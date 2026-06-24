@@ -1,0 +1,26 @@
+{
+  "name": "matrix_odoo",
+  "version": "1.0.0",
+  "description": "Цей скрипт автоматично створює товари з атрибутами, специфікації (BOMs) та операції в Odoo 19 через API.",
+  "main": "index.js",
+  "scripts": {
+    "validate": "ts-node src/index.ts validate",
+    "import": "ts-node src/index.ts import",
+    "check": "ts-node src/index.ts check",
+    "snapshot": "ts-node src/index.ts snapshot",
+    "restore": "ts-node src/index.ts restore",
+    "dev": "ts-node src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.18.0",
+    "dotenv": "^17.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
+  }
+}
