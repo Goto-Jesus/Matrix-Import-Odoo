@@ -9,7 +9,8 @@
     "check": "ts-node src/index.ts check",
     "snapshot": "ts-node src/index.ts snapshot",
     "restore": "ts-node src/index.ts restore",
-    "dev": "ts-node src/index.ts"
+    "dev": "ts-node src/index.ts",
+    "export-json": "ts-node src/commands/exportJson.ts"
   },
   "keywords": [],
   "author": "",

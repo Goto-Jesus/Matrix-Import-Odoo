@@ -1,0 +1,1318 @@
+{
+  "sourceFile": "BOMs Д Нео-3 Механізм.md",
+  "generatedAt": "2026-06-25T18:16:37.191Z",
+  "boms": [
+    {
+      "product": {
+        "templateName": "🪵[Каркас - нарізана деревина]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "100ДСП Механізм"
+          }
+        ],
+        "variantDisplayName": "🪵[Каркас - нарізана деревина] (100ДСП Механізм)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №1) 🪵[Каркас - нарізана деревина] (100ДСП Механізм)",
+          "workcenterName": "Цех №1 Дерева (нарізка)",
+          "priceRate": 0
+        }
+      ],
+      "components": [
+        {
+          "templateName": "Дерево",
+          "attributes": [],
+          "qty": 0.02,
+          "uom": "m³",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪵[Бильце - нарізана деревина]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Б.Нео"
+          }
+        ],
+        "variantDisplayName": "🪵[Бильце - нарізана деревина] (Б.Нео)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №1) 🪵[Бильце - нарізана деревина] (Б.Нео)",
+          "workcenterName": "Цех №1 Дерева (нарізка)",
+          "priceRate": 0
+        }
+      ],
+      "components": [
+        {
+          "templateName": "Дерево",
+          "attributes": [],
+          "qty": 0.00125,
+          "uom": "m³",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪵[Бильце - нарізана деревина]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Б.Нео - зменшене бильце"
+          }
+        ],
+        "variantDisplayName": "🪵[Бильце - нарізана деревина] (Б.Нео - зменшене бильце)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №1) 🪵[Бильце - нарізана деревина] (Б.Нео - зменшене бильце)",
+          "workcenterName": "Цех №1 Дерева (нарізка)",
+          "priceRate": 0
+        }
+      ],
+      "components": [
+        {
+          "templateName": "Дерево",
+          "attributes": [],
+          "qty": 0.00125,
+          "uom": "m³",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🧩[Бильце - нарізані деталі]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Б.Нео"
+          }
+        ],
+        "variantDisplayName": "🧩[Бильце - нарізані деталі] (Б.Нео)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №2-1) 🧩[Бильце - нарізані деталі] (Б.Нео)",
+          "workcenterName": "Цех №2-1 ДСП (нарізка бильце)",
+          "priceRate": 0
+        }
+      ],
+      "components": [
+        {
+          "templateName": "[ДСП]",
+          "attributes": [],
+          "qty": 0.59,
+          "uom": "m²",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[ДВП]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Звичайний"
+            }
+          ],
+          "qty": 0.41,
+          "uom": "m²",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🧩[Бильце - нарізані деталі]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Б.Нео - зменшене бильце"
+          }
+        ],
+        "variantDisplayName": "🧩[Бильце - нарізані деталі] (Б.Нео - зменшене бильце)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №2-1) 🧩[Бильце - нарізані деталі] (Б.Нео - зменшене бильце)",
+          "workcenterName": "Цех №2-1 ДСП (нарізка бильце)",
+          "priceRate": 0
+        }
+      ],
+      "components": [
+        {
+          "templateName": "[ДСП]",
+          "attributes": [],
+          "qty": 0.59,
+          "uom": "m²",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[ДВП]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Звичайний"
+            }
+          ],
+          "qty": 0.41,
+          "uom": "m²",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🧩[Каркас - нарізані деталі]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "100ДСП Механізм"
+          }
+        ],
+        "variantDisplayName": "🧩[Каркас - нарізані деталі] (100ДСП Механізм)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №2-2) 🧩[Каркас - нарізані деталі] (100ДСП Механізм)",
+          "workcenterName": "Цех №2-2 ДСП (нарізка карказ )",
+          "priceRate": 0
+        }
+      ],
+      "components": [
+        {
+          "templateName": "[ДСП]",
+          "attributes": [],
+          "qty": 1.76,
+          "uom": "m²",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[ДВП]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Білий"
+            }
+          ],
+          "qty": 0.73,
+          "uom": "m²",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🧩[Планка - нарізані деталі]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "НАЗВА_МОДЕЛІ"
+          }
+        ],
+        "variantDisplayName": "🧩[Планка - нарізані деталі] (НАЗВА_МОДЕЛІ)",
+        "qty": 0
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №2-3) 🧩[Планка - нарізані деталі] (НАЗВА_МОДЕЛІ)",
+          "workcenterName": "Цех №2-3 ДСП (нарізка планка)",
+          "priceRate": 0
+        }
+      ],
+      "components": []
+    },
+    {
+      "product": {
+        "templateName": "🧩[Ламінат - нарізані деталі]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "100 Механізм"
+          }
+        ],
+        "variantDisplayName": "🧩[Ламінат - нарізані деталі] (100 Механізм)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №3-1) 🧩[Ламінат - нарізані деталі] (100 Механізм)",
+          "workcenterName": "Цех №3-1 ЛДСП (нарізка ламінату)",
+          "priceRate": 0
+        }
+      ],
+      "components": [
+        {
+          "templateName": "🧩[Ламінат - лист]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "712x220"
+            }
+          ],
+          "qty": 2,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "🧩[Ламінат - лист]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "950х220"
+            }
+          ],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "🧩[Ламінат - лист]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "950х220 с углами"
+            }
+          ],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "[Накладка]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "НАЗВА_МОДЕЛІ"
+          }
+        ],
+        "variantDisplayName": "[Накладка] (НАЗВА_МОДЕЛІ)",
+        "qty": 0
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №3-2) [Накладка] (НАЗВА_МОДЕЛІ)",
+          "workcenterName": "Цех №3-2 ЛДСП (нарізка накладок)",
+          "priceRate": 0
+        }
+      ],
+      "components": []
+    },
+    {
+      "product": {
+        "templateName": "🪤[Бильце - напівфабрикат]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Б.Нео"
+          }
+        ],
+        "variantDisplayName": "🪤[Бильце - напівфабрикат] (Б.Нео)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №4-1) 🪤[Бильце - напівфабрикат] (Б.Нео)",
+          "workcenterName": "Цех №4-1 Сборка Бильце",
+          "priceRate": 0
+        }
+      ],
+      "components": [
+        {
+          "templateName": "🧩[Бильце - нарізані деталі]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Б.Нео"
+            }
+          ],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪤[Бильце - напівфабрикат]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Б.Нео - зменшене бильце"
+          }
+        ],
+        "variantDisplayName": "🪤[Бильце - напівфабрикат] (Б.Нео - зменшене бильце)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №4-1) 🪤[Бильце - напівфабрикат] (Б.Нео - зменшене бильце)",
+          "workcenterName": "Цех №4-1 Сборка Бильце",
+          "priceRate": 0
+        }
+      ],
+      "components": [
+        {
+          "templateName": "🧩[Бильце - нарізані деталі]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Б.Нео - зменшене бильце"
+            }
+          ],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪤[Каркас - напівфабрикат]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "100ДСП Механізм"
+          }
+        ],
+        "variantDisplayName": "🪤[Каркас - напівфабрикат] (100ДСП Механізм)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №4-2) 🪤[Каркас - напівфабрикат] (100ДСП Механізм)",
+          "workcenterName": "Цех №4-2 Сборка Карказ",
+          "priceRate": 0
+        }
+      ],
+      "components": [
+        {
+          "templateName": "🧩[Каркас - нарізані деталі]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "100ДСП Механізм"
+            }
+          ],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "🪵[Каркас - нарізана деревина]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "100ДСП Механізм"
+            }
+          ],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "🧩[Ламінат - нарізані деталі]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "100 Механізм"
+            }
+          ],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪤[Планка - напівфабрикат]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "НАЗВА*МОДЕЛІ"
+          }
+        ],
+        "variantDisplayName": "🪤[Планка - напівфабрикат] (НАЗВА*МОДЕЛІ)",
+        "qty": 0
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №4-3) 🪤[Планка - напівфабрикат] (НАЗВА*МОДЕЛІ)",
+          "workcenterName": "Цех №4-3 Сборка Планка",
+          "priceRate": 0
+        }
+      ],
+      "components": []
+    },
+    {
+      "product": {
+        "templateName": "🧩[Поролон - нарізані компонети]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Д.Нео-3 Механізм"
+          }
+        ],
+        "variantDisplayName": "🧩[Поролон - нарізані компонети] (Д.Нео-3 Механізм)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №5) 🧩[Поролон - нарізані компонети] (Д.Нео-3 Механізм)",
+          "workcenterName": "Цех №5 Порезка Поролон",
+          "priceRate": 100
+        }
+      ],
+      "components": [
+        {
+          "templateName": "[Поролон]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "ST-2535 (2000x1600x20)"
+            }
+          ],
+          "qty": 2.4,
+          "uom": "кг",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Поролон]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "ST-2233 (2000x1600x40x105)"
+            }
+          ],
+          "qty": 1.4,
+          "uom": "кг",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Поролон]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "ST-2233 (2000x1600x10)"
+            }
+          ],
+          "qty": 1.06,
+          "uom": "кг",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Поролон]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "ST-2233 (2000x1400x10)"
+            }
+          ],
+          "qty": 0.93,
+          "uom": "кг",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Поролон]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "ST-2233 (2000x1600x40x70)"
+            }
+          ],
+          "qty": 1.6,
+          "uom": "кг",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Войлок]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "1.60"
+            }
+          ],
+          "qty": 3,
+          "uom": "m",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🧩[Поролон - нарізані компонети]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Д.Нео-3 Механізм - посилений блок"
+          }
+        ],
+        "variantDisplayName": "🧩[Поролон - нарізані компонети] (Д.Нео-3 Механізм - посилений блок)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №5) 🧩[Поролон - нарізані компонети] (Д.Нео-3 Механізм - посилений блок)",
+          "workcenterName": "Цех №5 Порезка Поролон",
+          "priceRate": 100
+        }
+      ],
+      "components": [
+        {
+          "templateName": "[Поролон]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "ST-2535 (2000x1600x20)"
+            }
+          ],
+          "qty": 2.4,
+          "uom": "кг",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Поролон]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "ST-2233 (2000x1600x40x105)"
+            }
+          ],
+          "qty": 1.4,
+          "uom": "кг",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Поролон]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "ST-2233 (2000x1600x10)"
+            }
+          ],
+          "qty": 1.06,
+          "uom": "кг",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Поролон]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "ST-2233 (2000x1400x10)"
+            }
+          ],
+          "qty": 0.93,
+          "uom": "кг",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Поролон]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "ST-2233 (2000x1600x40x70)"
+            }
+          ],
+          "qty": 3.2,
+          "uom": "кг",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Войлок]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "1.60"
+            }
+          ],
+          "qty": 6,
+          "uom": "m",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "[Наволочка]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Д.Нео"
+          }
+        ],
+        "variantDisplayName": "[Наволочка] (Д.Нео)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №5-1) [Наволочка] (Д.Нео)",
+          "workcenterName": "Цех №5-1 Наволочка",
+          "priceRate": 1
+        }
+      ],
+      "components": [
+        {
+          "templateName": "[Флізелін]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "30"
+            }
+          ],
+          "qty": 1.3,
+          "uom": "m",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪤🧽[Каркас + Поролон - напівфабрикат 2]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Д.Нео-3 Механізм"
+          }
+        ],
+        "variantDisplayName": "🪤🧽[Каркас + Поролон - напівфабрикат 2] (Д.Нео-3 Механізм)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №6) 🪤🧽[Каркас + Поролон - напівфабрикат 2] (Д.Нео-3 Механізм)",
+          "workcenterName": "Цех №6 Поклейки Поролона + Сбивка",
+          "priceRate": 380
+        }
+      ],
+      "components": [
+        {
+          "templateName": "🪤[Каркас - напівфабрикат]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "100ДСП Механізм"
+            }
+          ],
+          "qty": 3,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "🪤[Бильце - напівфабрикат]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Б.Нео"
+            }
+          ],
+          "qty": 2,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "🧩[Поролон - нарізані компонети]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Д.Нео-3 Механізм"
+            }
+          ],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Боннель]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "910 х 600"
+            }
+          ],
+          "qty": 3,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Боннель]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "910 х 750"
+            }
+          ],
+          "qty": 3,
+          "uom": "шт",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪤🧽[Каркас + Поролон - напівфабрикат 2]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Д.Нео-3 Механізм - посилений блок"
+          }
+        ],
+        "variantDisplayName": "🪤🧽[Каркас + Поролон - напівфабрикат 2] (Д.Нео-3 Механізм - посилений блок)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №6) 🪤🧽[Каркас + Поролон - напівфабрикат 2] (Д.Нео-3 Механізм - посилений блок)",
+          "workcenterName": "Цех №6 Поклейки Поролона + Сбивка",
+          "priceRate": 380
+        }
+      ],
+      "components": [
+        {
+          "templateName": "🪤[Каркас - напівфабрикат]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "100ДСП Механізм"
+            }
+          ],
+          "qty": 3,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "🪤[Бильце - напівфабрикат]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Б.Нео"
+            }
+          ],
+          "qty": 2,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "🧩[Поролон - нарізані компонети]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Д.Нео-3 Механізм - посилений блок"
+            }
+          ],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Боннель]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "910 х 600"
+            }
+          ],
+          "qty": 3,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Боннель]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "910 х 750"
+            }
+          ],
+          "qty": 3,
+          "uom": "шт",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🧩[Чохол - нарізані матеріали]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Д.Нео-3 Механізм"
+          },
+          {
+            "attributeName": "Тканина",
+            "value": "Рене 4"
+          }
+        ],
+        "variantDisplayName": "🧩[Чохол - нарізані матеріали] (Д.Нео-3 Механізм, Рене 4)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали] (Д.Нео-3 Механізм, Рене 4)",
+          "workcenterName": "Цех №7 Закройка Тканини",
+          "priceRate": 500
+        }
+      ],
+      "components": [
+        {
+          "templateName": "[Синтепон]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "400"
+            }
+          ],
+          "qty": 14,
+          "uom": "m",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Тканина]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Рене 4"
+            }
+          ],
+          "qty": 17.5,
+          "uom": "m",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Флізелін]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "60"
+            }
+          ],
+          "qty": 16.5,
+          "uom": "m",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🧩[Чохол - нарізані матеріали]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Д.Нео-3 Механізм - зменшене бильце"
+          },
+          {
+            "attributeName": "Тканина",
+            "value": "Рене 4"
+          }
+        ],
+        "variantDisplayName": "🧩[Чохол - нарізані матеріали] (Д.Нео-3 Механізм - зменшене бильце, Рене 4)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали] (Д.Нео-3 Механізм - зменшене бильце, Рене 4)",
+          "workcenterName": "Цех №7 Закройка Тканини",
+          "priceRate": 500
+        }
+      ],
+      "components": [
+        {
+          "templateName": "[Синтепон]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "400"
+            }
+          ],
+          "qty": 14,
+          "uom": "m",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Тканина]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Рене 4"
+            }
+          ],
+          "qty": 17.5,
+          "uom": "m",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Флізелін]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "60"
+            }
+          ],
+          "qty": 16.5,
+          "uom": "m",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪤[Чохол - напівфабрикат]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Д.Нео-3 Механізм"
+          },
+          {
+            "attributeName": "Тканина",
+            "value": "Рене 4"
+          }
+        ],
+        "variantDisplayName": "🪤[Чохол - напівфабрикат] (Д.Нео-3 Механізм, Рене 4)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат] (Д.Нео-3 Механізм, Рене 4)",
+          "workcenterName": "Цех №8 Швейка",
+          "priceRate": 0
+        }
+      ],
+      "components": [
+        {
+          "templateName": "🧩[Чохол - нарізані матеріали]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Д.Нео-3 Механізм"
+            },
+            {
+              "attributeName": "Тканина",
+              "value": "Рене 4"
+            }
+          ],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪤[Чохол - напівфабрикат]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Д.Нео-3 Механізм - зменшене бильце"
+          },
+          {
+            "attributeName": "Тканина",
+            "value": "Рене 4"
+          }
+        ],
+        "variantDisplayName": "🪤[Чохол - напівфабрикат] (Д.Нео-3 Механізм - зменшене бильце, Рене 4)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат] (Д.Нео-3 Механізм - зменшене бильце, Рене 4)",
+          "workcenterName": "Цех №8 Швейка",
+          "priceRate": 0
+        }
+      ],
+      "components": [
+        {
+          "templateName": "🧩[Чохол - нарізані матеріали]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Д.Нео-3 Механізм - зменшене бильце"
+            },
+            {
+              "attributeName": "Тканина",
+              "value": "Рене 4"
+            }
+          ],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "[Подушка]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Д.Нео"
+          },
+          {
+            "attributeName": "Тканина",
+            "value": "Рене 4"
+          },
+          {
+            "attributeName": "Наповнювач",
+            "value": "Крихта ППУ"
+          }
+        ],
+        "variantDisplayName": "[Подушка] (Д.Нео, Рене 4, Крихта ППУ)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №9-1) [Подушка] (Д.Нео, Рене 4, Крихта ППУ)",
+          "workcenterName": "Цех №9-1 Набивки Подушек",
+          "priceRate": 0
+        }
+      ],
+      "components": [
+        {
+          "templateName": "[Наволочка]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Д.Нео"
+            }
+          ],
+          "qty": 2,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "Крихта ППУ",
+          "attributes": [],
+          "qty": 2.7,
+          "uom": "кг",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "[Подушка]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Д.Нео"
+          },
+          {
+            "attributeName": "Тканина",
+            "value": "Рене 4"
+          },
+          {
+            "attributeName": "Наповнювач",
+            "value": "Холофайбер"
+          }
+        ],
+        "variantDisplayName": "[Подушка] (Д.Нео, Рене 4, Холофайбер)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №9-1) [Подушка] (Д.Нео, Рене 4, Холофайбер)",
+          "workcenterName": "Цех №9-1 Набивки Подушек",
+          "priceRate": 0
+        }
+      ],
+      "components": [
+        {
+          "templateName": "[Наволочка]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Д.Нео"
+            }
+          ],
+          "qty": 2,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "Холофайбер",
+          "attributes": [],
+          "qty": 2.7,
+          "uom": "кг",
+          "operationIndex": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "Диван",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Нео-3 Механізм"
+          },
+          {
+            "attributeName": "Тканина",
+            "value": "Рене 4"
+          }
+        ],
+        "variantDisplayName": "Диван (Нео-3 Механізм, Рене 4)",
+        "qty": 1
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №9) Диван (Нео-3 Механізм, Рене 4)",
+          "workcenterName": "Цех №9 Оббивки",
+          "priceRate": 490
+        },
+        {
+          "name": "Операція (Цех №10) Диван (Нео-3 Механізм, Рене 4)",
+          "workcenterName": "Цех №10 Упаковки",
+          "priceRate": 160
+        },
+        {
+          "name": "ВТК Диван (Нео-3 Механізм, Рене 4)",
+          "workcenterName": "ВТК",
+          "priceRate": 100
+        }
+      ],
+      "components": [
+        {
+          "templateName": "🪤🧽[Каркас + Поролон - напівфабрикат 2]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Д.Нео-3 Механізм"
+            }
+          ],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "Тік-так",
+          "attributes": [],
+          "qty": 3,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "Распорка",
+          "attributes": [],
+          "qty": 3,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Соединитель]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "83 эконом"
+            }
+          ],
+          "qty": 8,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Петля]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "К.11301"
+            }
+          ],
+          "qty": 6,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Ніжка]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "h30"
+            }
+          ],
+          "qty": 26,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "🪤[Чохол - напівфабрикат]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Д.Нео-3 Механізм"
+            },
+            {
+              "attributeName": "Тканина",
+              "value": "Рене 4"
+            }
+          ],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "[Подушка]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Д.Нео"
+            },
+            {
+              "attributeName": "Тканина",
+              "value": "Рене 4"
+            },
+            {
+              "attributeName": "Наповнювач",
+              "value": "Крихта ППУ"
+            }
+          ],
+          "qty": 3,
+          "uom": "шт",
+          "operationIndex": 0
+        },
+        {
+          "templateName": "Скотч",
+          "attributes": [],
+          "qty": 85,
+          "uom": "m",
+          "operationIndex": 1
+        },
+        {
+          "templateName": "Плівка",
+          "attributes": [],
+          "qty": 3.4,
+          "uom": "кг",
+          "operationIndex": 1
+        },
+        {
+          "templateName": "Картон",
+          "attributes": [],
+          "qty": 5.1,
+          "uom": "m",
+          "operationIndex": 1
+        },
+        {
+          "templateName": "Перевірка Якості",
+          "attributes": [],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 2,
+          "isService": true
+        }
+      ]
+    }
+  ]
+}
