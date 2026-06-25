@@ -1,0 +1,1235 @@
+{
+  "_meta": {
+    "sofa": "Диван \"Нео-3 Механізм\"",
+    "spec_file": "good_format_documents/BOMs Д Нео-3 Механізм.md",
+    "generated": "2026-06-25",
+    "based_on_snapshot": "2026-06-23T21-07-47",
+    "execution_order": "phase_1 → phase_2 → phase_3 → phase_4 → phase_5",
+    "notes": [
+      "IDs prefixed with $ — symbolic refs resolved from previous phase",
+      "Spec 'Крихта ППУ' = Odoo 'ППУ Крихта' (attr_val id:375) — same material, different word order",
+      "Spec 'Холофайбер' = Odoo 'Холофайдер' (attr_val id:374) — same material, typo in Odoo",
+      "Spec '[Петля] (К.11301)' = Odoo '[Петля] (K 113.01)' (variant id:337) — different encoding",
+      "Spec '[Поролон] (ST-2535 2000x1600x20)' = Odoo variant id:302 (uses Cyrillic х in dims)",
+      "Тік-так Odoo name is 'Tік-так' (Latin T) — same product, variant id:45",
+      "RISK: Adding 'Діван Наповнювач Подушек' attr to Подушка template archives existing variant 1330. Check BOMs referencing it before executing phase_2 step for Подушка."
+    ]
+  },
+
+  "_reference_ids": {
+    "uom": {
+      "шт": 1,
+      "m": 8,
+      "m²": 10,
+      "кг": 15,
+      "m³": 30,
+      "g": 14
+    },
+    "workcenters": {
+      "Цех №1 Дерева": 4,
+      "Цех №2-1 ДСП": 1,
+      "Цех №2-2 ДСП": 2,
+      "Цех №2-3 ДСП": 3,
+      "Цех №3-1 ЛДСП ламінат": 13,
+      "Цех №3-2 ЛДСП накладки": 16,
+      "Цех №4 Сборка": 5,
+      "Цех №5 Поролон": 6,
+      "Цех №5-1 Наволочка": 17,
+      "Цех №6 Поклейки": 9,
+      "Цех №7 Закройка": 7,
+      "Цех №8 Швейка": 8,
+      "Цех №9 Оббивки": 10,
+      "Цех №9-1 Набивки Подушок": 12,
+      "Цех №10 Упаковки": 11,
+      "ВТК": 14
+    },
+    "attribute_ids": {
+      "Модель": 13,
+      "Тканина": 2,
+      "ДСП": 6,
+      "ДВП": 7,
+      "Діван Пружинний Блок": 27,
+      "Діван Наповнювач Подушек": 28,
+      "Діван Розмір Бильця": 26
+    },
+    "attribute_values": {
+      "Модель_100ДСП_Механізм": 231,
+      "Модель_Б.Нео": 188,
+      "Модель_100_Механізм": 226,
+      "Модель_Д.Нео": 236,
+      "Тканина_Рене_4": 210,
+      "Тканина_Рене_20": 46,
+      "Тканина_Рене_23": 47,
+      "Тканина_Рене_26": 48,
+      "Пружинний_Блок_Посиленний": 372,
+      "Пружинний_Блок_Звичайний": 373,
+      "Наповнювач_Холофайдер": 374,
+      "Наповнювач_ППУ_Крихта": 375,
+      "Розмір_Бильця_Зменшені": 370,
+      "Розмір_Бильця_Звичайні": 371
+    },
+    "product_templates": {
+      "Каркас - нарізана деревина": 49,
+      "Бильце - нарізана деревина": 179,
+      "Бильце - нарізані деталі": 36,
+      "Каркас - нарізані деталі": 177,
+      "Ламінат - нарізані деталі": 66,
+      "Бильце - напівфабрикат": 12,
+      "Каркас - напівфабрикат": 33,
+      "Планка - нарізані деталі": 39,
+      "Планка - напівфабрикат": 17,
+      "Накладка": 11,
+      "Поролон - нарізані компонети": 45,
+      "Наволочка": 167,
+      "Каркас + Поролон - напівфабрикат 2": 16,
+      "Чохол - нарізані матеріали": 43,
+      "Чохол - напівфабрикат": 34,
+      "Подушка": 67
+    },
+    "existing_variants": {
+      "Каркас_НР_100ДСП_Мекh": 640,
+      "Бильце_НР_Б.Нео": 351,
+      "Бильце_НД_Б.Нео": 508,
+      "Каркас_НД_100ДСП_Мекh": 641,
+      "Ламінат_НД_100_Мекh": 608,
+      "Бильце_НФ_Б.Нео": 512,
+      "Наволочка_Д.Нео": 663,
+      "Подушка_Д.Нео_Рене4": 1330,
+      "Ламінат_лист_712x220": 504,
+      "Ламінат_лист_950х220": 505,
+      "Ламінат_лист_950х220_с_углами": 609
+    },
+    "raw_material_variants": {
+      "Дерево": 59,
+      "ДСП_Звичайний": 31,
+      "ДВП_Звичайний": 324,
+      "ДВП_Білий": 325,
+      "Поролон_ST2535_2000x1600x20": 302,
+      "Поролон_ST2233_2000x1600x40x105": 515,
+      "Поролон_ST2233_2000x1600x10": 517,
+      "Поролон_ST2233_2000x1400x10": 518,
+      "Поролон_ST2233_2000x1600x40x70": 516,
+      "Войлок_1.60": 330,
+      "Флізелін_30": 340,
+      "Флізелін_60": 341,
+      "Синтепон_400": 311,
+      "Боннель_910х600": 521,
+      "Боннель_910х750": 522,
+      "Ніжка_h30": 332,
+      "Петля_K113.01": 337,
+      "Соединитель_83_эконом": 539,
+      "Распорка": 19,
+      "Стопор": 22,
+      "Картон": 47,
+      "Плівка": 46,
+      "Скотч": 188,
+      "Крихта_ППУ": 261,
+      "Холофайбер": 704,
+      "Тканина_Рене_4": 527,
+      "Тканина_Рене_20": 354,
+      "Тканина_Рене_23": 355,
+      "Тканина_Рене_26": 356,
+      "Тік_так": 45,
+      "Перевірка_Якості": 187
+    }
+  },
+
+  "phase_1_create_attribute_values": {
+    "description": "Нові значення атрибута 'Модель' (id:13) через product.attribute.value.create()",
+    "model": "product.attribute.value",
+    "method": "create",
+    "items": [
+      {
+        "ref": "$modelDNeo3Mekh",
+        "fields": { "attribute_id": 13, "name": "Д.Нео-3 Механізм" }
+      },
+      {
+        "ref": "$modelDNeo3MekhPBl",
+        "fields": {
+          "attribute_id": 13,
+          "name": "Д.Нео-3 Механізм - посилений блок"
+        }
+      },
+      {
+        "ref": "$modelBNeoZm",
+        "fields": { "attribute_id": 13, "name": "Б.Нео- зменшене бильцебильце" }
+      },
+      {
+        "ref": "$modelDNeo3MekhZm",
+        "fields": {
+          "attribute_id": 13,
+          "name": "Д.Нео-3 Механізм- зменшене бильцебильце"
+        }
+      }
+    ]
+  },
+
+  "phase_2_add_values_to_templates": {
+    "description": "Додати значення Модель до шаблонів продуктів. Спочатку знайти PTAL: product.template.attribute.line.search_read([[product_tmpl_id,=,TMPL],[attribute_id,=,13]]). Потім: write([[ptal_id], {value_ids: [[4, value_id]]}]). Odoo автоматично створить варіанти.",
+    "model": "product.template.attribute.line",
+    "method": "write",
+    "items": [
+      {
+        "comment": "Variant: 🪤[Каркас - напівфабрикат] (100ДСП Механізм) — значення вже існує (231)",
+        "template_id": 33,
+        "attribute_id": 13,
+        "add_value_id": 231,
+        "add_value_name": "100ДСП Механізм",
+        "creates_variant_ref": "$varKarNF_100DspMekh"
+      },
+      {
+        "comment": "Variants: 🧩[Поролон - нарізані компонети] (Д.Нео-3 Механізм)",
+        "template_id": 45,
+        "attribute_id": 13,
+        "add_value_id": "$modelDNeo3Mekh",
+        "creates_variant_ref": "$varPorolon_DNeo3Mekh"
+      },
+      {
+        "comment": "Variants: 🧩[Поролон - нарізані компонети] (Д.Нео-3 Механізм - посилений блок)",
+        "template_id": 45,
+        "attribute_id": 13,
+        "add_value_id": "$modelDNeo3MekhPBl",
+        "creates_variant_ref": "$varPorolon_DNeo3MekhPBl"
+      },
+      {
+        "comment": "Variants: 🪤🧽[Каркас + Поролон - напівфабрикат 2] (Д.Нео-3 Механізм)",
+        "template_id": 16,
+        "attribute_id": 13,
+        "add_value_id": "$modelDNeo3Mekh",
+        "creates_variant_ref": "$varKP_DNeo3Mekh"
+      },
+      {
+        "comment": "Variants: 🪤🧽[Каркас + Поролон - напівфабрикат 2] (Д.Нео-3 Механізм - посилений блок)",
+        "template_id": 16,
+        "attribute_id": 13,
+        "add_value_id": "$modelDNeo3MekhPBl",
+        "creates_variant_ref": "$varKP_DNeo3MekhPBl"
+      },
+      {
+        "comment": "Variants: 🧩[Чохол - нарізані матеріали] (Д.Нео-3 Механізм, Рене 4/20/23/26) — 4 варіанти",
+        "template_id": 43,
+        "attribute_id": 13,
+        "add_value_id": "$modelDNeo3Mekh",
+        "creates_variant_refs": {
+          "Рене_4": "$varChovMat_DNeo3Mekh_Rene4",
+          "Рене_20": "$varChovMat_DNeo3Mekh_Rene20",
+          "Рене_23": "$varChovMat_DNeo3Mekh_Rene23",
+          "Рене_26": "$varChovMat_DNeo3Mekh_Rene26"
+        }
+      },
+      {
+        "comment": "Variants: 🧩[Чохол - нарізані матеріали] (Д.Нео-3 Механізм- зменшене бильцебильце, Рене X) — 4 варіанти",
+        "template_id": 43,
+        "attribute_id": 13,
+        "add_value_id": "$modelDNeo3MekhZm",
+        "creates_variant_refs": {
+          "Рене_4": "$varChovMat_DNeo3MekhZm_Rene4",
+          "Рене_20": "$varChovMat_DNeo3MekhZm_Rene20",
+          "Рене_23": "$varChovMat_DNeo3MekhZm_Rene23",
+          "Рене_26": "$varChovMat_DNeo3MekhZm_Rene26"
+        }
+      },
+      {
+        "comment": "Variants: 🪤[Чохол - напівфабрикат] (Д.Нео-3 Механізм, Рене X) — 4 варіанти",
+        "template_id": 34,
+        "attribute_id": 13,
+        "add_value_id": "$modelDNeo3Mekh",
+        "creates_variant_refs": {
+          "Рене_4": "$varChovNF_DNeo3Mekh_Rene4",
+          "Рене_20": "$varChovNF_DNeo3Mekh_Rene20",
+          "Рене_23": "$varChovNF_DNeo3Mekh_Rene23",
+          "Рене_26": "$varChovNF_DNeo3Mekh_Rene26"
+        }
+      },
+      {
+        "comment": "Variants: 🪤[Чохол - напівфабрикат] (Д.Нео-3 Механізм- зменшене бильцебильце, Рене X) — 4 варіанти",
+        "template_id": 34,
+        "attribute_id": 13,
+        "add_value_id": "$modelDNeo3MekhZm",
+        "creates_variant_refs": {
+          "Рене_4": "$varChovNF_DNeo3MekhZm_Rene4",
+          "Рене_20": "$varChovNF_DNeo3MekhZm_Rene20",
+          "Рене_23": "$varChovNF_DNeo3MekhZm_Rene23",
+          "Рене_26": "$varChovNF_DNeo3MekhZm_Rene26"
+        }
+      },
+      {
+        "comment": "Variants: 🪵[Бильце - нарізана деревина] (Б.Нео - зменшене бильце)",
+        "template_id": 179,
+        "attribute_id": 13,
+        "add_value_id": "$modelBNeoZm",
+        "creates_variant_ref": "$varBiltsNR_BNeoZm"
+      },
+      {
+        "comment": "Variants: 🧩[Бильце - нарізані деталі] (Б.Нео - зменшене бильце)",
+        "template_id": 36,
+        "attribute_id": 13,
+        "add_value_id": "$modelBNeoZm",
+        "creates_variant_ref": "$varBiltsND_BNeoZm"
+      },
+      {
+        "comment": "Variants: 🪤[Бильце - напівфабрикат] (Б.Нео - зменшене бильце)",
+        "template_id": 12,
+        "attribute_id": 13,
+        "add_value_id": "$modelBNeoZm",
+        "creates_variant_ref": "$varBiltsNF_BNeoZm"
+      },
+      {
+        "comment": "⚠️ УВАГА: Додавання 3-го атрибута до шаблону Подушка АРХІВУЄ variant 1330. Перевірте всі BOM що посилаються на variant 1330 перед виконанням! Після: (Д.Нео, Рене 4, ППУ Крихта) і (Д.Нео, Рене 4, Холофайдер) — нові варіанти.",
+        "template_id": 67,
+        "attribute_id_NEW": 28,
+        "attribute_name_NEW": "Діван Наповнювач Подушек",
+        "add_value_ids": [374, 375],
+        "action": "product.template.attribute.line — CREATE new line (not write), since this attr doesn't exist on Подушка yet",
+        "model_override": "product.template.attribute.line",
+        "method_override": "create",
+        "fields": {
+          "product_tmpl_id": 67,
+          "attribute_id": 28,
+          "value_ids": [
+            [4, 374],
+            [4, 375]
+          ]
+        },
+        "creates_variant_refs": {
+          "Д.Нео_Рене4_Холофайдер": "$varPodushka_DNeo_Rene4_Xolo",
+          "Д.Нео_Рене4_ППУ_Крихта": "$varPodushka_DNeo_Rene4_PPU"
+        }
+      }
+    ]
+  },
+
+  "phase_3_create_divan_template": {
+    "description": "Створити шаблон продукту 'Диван \"Нео-3 Механізм\"' з атрибутами",
+    "model": "product.product",
+    "note": "Create via product.template.create, Odoo auto-creates product.product variants",
+    "fields": {
+      "name": "Диван \"Нео-3 Механізм\"",
+      "type": "product",
+      "categ_id": "lookup: Головна продукція / Дивани",
+      "attribute_line_ids": [
+        [
+          0,
+          0,
+          {
+            "attribute_id": 2,
+            "value_ids": [
+              [4, 46],
+              [4, 47],
+              [4, 48],
+              [4, 210]
+            ]
+          }
+        ],
+        [
+          0,
+          0,
+          {
+            "attribute_id": 27,
+            "value_ids": [
+              [4, 372],
+              [4, 373]
+            ]
+          }
+        ],
+        [
+          0,
+          0,
+          {
+            "attribute_id": 28,
+            "value_ids": [
+              [4, 374],
+              [4, 375]
+            ]
+          }
+        ],
+        [
+          0,
+          0,
+          {
+            "attribute_id": 26,
+            "value_ids": [
+              [4, 370],
+              [4, 371]
+            ]
+          }
+        ]
+      ]
+    },
+    "creates_template_ref": "$tmplDivanNeo3Mekh",
+    "example_variants": [
+      "Диван \"Нео-3 Механізм\" (Рене 4, Звичайні Бильця, Звичайний, ППУ Крихта)",
+      "Диван \"Нео-3 Механізм\" (Рене 4, Звичайні Бильця, Посиленний, ППУ Крихта)",
+      "... total 4×2×2×2 = 32 variants"
+    ]
+  },
+
+  "phase_4_create_boms": {
+    "description": "Створити специфікації. Порядок: Цех №1 → №2 → №3 → №4 → №5 → №6 → №7 → №8 → №9-1 → №9+10+ВТК. Odoo JSON-RPC: mrp.bom.create({product_tmpl_id, product_id, bom_line_ids: [[0,0,{...}]], operation_ids: [[0,0,{...}]]})",
+    "boms": [
+      {
+        "status": "EXISTS",
+        "odoo_id": 213,
+        "цех": "Цех №1",
+        "product": "🪵[Каркас - нарізана деревина] (100ДСП Механізм)",
+        "skip": true
+      },
+      {
+        "status": "EXISTS",
+        "odoo_id": 98,
+        "цех": "Цех №1",
+        "product": "🪵[Бильце - нарізана деревина] (Б.Нео)",
+        "skip": true
+      },
+      {
+        "status": "CREATE",
+        "ref": "bom_ceh1_BiltsNR_BNeoZm",
+        "цех": "Цех №1 Дерева (нарізка)",
+        "model": "mrp.bom",
+        "fields": {
+          "product_tmpl_id": 179,
+          "product_id": "$varBiltsNR_BNeoZm",
+          "product_qty": 1.0,
+          "type": "normal",
+          "bom_line_ids": [
+            [
+              0,
+              0,
+              { "product_id": 59, "product_qty": 0.00125, "product_uom_id": 30 }
+            ]
+          ],
+          "operation_ids": [
+            [
+              0,
+              0,
+              {
+                "name": "Операція (Цех №1)",
+                "workcenter_id": 4,
+                "time_cycle_manual": 0,
+                "sequence": 100
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "status": "EXISTS",
+        "odoo_id": 214,
+        "цех": "Цех №2-2",
+        "product": "🧩[Каркас - нарізані деталі] (100ДСП Механізм)",
+        "skip": true
+      },
+      {
+        "status": "CREATE",
+        "ref": "bom_ceh21_BiltsND_BNeo",
+        "цех": "Цех №2-1 ДСП (нарізка бильце)",
+        "note": "Variant 508 exists, BOM is missing",
+        "model": "mrp.bom",
+        "fields": {
+          "product_tmpl_id": 36,
+          "product_id": 508,
+          "product_qty": 1.0,
+          "type": "normal",
+          "bom_line_ids": [
+            [
+              0,
+              0,
+              { "product_id": 31, "product_qty": 0.59, "product_uom_id": 10 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 324, "product_qty": 0.41, "product_uom_id": 10 }
+            ]
+          ],
+          "operation_ids": [
+            [
+              0,
+              0,
+              {
+                "name": "Операція (Цех №2-1)",
+                "workcenter_id": 1,
+                "time_cycle_manual": 0,
+                "sequence": 100
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "status": "CREATE",
+        "ref": "bom_ceh21_BiltsND_BNeoZm",
+        "цех": "Цех №2-1 ДСП (нарізка бильце)",
+        "model": "mrp.bom",
+        "fields": {
+          "product_tmpl_id": 36,
+          "product_id": "$varBiltsND_BNeoZm",
+          "product_qty": 1.0,
+          "type": "normal",
+          "bom_line_ids": [
+            [
+              0,
+              0,
+              { "product_id": 31, "product_qty": 0.59, "product_uom_id": 10 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 324, "product_qty": 0.41, "product_uom_id": 10 }
+            ]
+          ],
+          "operation_ids": [
+            [
+              0,
+              0,
+              {
+                "name": "Операція (Цех №2-1)",
+                "workcenter_id": 1,
+                "time_cycle_manual": 0,
+                "sequence": 100
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "status": "NOT_APPLICABLE",
+        "цех": "Цех №2-3",
+        "product": "🧩[Планка - нарізані деталі]",
+        "note": "Нео-3 Механізм не використовує Планку (qty=0 в spec). Якщо треба placeholder — додати BOM без компонентів."
+      },
+      {
+        "status": "NOT_APPLICABLE",
+        "цех": "Цех №3-2",
+        "product": "[Накладка]",
+        "note": "Нео-3 Механізм не використовує Накладку (qty=0 в spec)."
+      },
+      {
+        "status": "EXISTS",
+        "odoo_id": 194,
+        "цех": "Цех №3-1",
+        "product": "🧩[Ламінат - нарізані деталі] (100 Механізм)",
+        "skip": true,
+        "note": "BOM 194 існує. Має 4 рядки: Ламінат лист 712x220 (2шт), 950х220 (1шт), 950х220 с углами (1шт) + Кромка (Білий) 4.2m. Spec показує лише 3 ламінати без Кромки — можливо BOM оновлено пізніше."
+      },
+      {
+        "status": "EXISTS",
+        "odoo_id": 135,
+        "цех": "Цех №4-1",
+        "product": "🪤[Бильце - напівфабрикат] (Б.Нео)",
+        "skip": true
+      },
+      {
+        "status": "CREATE",
+        "ref": "bom_ceh41_BiltsNF_BNeoZm",
+        "цех": "Цех №4-1 Сборка Бильце",
+        "model": "mrp.bom",
+        "fields": {
+          "product_tmpl_id": 12,
+          "product_id": "$varBiltsNF_BNeoZm",
+          "product_qty": 1.0,
+          "type": "normal",
+          "bom_line_ids": [
+            [
+              0,
+              0,
+              {
+                "product_id": "$varBiltsND_BNeoZm",
+                "product_qty": 1.0,
+                "product_uom_id": 1
+              }
+            ]
+          ],
+          "operation_ids": [
+            [
+              0,
+              0,
+              {
+                "name": "Операція (Цех №4-1)",
+                "workcenter_id": 5,
+                "time_cycle_manual": 0,
+                "sequence": 100
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "status": "CREATE",
+        "ref": "bom_ceh42_KarNF_100DspMekh",
+        "цех": "Цех №4-2 Сборка Карказ",
+        "model": "mrp.bom",
+        "fields": {
+          "product_tmpl_id": 33,
+          "product_id": "$varKarNF_100DspMekh",
+          "product_qty": 1.0,
+          "type": "normal",
+          "bom_line_ids": [
+            [
+              0,
+              0,
+              { "product_id": 641, "product_qty": 1.0, "product_uom_id": 1 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 640, "product_qty": 1.0, "product_uom_id": 1 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 608, "product_qty": 1.0, "product_uom_id": 1 }
+            ]
+          ],
+          "operation_ids": [
+            [
+              0,
+              0,
+              {
+                "name": "Операція (Цех №4-2)",
+                "workcenter_id": 5,
+                "time_cycle_manual": 0,
+                "sequence": 100
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "status": "NOT_APPLICABLE",
+        "цех": "Цех №4-3",
+        "product": "🪤[Планка - напівфабрикат]",
+        "note": "Нео-3 Механізм не використовує Планку."
+      },
+      {
+        "status": "CREATE",
+        "ref": "bom_ceh5_Porolon_DNeo3Mekh",
+        "цех": "Цех №5 Порезка Поролон",
+        "model": "mrp.bom",
+        "fields": {
+          "product_tmpl_id": 45,
+          "product_id": "$varPorolon_DNeo3Mekh",
+          "product_qty": 1.0,
+          "type": "normal",
+          "bom_line_ids": [
+            [
+              0,
+              0,
+              { "product_id": 302, "product_qty": 2.4, "product_uom_id": 15 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 515, "product_qty": 1.4, "product_uom_id": 15 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 517, "product_qty": 1.06, "product_uom_id": 15 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 518, "product_qty": 0.93, "product_uom_id": 15 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 516, "product_qty": 1.6, "product_uom_id": 15 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 330, "product_qty": 3.0, "product_uom_id": 8 }
+            ]
+          ],
+          "operation_ids": [
+            [
+              0,
+              0,
+              {
+                "name": "Операція (Цех №5)",
+                "workcenter_id": 6,
+                "time_cycle_manual": 100,
+                "sequence": 100
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "status": "CREATE",
+        "ref": "bom_ceh5_Porolon_DNeo3MekhPBl",
+        "цех": "Цех №5 Порезка Поролон (Посилений Блок)",
+        "note": "Посилений блок: Поролон ST-2233 (2000x1600x40x70) подвоюється (1.6→3.2 кг), Войлок подвоюється (3→6 м)",
+        "model": "mrp.bom",
+        "fields": {
+          "product_tmpl_id": 45,
+          "product_id": "$varPorolon_DNeo3MekhPBl",
+          "product_qty": 1.0,
+          "type": "normal",
+          "bom_line_ids": [
+            [
+              0,
+              0,
+              { "product_id": 302, "product_qty": 2.4, "product_uom_id": 15 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 515, "product_qty": 1.4, "product_uom_id": 15 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 517, "product_qty": 1.06, "product_uom_id": 15 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 518, "product_qty": 0.93, "product_uom_id": 15 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 516, "product_qty": 3.2, "product_uom_id": 15 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 330, "product_qty": 6.0, "product_uom_id": 8 }
+            ]
+          ],
+          "operation_ids": [
+            [
+              0,
+              0,
+              {
+                "name": "Операція (Цех №5)",
+                "workcenter_id": 6,
+                "time_cycle_manual": 100,
+                "sequence": 100
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "status": "EXISTS",
+        "odoo_id": 225,
+        "цех": "Цех №5-1",
+        "product": "[Наволочка] (Д.Нео)",
+        "skip": true
+      },
+      {
+        "status": "CREATE",
+        "ref": "bom_ceh6_KP_DNeo3Mekh",
+        "цех": "Цех №6 Поклейки Поролона + Сбивка",
+        "model": "mrp.bom",
+        "fields": {
+          "product_tmpl_id": 16,
+          "product_id": "$varKP_DNeo3Mekh",
+          "product_qty": 1.0,
+          "type": "normal",
+          "bom_line_ids": [
+            [
+              0,
+              0,
+              {
+                "product_id": "$varKarNF_100DspMekh",
+                "product_qty": 3.0,
+                "product_uom_id": 1
+              }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 512, "product_qty": 2.0, "product_uom_id": 1 }
+            ],
+            [
+              0,
+              0,
+              {
+                "product_id": "$varPorolon_DNeo3Mekh",
+                "product_qty": 1.0,
+                "product_uom_id": 1
+              }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 521, "product_qty": 3.0, "product_uom_id": 1 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 522, "product_qty": 3.0, "product_uom_id": 1 }
+            ]
+          ],
+          "operation_ids": [
+            [
+              0,
+              0,
+              {
+                "name": "Операція (Цех №6)",
+                "workcenter_id": 9,
+                "time_cycle_manual": 380,
+                "sequence": 100
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "status": "CREATE",
+        "ref": "bom_ceh6_KP_DNeo3MekhPBl",
+        "цех": "Цех №6 Поклейки Поролона + Сбивка (Посилений Блок)",
+        "model": "mrp.bom",
+        "fields": {
+          "product_tmpl_id": 16,
+          "product_id": "$varKP_DNeo3MekhPBl",
+          "product_qty": 1.0,
+          "type": "normal",
+          "bom_line_ids": [
+            [
+              0,
+              0,
+              {
+                "product_id": "$varKarNF_100DspMekh",
+                "product_qty": 3.0,
+                "product_uom_id": 1
+              }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 512, "product_qty": 2.0, "product_uom_id": 1 }
+            ],
+            [
+              0,
+              0,
+              {
+                "product_id": "$varPorolon_DNeo3MekhPBl",
+                "product_qty": 1.0,
+                "product_uom_id": 1
+              }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 521, "product_qty": 3.0, "product_uom_id": 1 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 522, "product_qty": 3.0, "product_uom_id": 1 }
+            ]
+          ],
+          "operation_ids": [
+            [
+              0,
+              0,
+              {
+                "name": "Операція (Цех №6)",
+                "workcenter_id": 9,
+                "time_cycle_manual": 380,
+                "sequence": 100
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "status": "CREATE",
+        "ref": "bom_ceh7_ChovMat_DNeo3Mekh_Rene4",
+        "цех": "Цех №7 Закройка Тканини",
+        "note": "Повторити для Рене 20/23/26 зі зміною product_id варіантів Чохол і [Тканина]",
+        "model": "mrp.bom",
+        "fields": {
+          "product_tmpl_id": 43,
+          "product_id": "$varChovMat_DNeo3Mekh_Rene4",
+          "product_qty": 1.0,
+          "type": "normal",
+          "bom_line_ids": [
+            [
+              0,
+              0,
+              { "product_id": 311, "product_qty": 14.0, "product_uom_id": 8 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 527, "product_qty": 17.5, "product_uom_id": 8 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 341, "product_qty": 16.5, "product_uom_id": 8 }
+            ]
+          ],
+          "operation_ids": [
+            [
+              0,
+              0,
+              {
+                "name": "Операція (Цех №7)",
+                "workcenter_id": 7,
+                "time_cycle_manual": 500,
+                "sequence": 100
+              }
+            ]
+          ]
+        },
+        "variants_Рене_20_23_26": {
+          "note": "Для Рене 20/23/26: змінити product_id BOM → $varChovMat_DNeo3Mekh_ReneXX та product_id Тканини → 354/355/356"
+        }
+      },
+      {
+        "status": "CREATE",
+        "ref": "bom_ceh7_ChovMat_DNeo3MekhZm_Rene4",
+        "цех": "Цех №7 Закройка Тканини (зменшене бильце)",
+        "note": "Компоненти ті ж — різниця лише в product_id (інший варіант Чохлу)",
+        "model": "mrp.bom",
+        "fields": {
+          "product_tmpl_id": 43,
+          "product_id": "$varChovMat_DNeo3MekhZm_Rene4",
+          "product_qty": 1.0,
+          "type": "normal",
+          "bom_line_ids": [
+            [
+              0,
+              0,
+              { "product_id": 311, "product_qty": 14.0, "product_uom_id": 8 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 527, "product_qty": 17.5, "product_uom_id": 8 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 341, "product_qty": 16.5, "product_uom_id": 8 }
+            ]
+          ],
+          "operation_ids": [
+            [
+              0,
+              0,
+              {
+                "name": "Операція (Цех №7)",
+                "workcenter_id": 7,
+                "time_cycle_manual": 500,
+                "sequence": 100
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "status": "CREATE",
+        "ref": "bom_ceh8_ChovNF_DNeo3Mekh_Rene4",
+        "цех": "Цех №8 Швейка",
+        "note": "Повторити для всіх 4 тканин + зменшене бильце варіант",
+        "model": "mrp.bom",
+        "fields": {
+          "product_tmpl_id": 34,
+          "product_id": "$varChovNF_DNeo3Mekh_Rene4",
+          "product_qty": 1.0,
+          "type": "normal",
+          "bom_line_ids": [
+            [
+              0,
+              0,
+              {
+                "product_id": "$varChovMat_DNeo3Mekh_Rene4",
+                "product_qty": 1.0,
+                "product_uom_id": 1
+              }
+            ]
+          ],
+          "operation_ids": [
+            [
+              0,
+              0,
+              {
+                "name": "Операція (Цех №8)",
+                "workcenter_id": 8,
+                "time_cycle_manual": 0,
+                "sequence": 100
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "status": "CREATE",
+        "ref": "bom_ceh8_ChovNF_DNeo3MekhZm_Rene4",
+        "цех": "Цех №8 Швейка (зменшене бильце)",
+        "model": "mrp.bom",
+        "fields": {
+          "product_tmpl_id": 34,
+          "product_id": "$varChovNF_DNeo3MekhZm_Rene4",
+          "product_qty": 1.0,
+          "type": "normal",
+          "bom_line_ids": [
+            [
+              0,
+              0,
+              {
+                "product_id": "$varChovMat_DNeo3MekhZm_Rene4",
+                "product_qty": 1.0,
+                "product_uom_id": 1
+              }
+            ]
+          ],
+          "operation_ids": [
+            [
+              0,
+              0,
+              {
+                "name": "Операція (Цех №8)",
+                "workcenter_id": 8,
+                "time_cycle_manual": 0,
+                "sequence": 100
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "status": "CREATE",
+        "ref": "bom_ceh91_Podushka_DNeo_Rene4_PPU",
+        "цех": "Цех №9-1 Набивки Подушек (ППУ Крихта)",
+        "model": "mrp.bom",
+        "fields": {
+          "product_tmpl_id": 67,
+          "product_id": "$varPodushka_DNeo_Rene4_PPU",
+          "product_qty": 1.0,
+          "type": "normal",
+          "bom_line_ids": [
+            [
+              0,
+              0,
+              { "product_id": 663, "product_qty": 2.0, "product_uom_id": 1 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 261, "product_qty": 2.7, "product_uom_id": 15 }
+            ]
+          ],
+          "operation_ids": [
+            [
+              0,
+              0,
+              {
+                "name": "Операція (Цех №9-1)",
+                "workcenter_id": 12,
+                "time_cycle_manual": 1,
+                "sequence": 100
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "status": "CREATE",
+        "ref": "bom_ceh91_Podushka_DNeo_Rene4_Xolo",
+        "цех": "Цех №9-1 Набивки Подушек (Холофайдер/Холофайбер)",
+        "model": "mrp.bom",
+        "fields": {
+          "product_tmpl_id": 67,
+          "product_id": "$varPodushka_DNeo_Rene4_Xolo",
+          "product_qty": 1.0,
+          "type": "normal",
+          "bom_line_ids": [
+            [
+              0,
+              0,
+              { "product_id": 663, "product_qty": 2.0, "product_uom_id": 1 }
+            ],
+            [
+              0,
+              0,
+              { "product_id": 704, "product_qty": 2.7, "product_uom_id": 15 }
+            ]
+          ],
+          "operation_ids": [
+            [
+              0,
+              0,
+              {
+                "name": "Операція (Цех №9-1)",
+                "workcenter_id": 12,
+                "time_cycle_manual": 1,
+                "sequence": 100
+              }
+            ]
+          ]
+        }
+      },
+
+      {
+        "status": "CREATE",
+        "ref": "bom_FINAL_Divan_Rene4_Zvychayni_Zvychaynyy_PPU",
+        "цех": "Цех №9 + №10 + ВТК (фінальна зборка)",
+        "note": "⚠️ Мультиопераційний BOM: 3 операції в одному BOM. Odoo: create BOM з operation_ids → query операції → update лінії з operation_id. Тут вказані operation_ref_idx для кожної лінії.",
+        "model": "mrp.bom",
+        "fields": {
+          "product_tmpl_id": "$tmplDivanNeo3Mekh",
+          "product_id": "lookup: Диван \"Нео-3 Механізм\" (Рене 4, Звичайні Бильця, Звичайний, ППУ Крихта)",
+          "product_qty": 1.0,
+          "type": "normal",
+          "code": "Рене 4",
+          "operation_ids": [
+            [
+              0,
+              0,
+              {
+                "name": "Операція (Цех №9)",
+                "workcenter_id": 10,
+                "time_cycle_manual": 490,
+                "sequence": 100
+              }
+            ],
+            [
+              0,
+              0,
+              {
+                "name": "Операція (Цех №10)",
+                "workcenter_id": 11,
+                "time_cycle_manual": 160,
+                "sequence": 200
+              }
+            ],
+            [
+              0,
+              0,
+              {
+                "name": "Операція (ВТК)",
+                "workcenter_id": 14,
+                "time_cycle_manual": 100,
+                "sequence": 300
+              }
+            ]
+          ],
+          "bom_line_ids_step2": {
+            "note": "Після create BOM: query operation IDs → update lines. operation_ref_idx: 0=Цех№9, 1=Цех№10, 2=ВТК",
+            "lines": [
+              {
+                "product_id": "$varKP_DNeo3Mekh",
+                "product_qty": 1.0,
+                "product_uom_id": 1,
+                "operation_ref_idx": 0
+              },
+              {
+                "product_id": 45,
+                "product_qty": 3.0,
+                "product_uom_id": 1,
+                "operation_ref_idx": 0,
+                "note": "Тік-так (variant id:45, tmpl:27)"
+              },
+              {
+                "product_id": 19,
+                "product_qty": 3.0,
+                "product_uom_id": 1,
+                "operation_ref_idx": 0
+              },
+              {
+                "product_id": 539,
+                "product_qty": 8.0,
+                "product_uom_id": 1,
+                "operation_ref_idx": 0
+              },
+              {
+                "product_id": 337,
+                "product_qty": 6.0,
+                "product_uom_id": 1,
+                "operation_ref_idx": 0,
+                "note": "[Петля] K113.01 — spec: К.11301"
+              },
+              {
+                "product_id": 332,
+                "product_qty": 26.0,
+                "product_uom_id": 1,
+                "operation_ref_idx": 0
+              },
+              {
+                "product_id": "$varChovNF_DNeo3Mekh_Rene4",
+                "product_qty": 1.0,
+                "product_uom_id": 1,
+                "operation_ref_idx": 0
+              },
+              {
+                "product_id": "$varPodushka_DNeo_Rene4_PPU",
+                "product_qty": 3.0,
+                "product_uom_id": 1,
+                "operation_ref_idx": 0
+              },
+              {
+                "product_id": 188,
+                "product_qty": 85.0,
+                "product_uom_id": 8,
+                "operation_ref_idx": 1,
+                "note": "Скотч"
+              },
+              {
+                "product_id": 46,
+                "product_qty": 3400.0,
+                "product_uom_id": 14,
+                "operation_ref_idx": 1,
+                "note": "Плівка (spec: 3.4 кг = 3400 g)"
+              },
+              {
+                "product_id": 47,
+                "product_qty": 5.1,
+                "product_uom_id": 8,
+                "operation_ref_idx": 1,
+                "note": "Картон"
+              },
+              {
+                "product_id": 187,
+                "product_qty": 1.0,
+                "product_uom_id": 1,
+                "operation_ref_idx": 2,
+                "note": "(Послуга) Перевірка Якості"
+              }
+            ]
+          }
+        },
+        "replicate_for": {
+          "note": "Для кожної комбінації Тканина×Пружинний_Блок×Наповнювач×Розмір_Бильця: 4×2×2×2=32 BOM. Ключові зміни product_id: Чохол, Підушка, KP-напівфабрикат.",
+          "fabric_variants_чохол": {
+            "Рене_4": "$varChovNF_DNeo3Mekh_Rene4",
+            "Рене_20": "$varChovNF_DNeo3Mekh_Rene20",
+            "Рене_23": "$varChovNF_DNeo3Mekh_Rene23",
+            "Рене_26": "$varChovNF_DNeo3Mekh_Rene26"
+          },
+          "arm_variants_чохол": {
+            "Звичайні": "$varChovNF_DNeo3Mekh_ReneX",
+            "Зменшені": "$varChovNF_DNeo3MekhZm_ReneX"
+          },
+          "spring_variants_KP": {
+            "Звичайний": "$varKP_DNeo3Mekh",
+            "Посиленний": "$varKP_DNeo3MekhPBl"
+          },
+          "stuffing_variants_podushka": {
+            "ППУ_Крихта": "$varPodushka_DNeo_Rene4_PPU",
+            "Холофайдер": "$varPodushka_DNeo_Rene4_Xolo"
+          }
+        }
+      }
+    ]
+  },
+
+  "phase_5_validate": {
+    "description": "Перевірка після імпорту",
+    "checks": [
+      "npm run check '🪤[Каркас - напівфабрикат] (100ДСП Механізм)'",
+      "npm run check '🧩[Поролон - нарізані компонети] (Д.Нео-3 Механізм)'",
+      "npm run check '🪤🧽[Каркас + Поролон - напівфабрикат 2] (Д.Нео-3 Механізм)'",
+      "npm run check 'Диван \"Нео-3 Механізм\"'"
+    ]
+  }
+}
