@@ -1,6 +1,6 @@
 {
   "sourceFile": "BOMs Д Нео-3 Механізм.md",
-  "generatedAt": "2026-06-25T18:16:37.191Z",
+  "generatedAt": "2026-06-29T11:43:16.653Z",
   "boms": [
     {
       "product": {
@@ -186,7 +186,7 @@
       "operations": [
         {
           "name": "Операція (Цех №2-2) 🧩[Каркас - нарізані деталі] (100ДСП Механізм)",
-          "workcenterName": "Цех №2-2 ДСП (нарізка карказ )",
+          "workcenterName": "Цех №2-2 ДСП (нарізка каркас)",
           "priceRate": 0
         }
       ],
@@ -202,7 +202,7 @@
           "templateName": "[ДВП]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // ------------------------ "ДВП"
               "value": "Білий"
             }
           ],
@@ -212,27 +212,27 @@
         }
       ]
     },
-    {
-      "product": {
-        "templateName": "🧩[Планка - нарізані деталі]",
-        "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "НАЗВА_МОДЕЛІ"
-          }
-        ],
-        "variantDisplayName": "🧩[Планка - нарізані деталі] (НАЗВА_МОДЕЛІ)",
-        "qty": 0
-      },
-      "operations": [
-        {
-          "name": "Операція (Цех №2-3) 🧩[Планка - нарізані деталі] (НАЗВА_МОДЕЛІ)",
-          "workcenterName": "Цех №2-3 ДСП (нарізка планка)",
-          "priceRate": 0
-        }
-      ],
-      "components": []
-    },
+    // {
+    //   "product": {
+    //     "templateName": "🧩[Планка - нарізані деталі]",
+    //     "attributes": [
+    //       {
+    //         "attributeName": "Модель",
+    //         "value": "НАЗВА_МОДЕЛІ"
+    //       }
+    //     ],
+    //     "variantDisplayName": "🧩[Планка - нарізані деталі] (НАЗВА_МОДЕЛІ)",
+    //     "qty": 0
+    //   },
+    //   "operations": [
+    //     {
+    //       "name": "Операція (Цех №2-3) 🧩[Планка - нарізані деталі] (НАЗВА_МОДЕЛІ)",
+    //       "workcenterName": "Цех №2-3 ДСП (нарізка планка)",
+    //       "priceRate": 0
+    //     }
+    //   ],
+    //   "components": []
+    // },
     {
       "product": {
         "templateName": "🧩[Ламінат - нарізані деталі]",
@@ -257,7 +257,7 @@
           "templateName": "🧩[Ламінат - лист]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // ------------------------ "Ламінат Розмір"
               "value": "712x220"
             }
           ],
@@ -269,7 +269,7 @@
           "templateName": "🧩[Ламінат - лист]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // ------------------------ "Ламінат Розмір"
               "value": "950х220"
             }
           ],
@@ -281,7 +281,7 @@
           "templateName": "🧩[Ламінат - лист]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // ------------------------ "Ламінат Розмір"
               "value": "950х220 с углами"
             }
           ],
@@ -438,27 +438,27 @@
         }
       ]
     },
-    {
-      "product": {
-        "templateName": "🪤[Планка - напівфабрикат]",
-        "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "НАЗВА*МОДЕЛІ"
-          }
-        ],
-        "variantDisplayName": "🪤[Планка - напівфабрикат] (НАЗВА*МОДЕЛІ)",
-        "qty": 0
-      },
-      "operations": [
-        {
-          "name": "Операція (Цех №4-3) 🪤[Планка - напівфабрикат] (НАЗВА*МОДЕЛІ)",
-          "workcenterName": "Цех №4-3 Сборка Планка",
-          "priceRate": 0
-        }
-      ],
-      "components": []
-    },
+    // {
+    //   "product": {
+    //     "templateName": "🪤[Планка - напівфабрикат]",
+    //     "attributes": [
+    //       {
+    //         "attributeName": "Модель",
+    //         "value": "НАЗВА*МОДЕЛІ"
+    //       }
+    //     ],
+    //     "variantDisplayName": "🪤[Планка - напівфабрикат] (НАЗВА*МОДЕЛІ)",
+    //     "qty": 0
+    //   },
+    //   "operations": [
+    //     {
+    //       "name": "Операція (Цех №4-3) 🪤[Планка - напівфабрикат] (НАЗВА*МОДЕЛІ)",
+    //       "workcenterName": "Цех №4-3 Сборка Планка",
+    //       "priceRate": 0
+    //     }
+    //   ],
+    //   "components": []
+    // },
     {
       "product": {
         "templateName": "🧩[Поролон - нарізані компонети]",
@@ -483,7 +483,7 @@
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Поролон"
               "value": "ST-2535 (2000x1600x20)"
             }
           ],
@@ -495,7 +495,7 @@
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Поролон"
               "value": "ST-2233 (2000x1600x40x105)"
             }
           ],
@@ -507,7 +507,7 @@
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Поролон"
               "value": "ST-2233 (2000x1600x10)"
             }
           ],
@@ -519,7 +519,7 @@
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Поролон"
               "value": "ST-2233 (2000x1400x10)"
             }
           ],
@@ -531,7 +531,7 @@
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Поролон"
               "value": "ST-2233 (2000x1600x40x70)"
             }
           ],
@@ -543,7 +543,7 @@
           "templateName": "[Войлок]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Войлок"
               "value": "1.60"
             }
           ],
@@ -577,7 +577,7 @@
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Поролон"
               "value": "ST-2535 (2000x1600x20)"
             }
           ],
@@ -589,7 +589,7 @@
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Поролон"
               "value": "ST-2233 (2000x1600x40x105)"
             }
           ],
@@ -601,7 +601,7 @@
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Поролон"
               "value": "ST-2233 (2000x1600x10)"
             }
           ],
@@ -613,7 +613,7 @@
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Поролон"
               "value": "ST-2233 (2000x1400x10)"
             }
           ],
@@ -625,7 +625,7 @@
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Поролон"
               "value": "ST-2233 (2000x1600x40x70)"
             }
           ],
@@ -637,7 +637,7 @@
           "templateName": "[Войлок]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Войлок"
               "value": "1.60"
             }
           ],
@@ -671,7 +671,7 @@
           "templateName": "[Флізелін]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Флізелін"
               "value": "30"
             }
           ],
@@ -741,7 +741,7 @@
           "templateName": "[Боннель]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Боннель"
               "value": "910 х 600"
             }
           ],
@@ -750,7 +750,7 @@
           "operationIndex": 0
         },
         {
-          "templateName": "[Боннель]",
+          "templateName": "[Боннель]", // --------------------- "Боннель"
           "attributes": [
             {
               "attributeName": "Модель",
@@ -823,7 +823,7 @@
           "templateName": "[Боннель]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Боннель"
               "value": "910 х 600"
             }
           ],
@@ -835,7 +835,7 @@
           "templateName": "[Боннель]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Боннель"
               "value": "910 х 750"
             }
           ],
@@ -873,7 +873,7 @@
           "templateName": "[Синтепон]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Синтепон"
               "value": "400"
             }
           ],
@@ -885,7 +885,7 @@
           "templateName": "[Тканина]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Тканина"
               "value": "Рене 4"
             }
           ],
@@ -897,7 +897,7 @@
           "templateName": "[Флізелін]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Флізелін"
               "value": "60"
             }
           ],
@@ -935,7 +935,7 @@
           "templateName": "[Синтепон]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Синтепон"
               "value": "400"
             }
           ],
@@ -947,7 +947,7 @@
           "templateName": "[Тканина]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель",  // --------------------- "Тканина"
               "value": "Рене 4"
             }
           ],
@@ -959,7 +959,7 @@
           "templateName": "[Флізелін]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Флізелін"
               "value": "60"
             }
           ],
@@ -1215,7 +1215,7 @@
           "templateName": "[Соединитель]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Соединитель"
               "value": "83 эконом"
             }
           ],
@@ -1227,7 +1227,7 @@
           "templateName": "[Петля]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Петля"
               "value": "К.11301"
             }
           ],
@@ -1239,7 +1239,7 @@
           "templateName": "[Ніжка]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Модель", // --------------------- "Ніжка"
               "value": "h30"
             }
           ],
