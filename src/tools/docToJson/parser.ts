@@ -1,6 +1,38 @@
 import { AttributeVal, BomEntry, ComponentEntry, OperationEntry } from './types';
 
-const ATTR_NAMES = ['Модель', 'Тканина', 'Наповнювач'] as const;
+const DEFAULT_ATTR_NAMES = ['Модель', 'Тканина', 'Наповнювач'];
+
+// Maps bracket name (without emoji/brackets) to the attribute name(s) for that product
+const BRACKET_ATTR_NAMES: Record<string, string[]> = {
+  'ДВП':            ['ДВП'],
+  'ДСП':            ['ДСП'],
+  'Ламінат - лист': ['Ламінат Розмір'],
+  'Поролон':        ['Поролон'],
+  'Войлок':         ['Войлок'],
+  'Боннель':        ['Боннель'],
+  'Соединитель':    ['Соединитель'],
+  'Петля':          ['Петля'],
+  'Ніжка':          ['Ніжка'],
+  'Синтепон':       ['Синтепон'],
+  'Тканина':        ['Тканина'],
+  'Флізелін':       ['Флізелін'],
+  'Накладка':       ['Накладка'],
+};
+
+// Maps the FIRST WORD of a plain (non-bracketed) product name to its attribute names
+// e.g. 'Диван "Нео-3 Механізм"' → first word "Диван" → sofa attribute names
+const PLAIN_PRODUCT_ATTR_NAMES: Record<string, string[]> = {
+  'Диван': ['Тканина', 'Диван Пружинний Блок', 'Диван Наповнювач Подушек'],
+};
+
+function getAttrNames(bracketName?: string, plainPrefix?: string): string[] {
+  if (bracketName && BRACKET_ATTR_NAMES[bracketName]) return BRACKET_ATTR_NAMES[bracketName];
+  if (plainPrefix) {
+    const firstWord = plainPrefix.split(/[\s"«»]/)[0].trim();
+    if (PLAIN_PRODUCT_ATTR_NAMES[firstWord]) return PLAIN_PRODUCT_ATTR_NAMES[firstWord];
+  }
+  return DEFAULT_ATTR_NAMES;
+}
 
 interface WorkshopInfo {
   fullName: string;        // "Цех №1 Дерева (нарізка)"
@@ -50,9 +82,10 @@ function parseAttrString(raw: string): string[] {
   return splitTopLevel(inner);
 }
 
-function valuesToAttributes(values: string[]): AttributeVal[] {
+function valuesToAttributes(values: string[], bracketName?: string, plainPrefix?: string): AttributeVal[] {
+  const names = getAttrNames(bracketName, plainPrefix);
   return values.map((value, i) => ({
-    attributeName: ATTR_NAMES[i] ?? `Атрибут${i + 1}`,
+    attributeName: names[i] ?? `Атрибут${i + 1}`,
     value,
   }));
 }
@@ -144,7 +177,7 @@ function tryParseProduct(line: string, isFirstInSection: boolean): ParsedProduct
     const bracketName = bracketMatch[2].trim();
     const attrValues = attrStr ? parseAttrString(attrStr) : [];
     const templateName = buildTemplateName(emoji, bracketName, true);
-    const attributes = valuesToAttributes(attrValues);
+    const attributes = valuesToAttributes(attrValues, bracketName);
     const variantDisplayName = buildVariantDisplayName(templateName, attrValues);
 
     // If it has qty but we already have a product, treat as component (caller checks)
@@ -161,10 +194,10 @@ function tryParseProduct(line: string, isFirstInSection: boolean): ParsedProduct
 
   // Plain product: Name (attrs) — no qty OR qty only if first in section
   if (attrStr && prefix && (qty === null || isFirstInSection)) {
-    // Make sure prefix doesn't look like a component (no dashes at start, etc.)
-    if (/^[А-ЯҐЄІЇA-Zа-яґєіїa-z0-9\s-]+$/u.test(prefix)) {
+    // Make sure prefix doesn't look like a component — allows quotes for names like Диван "Нео-3 Механізм"
+    if (/^[А-ЯҐЄІЇA-Zа-яґєіїa-z0-9\s\-"«»]+$/u.test(prefix)) {
       const attrValues = parseAttrString(attrStr);
-      const attributes = valuesToAttributes(attrValues);
+      const attributes = valuesToAttributes(attrValues, undefined, prefix);
       const variantDisplayName = buildVariantDisplayName(prefix, attrValues);
       return {
         templateName: prefix,
@@ -211,7 +244,7 @@ function tryParseComponent(line: string): ParsedComponent | null {
     const templateName = buildTemplateName(emoji, bracketName, true);
     return {
       templateName,
-      attributes: valuesToAttributes(attrValues),
+      attributes: valuesToAttributes(attrValues, bracketName),
       qty,
       uom,
       isService: false,
@@ -232,13 +265,12 @@ function tryParseComponent(line: string): ParsedComponent | null {
     }
   }
 
-  // Plain component with attributes: [Тканина] (Рене 4) - 17.50 m already handled by bracketMatch
-  // Or Name (attrs) - qty uom for component
+  // Plain component with attributes: Name (attrs) - qty uom
   if (attrStr && prefix) {
     const attrValues = parseAttrString(attrStr);
     return {
       templateName: prefix,
-      attributes: valuesToAttributes(attrValues),
+      attributes: valuesToAttributes(attrValues, undefined, prefix),
       qty,
       uom,
       isService: false,
@@ -335,6 +367,15 @@ export function parseDoc(content: string): BomEntry[] {
   function flushBom() {
     if (!currentProduct || !currentWorkshop) return;
     if (currentOperations.length === 0) return;
+
+    if (currentProduct.qty === 0) {
+      currentProduct = null;
+      currentComponents = [];
+      currentOperations = [];
+      currentOpIndex = 0;
+      isFirstInSection = true;
+      return;
+    }
 
     const components: ComponentEntry[] = currentComponents.map(c => ({
       templateName: c.templateName,
@@ -471,7 +512,7 @@ export function parseDoc(content: string): BomEntry[] {
   }
 
   // Flush last accumulated BOM
-  if (currentProduct) {
+  if (currentProduct && currentProduct.qty !== 0) {
     const components: ComponentEntry[] = currentComponents.map(c => ({
       templateName: c.templateName,
       attributes: c.attributes,

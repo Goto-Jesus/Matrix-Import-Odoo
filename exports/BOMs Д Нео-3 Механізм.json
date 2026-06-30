@@ -1,6 +1,6 @@
 {
   "sourceFile": "BOMs Д Нео-3 Механізм.md",
-  "generatedAt": "2026-06-29T11:43:16.653Z",
+  "generatedAt": "2026-06-30T09:48:22.550Z",
   "boms": [
     {
       "product": {
@@ -12,13 +12,16 @@
           }
         ],
         "variantDisplayName": "🪵[Каркас - нарізана деревина] (100ДСП Механізм)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 49,
+        "odooVariantId": 640
       },
       "operations": [
         {
           "name": "Операція (Цех №1) 🪵[Каркас - нарізана деревина] (100ДСП Механізм)",
           "workcenterName": "Цех №1 Дерева (нарізка)",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 4
         }
       ],
       "components": [
@@ -27,7 +30,10 @@
           "attributes": [],
           "qty": 0.02,
           "uom": "m³",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 35,
+          "odooVariantId": 59,
+          "odooUomId": 30
         }
       ]
     },
@@ -41,13 +47,16 @@
           }
         ],
         "variantDisplayName": "🪵[Бильце - нарізана деревина] (Б.Нео)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 179,
+        "odooVariantId": 351
       },
       "operations": [
         {
           "name": "Операція (Цех №1) 🪵[Бильце - нарізана деревина] (Б.Нео)",
           "workcenterName": "Цех №1 Дерева (нарізка)",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 4
         }
       ],
       "components": [
@@ -56,7 +65,10 @@
           "attributes": [],
           "qty": 0.00125,
           "uom": "m³",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 35,
+          "odooVariantId": 59,
+          "odooUomId": 30
         }
       ]
     },
@@ -70,13 +82,15 @@
           }
         ],
         "variantDisplayName": "🪵[Бильце - нарізана деревина] (Б.Нео - зменшене бильце)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 179
       },
       "operations": [
         {
           "name": "Операція (Цех №1) 🪵[Бильце - нарізана деревина] (Б.Нео - зменшене бильце)",
           "workcenterName": "Цех №1 Дерева (нарізка)",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 4
         }
       ],
       "components": [
@@ -85,7 +99,10 @@
           "attributes": [],
           "qty": 0.00125,
           "uom": "m³",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 35,
+          "odooVariantId": 59,
+          "odooUomId": 30
         }
       ]
     },
@@ -99,13 +116,16 @@
           }
         ],
         "variantDisplayName": "🧩[Бильце - нарізані деталі] (Б.Нео)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 36,
+        "odooVariantId": 508
       },
       "operations": [
         {
           "name": "Операція (Цех №2-1) 🧩[Бильце - нарізані деталі] (Б.Нео)",
           "workcenterName": "Цех №2-1 ДСП (нарізка бильце)",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 1
         }
       ],
       "components": [
@@ -114,19 +134,25 @@
           "attributes": [],
           "qty": 0.59,
           "uom": "m²",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 13,
+          "odooVariantId": 31,
+          "odooUomId": 10
         },
         {
           "templateName": "[ДВП]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "ДВП",
               "value": "Звичайний"
             }
           ],
           "qty": 0.41,
           "uom": "m²",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 14,
+          "odooVariantId": 324,
+          "odooUomId": 10
         }
       ]
     },
@@ -140,13 +166,15 @@
           }
         ],
         "variantDisplayName": "🧩[Бильце - нарізані деталі] (Б.Нео - зменшене бильце)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 36
       },
       "operations": [
         {
           "name": "Операція (Цех №2-1) 🧩[Бильце - нарізані деталі] (Б.Нео - зменшене бильце)",
           "workcenterName": "Цех №2-1 ДСП (нарізка бильце)",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 1
         }
       ],
       "components": [
@@ -155,19 +183,25 @@
           "attributes": [],
           "qty": 0.59,
           "uom": "m²",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 13,
+          "odooVariantId": 31,
+          "odooUomId": 10
         },
         {
           "templateName": "[ДВП]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "ДВП",
               "value": "Звичайний"
             }
           ],
           "qty": 0.41,
           "uom": "m²",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 14,
+          "odooVariantId": 324,
+          "odooUomId": 10
         }
       ]
     },
@@ -181,13 +215,16 @@
           }
         ],
         "variantDisplayName": "🧩[Каркас - нарізані деталі] (100ДСП Механізм)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 177,
+        "odooVariantId": 641
       },
       "operations": [
         {
           "name": "Операція (Цех №2-2) 🧩[Каркас - нарізані деталі] (100ДСП Механізм)",
           "workcenterName": "Цех №2-2 ДСП (нарізка каркас)",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 2
         }
       ],
       "components": [
@@ -196,43 +233,28 @@
           "attributes": [],
           "qty": 1.76,
           "uom": "m²",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 13,
+          "odooVariantId": 31,
+          "odooUomId": 10
         },
         {
           "templateName": "[ДВП]",
           "attributes": [
             {
-              "attributeName": "Модель", // ------------------------ "ДВП"
+              "attributeName": "ДВП",
               "value": "Білий"
             }
           ],
           "qty": 0.73,
           "uom": "m²",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 14,
+          "odooVariantId": 325,
+          "odooUomId": 10
         }
       ]
     },
-    // {
-    //   "product": {
-    //     "templateName": "🧩[Планка - нарізані деталі]",
-    //     "attributes": [
-    //       {
-    //         "attributeName": "Модель",
-    //         "value": "НАЗВА_МОДЕЛІ"
-    //       }
-    //     ],
-    //     "variantDisplayName": "🧩[Планка - нарізані деталі] (НАЗВА_МОДЕЛІ)",
-    //     "qty": 0
-    //   },
-    //   "operations": [
-    //     {
-    //       "name": "Операція (Цех №2-3) 🧩[Планка - нарізані деталі] (НАЗВА_МОДЕЛІ)",
-    //       "workcenterName": "Цех №2-3 ДСП (нарізка планка)",
-    //       "priceRate": 0
-    //     }
-    //   ],
-    //   "components": []
-    // },
     {
       "product": {
         "templateName": "🧩[Ламінат - нарізані деталі]",
@@ -243,13 +265,16 @@
           }
         ],
         "variantDisplayName": "🧩[Ламінат - нарізані деталі] (100 Механізм)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 66,
+        "odooVariantId": 608
       },
       "operations": [
         {
           "name": "Операція (Цех №3-1) 🧩[Ламінат - нарізані деталі] (100 Механізм)",
           "workcenterName": "Цех №3-1 ЛДСП (нарізка ламінату)",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 13
         }
       ],
       "components": [
@@ -257,60 +282,48 @@
           "templateName": "🧩[Ламінат - лист]",
           "attributes": [
             {
-              "attributeName": "Модель", // ------------------------ "Ламінат Розмір"
+              "attributeName": "Ламінат Розмір",
               "value": "712x220"
             }
           ],
           "qty": 2,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 18,
+          "odooVariantId": 504,
+          "odooUomId": 1
         },
         {
           "templateName": "🧩[Ламінат - лист]",
           "attributes": [
             {
-              "attributeName": "Модель", // ------------------------ "Ламінат Розмір"
+              "attributeName": "Ламінат Розмір",
               "value": "950х220"
             }
           ],
           "qty": 1,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 18,
+          "odooVariantId": 505,
+          "odooUomId": 1
         },
         {
           "templateName": "🧩[Ламінат - лист]",
           "attributes": [
             {
-              "attributeName": "Модель", // ------------------------ "Ламінат Розмір"
+              "attributeName": "Ламінат Розмір",
               "value": "950х220 с углами"
             }
           ],
           "qty": 1,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 18,
+          "odooVariantId": 609,
+          "odooUomId": 1
         }
       ]
-    },
-    {
-      "product": {
-        "templateName": "[Накладка]",
-        "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "НАЗВА_МОДЕЛІ"
-          }
-        ],
-        "variantDisplayName": "[Накладка] (НАЗВА_МОДЕЛІ)",
-        "qty": 0
-      },
-      "operations": [
-        {
-          "name": "Операція (Цех №3-2) [Накладка] (НАЗВА_МОДЕЛІ)",
-          "workcenterName": "Цех №3-2 ЛДСП (нарізка накладок)",
-          "priceRate": 0
-        }
-      ],
-      "components": []
     },
     {
       "product": {
@@ -322,13 +335,16 @@
           }
         ],
         "variantDisplayName": "🪤[Бильце - напівфабрикат] (Б.Нео)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 12,
+        "odooVariantId": 512
       },
       "operations": [
         {
           "name": "Операція (Цех №4-1) 🪤[Бильце - напівфабрикат] (Б.Нео)",
           "workcenterName": "Цех №4-1 Сборка Бильце",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 5
         }
       ],
       "components": [
@@ -342,7 +358,10 @@
           ],
           "qty": 1,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 36,
+          "odooVariantId": 508,
+          "odooUomId": 1
         }
       ]
     },
@@ -356,13 +375,15 @@
           }
         ],
         "variantDisplayName": "🪤[Бильце - напівфабрикат] (Б.Нео - зменшене бильце)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 12
       },
       "operations": [
         {
           "name": "Операція (Цех №4-1) 🪤[Бильце - напівфабрикат] (Б.Нео - зменшене бильце)",
           "workcenterName": "Цех №4-1 Сборка Бильце",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 5
         }
       ],
       "components": [
@@ -376,7 +397,9 @@
           ],
           "qty": 1,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 36,
+          "odooUomId": 1
         }
       ]
     },
@@ -390,13 +413,15 @@
           }
         ],
         "variantDisplayName": "🪤[Каркас - напівфабрикат] (100ДСП Механізм)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 33
       },
       "operations": [
         {
           "name": "Операція (Цех №4-2) 🪤[Каркас - напівфабрикат] (100ДСП Механізм)",
           "workcenterName": "Цех №4-2 Сборка Карказ",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 5
         }
       ],
       "components": [
@@ -410,7 +435,10 @@
           ],
           "qty": 1,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 177,
+          "odooVariantId": 641,
+          "odooUomId": 1
         },
         {
           "templateName": "🪵[Каркас - нарізана деревина]",
@@ -422,7 +450,10 @@
           ],
           "qty": 1,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 49,
+          "odooVariantId": 640,
+          "odooUomId": 1
         },
         {
           "templateName": "🧩[Ламінат - нарізані деталі]",
@@ -434,31 +465,13 @@
           ],
           "qty": 1,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 66,
+          "odooVariantId": 608,
+          "odooUomId": 1
         }
       ]
     },
-    // {
-    //   "product": {
-    //     "templateName": "🪤[Планка - напівфабрикат]",
-    //     "attributes": [
-    //       {
-    //         "attributeName": "Модель",
-    //         "value": "НАЗВА*МОДЕЛІ"
-    //       }
-    //     ],
-    //     "variantDisplayName": "🪤[Планка - напівфабрикат] (НАЗВА*МОДЕЛІ)",
-    //     "qty": 0
-    //   },
-    //   "operations": [
-    //     {
-    //       "name": "Операція (Цех №4-3) 🪤[Планка - напівфабрикат] (НАЗВА*МОДЕЛІ)",
-    //       "workcenterName": "Цех №4-3 Сборка Планка",
-    //       "priceRate": 0
-    //     }
-    //   ],
-    //   "components": []
-    // },
     {
       "product": {
         "templateName": "🧩[Поролон - нарізані компонети]",
@@ -469,13 +482,15 @@
           }
         ],
         "variantDisplayName": "🧩[Поролон - нарізані компонети] (Д.Нео-3 Механізм)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 45
       },
       "operations": [
         {
           "name": "Операція (Цех №5) 🧩[Поролон - нарізані компонети] (Д.Нео-3 Механізм)",
           "workcenterName": "Цех №5 Порезка Поролон",
-          "priceRate": 100
+          "priceRate": 100,
+          "odooWorkcenterId": 6
         }
       ],
       "components": [
@@ -483,73 +498,90 @@
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Поролон"
+              "attributeName": "Поролон",
               "value": "ST-2535 (2000x1600x20)"
             }
           ],
           "qty": 2.4,
           "uom": "кг",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 19,
+          "odooUomId": 15
         },
         {
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Поролон"
+              "attributeName": "Поролон",
               "value": "ST-2233 (2000x1600x40x105)"
             }
           ],
           "qty": 1.4,
           "uom": "кг",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 19,
+          "odooVariantId": 515,
+          "odooUomId": 15
         },
         {
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Поролон"
+              "attributeName": "Поролон",
               "value": "ST-2233 (2000x1600x10)"
             }
           ],
           "qty": 1.06,
           "uom": "кг",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 19,
+          "odooVariantId": 517,
+          "odooUomId": 15
         },
         {
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Поролон"
+              "attributeName": "Поролон",
               "value": "ST-2233 (2000x1400x10)"
             }
           ],
           "qty": 0.93,
           "uom": "кг",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 19,
+          "odooVariantId": 518,
+          "odooUomId": 15
         },
         {
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Поролон"
+              "attributeName": "Поролон",
               "value": "ST-2233 (2000x1600x40x70)"
             }
           ],
           "qty": 1.6,
           "uom": "кг",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 19,
+          "odooVariantId": 516,
+          "odooUomId": 15
         },
         {
           "templateName": "[Войлок]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Войлок"
+              "attributeName": "Войлок",
               "value": "1.60"
             }
           ],
           "qty": 3,
           "uom": "m",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 20,
+          "odooVariantId": 330,
+          "odooUomId": 8
         }
       ]
     },
@@ -563,13 +595,15 @@
           }
         ],
         "variantDisplayName": "🧩[Поролон - нарізані компонети] (Д.Нео-3 Механізм - посилений блок)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 45
       },
       "operations": [
         {
           "name": "Операція (Цех №5) 🧩[Поролон - нарізані компонети] (Д.Нео-3 Механізм - посилений блок)",
           "workcenterName": "Цех №5 Порезка Поролон",
-          "priceRate": 100
+          "priceRate": 100,
+          "odooWorkcenterId": 6
         }
       ],
       "components": [
@@ -577,73 +611,90 @@
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Поролон"
+              "attributeName": "Поролон",
               "value": "ST-2535 (2000x1600x20)"
             }
           ],
           "qty": 2.4,
           "uom": "кг",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 19,
+          "odooUomId": 15
         },
         {
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Поролон"
+              "attributeName": "Поролон",
               "value": "ST-2233 (2000x1600x40x105)"
             }
           ],
           "qty": 1.4,
           "uom": "кг",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 19,
+          "odooVariantId": 515,
+          "odooUomId": 15
         },
         {
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Поролон"
+              "attributeName": "Поролон",
               "value": "ST-2233 (2000x1600x10)"
             }
           ],
           "qty": 1.06,
           "uom": "кг",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 19,
+          "odooVariantId": 517,
+          "odooUomId": 15
         },
         {
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Поролон"
+              "attributeName": "Поролон",
               "value": "ST-2233 (2000x1400x10)"
             }
           ],
           "qty": 0.93,
           "uom": "кг",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 19,
+          "odooVariantId": 518,
+          "odooUomId": 15
         },
         {
           "templateName": "[Поролон]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Поролон"
+              "attributeName": "Поролон",
               "value": "ST-2233 (2000x1600x40x70)"
             }
           ],
           "qty": 3.2,
           "uom": "кг",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 19,
+          "odooVariantId": 516,
+          "odooUomId": 15
         },
         {
           "templateName": "[Войлок]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Войлок"
+              "attributeName": "Войлок",
               "value": "1.60"
             }
           ],
           "qty": 6,
           "uom": "m",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 20,
+          "odooVariantId": 330,
+          "odooUomId": 8
         }
       ]
     },
@@ -657,13 +708,16 @@
           }
         ],
         "variantDisplayName": "[Наволочка] (Д.Нео)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 167,
+        "odooVariantId": 663
       },
       "operations": [
         {
           "name": "Операція (Цех №5-1) [Наволочка] (Д.Нео)",
           "workcenterName": "Цех №5-1 Наволочка",
-          "priceRate": 1
+          "priceRate": 1,
+          "odooWorkcenterId": 17
         }
       ],
       "components": [
@@ -671,13 +725,16 @@
           "templateName": "[Флізелін]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Флізелін"
+              "attributeName": "Флізелін",
               "value": "30"
             }
           ],
           "qty": 1.3,
           "uom": "m",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 25,
+          "odooVariantId": 340,
+          "odooUomId": 8
         }
       ]
     },
@@ -691,13 +748,15 @@
           }
         ],
         "variantDisplayName": "🪤🧽[Каркас + Поролон - напівфабрикат 2] (Д.Нео-3 Механізм)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 16
       },
       "operations": [
         {
           "name": "Операція (Цех №6) 🪤🧽[Каркас + Поролон - напівфабрикат 2] (Д.Нео-3 Механізм)",
           "workcenterName": "Цех №6 Поклейки Поролона + Сбивка",
-          "priceRate": 380
+          "priceRate": 380,
+          "odooWorkcenterId": 9
         }
       ],
       "components": [
@@ -711,7 +770,9 @@
           ],
           "qty": 3,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 33,
+          "odooUomId": 1
         },
         {
           "templateName": "🪤[Бильце - напівфабрикат]",
@@ -723,7 +784,10 @@
           ],
           "qty": 2,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 12,
+          "odooVariantId": 512,
+          "odooUomId": 1
         },
         {
           "templateName": "🧩[Поролон - нарізані компонети]",
@@ -735,31 +799,39 @@
           ],
           "qty": 1,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 45,
+          "odooUomId": 1
         },
         {
           "templateName": "[Боннель]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Боннель"
+              "attributeName": "Боннель",
               "value": "910 х 600"
             }
           ],
           "qty": 3,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 24,
+          "odooVariantId": 521,
+          "odooUomId": 1
         },
         {
-          "templateName": "[Боннель]", // --------------------- "Боннель"
+          "templateName": "[Боннель]",
           "attributes": [
             {
-              "attributeName": "Модель",
+              "attributeName": "Боннель",
               "value": "910 х 750"
             }
           ],
           "qty": 3,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 24,
+          "odooVariantId": 522,
+          "odooUomId": 1
         }
       ]
     },
@@ -773,13 +845,15 @@
           }
         ],
         "variantDisplayName": "🪤🧽[Каркас + Поролон - напівфабрикат 2] (Д.Нео-3 Механізм - посилений блок)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 16
       },
       "operations": [
         {
           "name": "Операція (Цех №6) 🪤🧽[Каркас + Поролон - напівфабрикат 2] (Д.Нео-3 Механізм - посилений блок)",
           "workcenterName": "Цех №6 Поклейки Поролона + Сбивка",
-          "priceRate": 380
+          "priceRate": 380,
+          "odooWorkcenterId": 9
         }
       ],
       "components": [
@@ -793,7 +867,9 @@
           ],
           "qty": 3,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 33,
+          "odooUomId": 1
         },
         {
           "templateName": "🪤[Бильце - напівфабрикат]",
@@ -805,7 +881,10 @@
           ],
           "qty": 2,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 12,
+          "odooVariantId": 512,
+          "odooUomId": 1
         },
         {
           "templateName": "🧩[Поролон - нарізані компонети]",
@@ -817,31 +896,39 @@
           ],
           "qty": 1,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 45,
+          "odooUomId": 1
         },
         {
           "templateName": "[Боннель]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Боннель"
+              "attributeName": "Боннель",
               "value": "910 х 600"
             }
           ],
           "qty": 3,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 24,
+          "odooVariantId": 521,
+          "odooUomId": 1
         },
         {
           "templateName": "[Боннель]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Боннель"
+              "attributeName": "Боннель",
               "value": "910 х 750"
             }
           ],
           "qty": 3,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 24,
+          "odooVariantId": 522,
+          "odooUomId": 1
         }
       ]
     },
@@ -859,13 +946,15 @@
           }
         ],
         "variantDisplayName": "🧩[Чохол - нарізані матеріали] (Д.Нео-3 Механізм, Рене 4)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 43
       },
       "operations": [
         {
           "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали] (Д.Нео-3 Механізм, Рене 4)",
           "workcenterName": "Цех №7 Закройка Тканини",
-          "priceRate": 500
+          "priceRate": 500,
+          "odooWorkcenterId": 7
         }
       ],
       "components": [
@@ -873,37 +962,46 @@
           "templateName": "[Синтепон]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Синтепон"
+              "attributeName": "Синтепон",
               "value": "400"
             }
           ],
           "qty": 14,
           "uom": "m",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 159,
+          "odooVariantId": 311,
+          "odooUomId": 8
         },
         {
           "templateName": "[Тканина]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Тканина"
+              "attributeName": "Тканина",
               "value": "Рене 4"
             }
           ],
           "qty": 17.5,
           "uom": "m",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 181,
+          "odooVariantId": 527,
+          "odooUomId": 8
         },
         {
           "templateName": "[Флізелін]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Флізелін"
+              "attributeName": "Флізелін",
               "value": "60"
             }
           ],
           "qty": 16.5,
           "uom": "m",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 25,
+          "odooVariantId": 341,
+          "odooUomId": 8
         }
       ]
     },
@@ -921,13 +1019,15 @@
           }
         ],
         "variantDisplayName": "🧩[Чохол - нарізані матеріали] (Д.Нео-3 Механізм - зменшене бильце, Рене 4)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 43
       },
       "operations": [
         {
           "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали] (Д.Нео-3 Механізм - зменшене бильце, Рене 4)",
           "workcenterName": "Цех №7 Закройка Тканини",
-          "priceRate": 500
+          "priceRate": 500,
+          "odooWorkcenterId": 7
         }
       ],
       "components": [
@@ -935,37 +1035,46 @@
           "templateName": "[Синтепон]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Синтепон"
+              "attributeName": "Синтепон",
               "value": "400"
             }
           ],
           "qty": 14,
           "uom": "m",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 159,
+          "odooVariantId": 311,
+          "odooUomId": 8
         },
         {
           "templateName": "[Тканина]",
           "attributes": [
             {
-              "attributeName": "Модель",  // --------------------- "Тканина"
+              "attributeName": "Тканина",
               "value": "Рене 4"
             }
           ],
           "qty": 17.5,
           "uom": "m",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 181,
+          "odooVariantId": 527,
+          "odooUomId": 8
         },
         {
           "templateName": "[Флізелін]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Флізелін"
+              "attributeName": "Флізелін",
               "value": "60"
             }
           ],
           "qty": 16.5,
           "uom": "m",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 25,
+          "odooVariantId": 341,
+          "odooUomId": 8
         }
       ]
     },
@@ -983,13 +1092,15 @@
           }
         ],
         "variantDisplayName": "🪤[Чохол - напівфабрикат] (Д.Нео-3 Механізм, Рене 4)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 34
       },
       "operations": [
         {
           "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат] (Д.Нео-3 Механізм, Рене 4)",
           "workcenterName": "Цех №8 Швейка",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 8
         }
       ],
       "components": [
@@ -1007,7 +1118,9 @@
           ],
           "qty": 1,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 43,
+          "odooUomId": 1
         }
       ]
     },
@@ -1025,13 +1138,15 @@
           }
         ],
         "variantDisplayName": "🪤[Чохол - напівфабрикат] (Д.Нео-3 Механізм - зменшене бильце, Рене 4)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 34
       },
       "operations": [
         {
           "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат] (Д.Нео-3 Механізм - зменшене бильце, Рене 4)",
           "workcenterName": "Цех №8 Швейка",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 8
         }
       ],
       "components": [
@@ -1049,7 +1164,9 @@
           ],
           "qty": 1,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 43,
+          "odooUomId": 1
         }
       ]
     },
@@ -1071,13 +1188,15 @@
           }
         ],
         "variantDisplayName": "[Подушка] (Д.Нео, Рене 4, Крихта ППУ)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 67
       },
       "operations": [
         {
           "name": "Операція (Цех №9-1) [Подушка] (Д.Нео, Рене 4, Крихта ППУ)",
           "workcenterName": "Цех №9-1 Набивки Подушек",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 12
         }
       ],
       "components": [
@@ -1091,14 +1210,20 @@
           ],
           "qty": 2,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 167,
+          "odooVariantId": 663,
+          "odooUomId": 1
         },
         {
           "templateName": "Крихта ППУ",
           "attributes": [],
           "qty": 2.7,
           "uom": "кг",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 145,
+          "odooVariantId": 261,
+          "odooUomId": 15
         }
       ]
     },
@@ -1120,13 +1245,15 @@
           }
         ],
         "variantDisplayName": "[Подушка] (Д.Нео, Рене 4, Холофайбер)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 67
       },
       "operations": [
         {
           "name": "Операція (Цех №9-1) [Подушка] (Д.Нео, Рене 4, Холофайбер)",
           "workcenterName": "Цех №9-1 Набивки Подушек",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 12
         }
       ],
       "components": [
@@ -1140,48 +1267,61 @@
           ],
           "qty": 2,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 167,
+          "odooVariantId": 663,
+          "odooUomId": 1
         },
         {
           "templateName": "Холофайбер",
           "attributes": [],
           "qty": 2.7,
           "uom": "кг",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 204,
+          "odooVariantId": 704,
+          "odooUomId": 15
         }
       ]
     },
     {
       "product": {
-        "templateName": "Диван",
+        "templateName": "Диван \"Нео-3 Механізм\"",
         "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Нео-3 Механізм"
-          },
           {
             "attributeName": "Тканина",
             "value": "Рене 4"
+          },
+          {
+            "attributeName": "Диван Пружинний Блок",
+            "value": "Звичайний"
+          },
+          {
+            "attributeName": "Диван Наповнювач Подушек",
+            "value": "ППУ Крихта"
           }
         ],
-        "variantDisplayName": "Диван (Нео-3 Механізм, Рене 4)",
+        "variantDisplayName": "Диван \"Нео-3 Механізм\" (Рене 4, Звичайний, ППУ Крихта)",
         "qty": 1
       },
       "operations": [
         {
-          "name": "Операція (Цех №9) Диван (Нео-3 Механізм, Рене 4)",
+          "name": "Операція (Цех №9) Диван \"Нео-3 Механізм\" (Рене 4, Звичайний, ППУ Крихта)",
           "workcenterName": "Цех №9 Оббивки",
-          "priceRate": 490
+          "priceRate": 490,
+          "odooWorkcenterId": 10
         },
         {
-          "name": "Операція (Цех №10) Диван (Нео-3 Механізм, Рене 4)",
+          "name": "Операція (Цех №10) Диван \"Нео-3 Механізм\" (Рене 4, Звичайний, ППУ Крихта)",
           "workcenterName": "Цех №10 Упаковки",
-          "priceRate": 160
+          "priceRate": 160,
+          "odooWorkcenterId": 11
         },
         {
-          "name": "ВТК Диван (Нео-3 Механізм, Рене 4)",
+          "name": "ВТК Диван \"Нео-3 Механізм\" (Рене 4, Звичайний, ППУ Крихта)",
           "workcenterName": "ВТК",
-          "priceRate": 100
+          "priceRate": 100,
+          "odooWorkcenterId": 14
         }
       ],
       "components": [
@@ -1195,57 +1335,72 @@
           ],
           "qty": 1,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 16,
+          "odooUomId": 1
         },
         {
           "templateName": "Тік-так",
           "attributes": [],
           "qty": 3,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooUomId": 1
         },
         {
           "templateName": "Распорка",
           "attributes": [],
           "qty": 3,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 4,
+          "odooVariantId": 19,
+          "odooUomId": 1
         },
         {
           "templateName": "[Соединитель]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Соединитель"
+              "attributeName": "Соединитель",
               "value": "83 эконом"
             }
           ],
           "qty": 8,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 193,
+          "odooVariantId": 539,
+          "odooUomId": 1
         },
         {
           "templateName": "[Петля]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Петля"
-              "value": "К.11301"
+              "attributeName": "Петля",
+              "value": "K 113.01"
             }
           ],
           "qty": 6,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 8,
+          "odooVariantId": 337,
+          "odooUomId": 1
         },
         {
           "templateName": "[Ніжка]",
           "attributes": [
             {
-              "attributeName": "Модель", // --------------------- "Ніжка"
+              "attributeName": "Ніжка",
               "value": "h30"
             }
           ],
           "qty": 26,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 10,
+          "odooVariantId": 332,
+          "odooUomId": 1
         },
         {
           "templateName": "🪤[Чохол - напівфабрикат]",
@@ -1261,7 +1416,9 @@
           ],
           "qty": 1,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 34,
+          "odooUomId": 1
         },
         {
           "templateName": "[Подушка]",
@@ -1281,28 +1438,39 @@
           ],
           "qty": 3,
           "uom": "шт",
-          "operationIndex": 0
+          "operationIndex": 0,
+          "odooTemplateId": 67,
+          "odooUomId": 1
         },
         {
           "templateName": "Скотч",
           "attributes": [],
           "qty": 85,
           "uom": "m",
-          "operationIndex": 1
+          "operationIndex": 1,
+          "odooTemplateId": 72,
+          "odooVariantId": 188,
+          "odooUomId": 8
         },
         {
           "templateName": "Плівка",
           "attributes": [],
           "qty": 3.4,
           "uom": "кг",
-          "operationIndex": 1
+          "operationIndex": 1,
+          "odooTemplateId": 28,
+          "odooVariantId": 46,
+          "odooUomId": 15
         },
         {
           "templateName": "Картон",
           "attributes": [],
           "qty": 5.1,
           "uom": "m",
-          "operationIndex": 1
+          "operationIndex": 1,
+          "odooTemplateId": 29,
+          "odooVariantId": 47,
+          "odooUomId": 8
         },
         {
           "templateName": "Перевірка Якості",
@@ -1310,7 +1478,10 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 2,
-          "isService": true
+          "isService": true,
+          "odooTemplateId": 71,
+          "odooVariantId": 187,
+          "odooUomId": 1
         }
       ]
     }
