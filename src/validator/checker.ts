@@ -31,6 +31,21 @@ function loadKnownProducts(basePath: string): Set<string> {
 
 const KNOWN_UOMS = new Set(['шт', 'шт.', 'м', 'm', 'м²', 'm²', 'm2', 'м2', 'м³', 'm³', 'm3', 'м3', 'кг', 'kg', 'г', 'g', 'метр']);
 
+// Канонічні UOM після форматування — те що checker вважає "правильним"
+const CANONICAL_UOMS = new Set(['шт.', 'm', 'm²', 'm³', 'кг', 'г']);
+
+const UOM_SUGGESTION: Record<string, string> = {
+  'шт': 'шт.',
+  'kg': 'кг',
+  'g': 'г',
+  'м': 'm',
+  'метр': 'm',
+  'м2': 'm²',
+  'm2': 'm²',
+  'м3': 'm³',
+  'm3': 'm³',
+};
+
 function normalizeUom(s: string): string {
   return s.toLowerCase().replace(/\s+/g, '').replace(/\.$/, '');
 }
@@ -38,6 +53,10 @@ function normalizeUom(s: string): string {
 function isKnownUom(uomStr: string): boolean {
   const s = normalizeUom(uomStr);
   return KNOWN_UOMS.has(s) || s.includes('²') || s.includes('³');
+}
+
+function canonicalUomHint(uomStr: string): string | undefined {
+  return UOM_SUGGESTION[uomStr.replace(/\.$/, '')] ?? UOM_SUGGESTION[uomStr.toLowerCase().replace(/\.$/, '')];
 }
 
 // Перевірити що emoji стоїть перед дужкою, а не всередині
@@ -79,6 +98,20 @@ export function checkDocument(filePath: string, referenceBasePath?: string): Che
 
   let inWorkshop = false;
   let hasWorkshops = false;
+  let workshopHasPrice = false;
+  let workshopLabel = '';
+  let workshopHeaderLine = 0;
+
+  const warnMissingPrice = () => {
+    if (inWorkshop && !workshopHasPrice) {
+      warnings.push({
+        line: workshopHeaderLine,
+        severity: 'warning',
+        message: `Цех “${workshopLabel}” не має рядка “Ціна”. Додати: “Ціна 0 грн”`,
+        original: '',
+      });
+    }
+  };
 
   for (let i = 0; i < lines.length; i++) {
     const lineNum = i + 1;
@@ -87,20 +120,42 @@ export function checkDocument(filePath: string, referenceBasePath?: string): Che
 
     if (!trimmed) continue;
 
-    // Workshop header
-    if (trimmed.startsWith('#') && trimmed.includes('Цех')) {
-      const m = trimmed.match(/^#+\s*Цех\s+№([\w-]+)\s+(.+?)\s+-\s+(\S+)\s+["“](.+?)["”]\s*$/);
+    // Workshop header (тільки якщо є “№” — щоб не чіпати “## Цехи:” тощо)
+    if (trimmed.startsWith('#') && trimmed.includes('№')) {
+      warnMissingPrice();
+      const m = trimmed.match(/^#+\s*Цех\s+№([\w-]+)\s+(.+?)\s+-\s+(\S+)\s+[“”](.+?)[“”]\s*$/);
       if (!m) {
         errors.push({
           line: lineNum,
           severity: 'error',
-          message: `Некоректний заголовок цеху. Очікується: # Цех №N Назва - КОД "Операція (Цех №N)"`,
+          message: `Некоректний заголовок цеху. Очікується: # Цех №N Назва - КОД “Операція (Цех №N)”`,
           original: trimmed,
         });
       }
+      workshopLabel = trimmed.match(/^#+\s*(Цех\s+№[\w-]+)/)?.[1] ?? trimmed;
+      workshopHeaderLine = lineNum;
+      workshopHasPrice = false;
       inWorkshop = true;
       hasWorkshops = true;
       continue;
+    }
+
+    // Detect Ціна line (before inWorkshop check so it fires inside workshop context)
+    if (inWorkshop) {
+      const priceMatch = trimmed.match(/^Ціна\s+([\d.]+)\s*грн/i);
+      if (priceMatch) {
+        workshopHasPrice = true;
+        const price = parseFloat(priceMatch[1]);
+        if (price === 0) {
+          warnings.push({
+            line: lineNum,
+            severity: 'warning',
+            message: `Ціна = 0 у цеху “${workshopLabel}”. Вкажіть реальну ціну або залиште як заглушку.`,
+            original: trimmed,
+          });
+        }
+        continue;
+      }
     }
 
     if (!inWorkshop) continue;
@@ -145,19 +200,35 @@ export function checkDocument(filePath: string, referenceBasePath?: string): Che
         original: trimmed,
       });
     }
-    if (/\bХолофайдер\b/i.test(trimmed)) {
-      errors.push({
-        line: lineNum,
-        severity: 'error',
-        message: `Неправильна назва: "Холофайдер" → "Холофайбер"`,
-        original: trimmed,
-      });
-    }
     if (/\bдеровина\b/i.test(trimmed)) {
       errors.push({
         line: lineNum,
         severity: 'error',
         message: `Друкарська помилка: "деровина" → "деревина"`,
+        original: trimmed,
+      });
+    }
+
+    // Check [Name] attr - qty without parens around attr (syntax violation)
+    if (/\[[^\]]+\]\s+[^(\s\-][^\s\-]*\s+-\s*[\d]/.test(trimmed)) {
+      errors.push({
+        line: lineNum,
+        severity: 'error',
+        message: `Атрибут після назви має бути в дужках: "[Назва] (Атрибут)", не "[Назва] Атрибут"`,
+        original: trimmed,
+      });
+    }
+
+    // Check bare product with numeric model identifier (e.g. "Планка 198 - 1 шт.")
+    if (
+      !trimmed.startsWith('[') && !trimmed.startsWith('//') &&
+      !trimmed.startsWith('(') && !trimmed.startsWith('#') &&
+      /^[А-ЯҐЄІЇа-яґєіїє][\wА-ЯҐЄІЇа-яґєіїє\s-]*?\s+\d{2,}\w*\s+-\s*[\d,.]+/.test(trimmed)
+    ) {
+      warnings.push({
+        line: lineNum,
+        severity: 'warning',
+        message: `Можливо потрібні квадратні дужки: "${trimmed.split(' - ')[0].trim()}" — перевірте чи це компонент-специфікатор`,
         original: trimmed,
       });
     }
@@ -176,12 +247,24 @@ export function checkDocument(filePath: string, referenceBasePath?: string): Che
         });
       }
       if (!isKnownUom(uomStr)) {
+        const hint = canonicalUomHint(uomStr);
+        const suggestion = hint ? ` → "${hint}"` : '. Відомі: шт., m, m², m³, кг, г';
         warnings.push({
           line: lineNum,
           severity: 'warning',
-          message: `Невідома одиниця виміру: "${uomStr}". Відомі: шт, m, m², m³, кг, г`,
+          message: `Невідома одиниця виміру: "${uomStr}"${suggestion}`,
           original: trimmed,
         });
+      } else if (!CANONICAL_UOMS.has(uomStr.replace(/\.$/, '') === 'шт' ? 'шт.' : uomStr) && !CANONICAL_UOMS.has(uomStr)) {
+        const hint = canonicalUomHint(uomStr);
+        if (hint) {
+          warnings.push({
+            line: lineNum,
+            severity: 'warning',
+            message: `Нестандартна одиниця виміру: "${uomStr}" → "${hint}"`,
+            original: trimmed,
+          });
+        }
       }
     }
 
@@ -201,6 +284,9 @@ export function checkDocument(filePath: string, referenceBasePath?: string): Che
       }
     }
   }
+
+  // Check last workshop price
+  warnMissingPrice();
 
   if (!hasWorkshops) {
     errors.push({

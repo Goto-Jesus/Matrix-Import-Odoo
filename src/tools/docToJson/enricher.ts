@@ -2,10 +2,12 @@ import { BomEntry } from './types';
 
 interface SnapshotEntity { id: number; name: string; }
 interface SnapshotVariant { id: number; display_name: string; product_tmpl_id: [number, string]; }
+interface SnapshotAttrValue { id: number; name: string; attribute_id: [number, string]; }
 
 export interface SnapshotData {
   productTemplates: SnapshotEntity[];
   productVariants: SnapshotVariant[];
+  productAttributeValues?: SnapshotAttrValue[];
   workcenters: (SnapshotEntity & { code?: string })[];
   uoms: SnapshotEntity[];
 }
@@ -43,6 +45,17 @@ export function enrichBoms(boms: BomEntry[], snapshot: SnapshotData): void {
     return uomByName.get(UOM_ALIAS[uom] ?? uom);
   }
 
+  // Build attribute-value lookup: attrName → ordered list of values
+  const attrValuesByName = new Map<string, string[]>();
+  if (snapshot.productAttributeValues) {
+    for (const av of snapshot.productAttributeValues) {
+      if (!av.attribute_id) continue;
+      const attrName = av.attribute_id[1];
+      if (!attrValuesByName.has(attrName)) attrValuesByName.set(attrName, []);
+      attrValuesByName.get(attrName)!.push(av.name);
+    }
+  }
+
   for (const bom of boms) {
     const tmplId = templateByName.get(bom.product.templateName);
     const varId = variantByDisplayName.get(bom.product.variantDisplayName);
@@ -74,6 +87,44 @@ export function enrichBoms(boms: BomEntry[], snapshot: SnapshotData): void {
 
       const uomId = resolveUomId(comp.uom);
       if (uomId !== undefined) comp.odooUomId = uomId;
+    }
+
+    // Build expand config: collect all %AttrName% placeholders used in this BOM
+    const placeholders = new Set<string>();
+
+    function scanForPlaceholders(str: string) {
+      for (const m of str.matchAll(/%([^%]+)%/g)) placeholders.add(m[1]);
+    }
+
+    for (const attr of bom.product.attributes) {
+      scanForPlaceholders(attr.value);
+      scanForPlaceholders(attr.attributeName);
+    }
+    scanForPlaceholders(bom.product.variantDisplayName);
+
+    for (const comp of bom.components) {
+      for (const attr of comp.attributes) scanForPlaceholders(attr.value);
+      if (comp.ifAttr) {
+        for (const val of Object.values(comp.ifAttr)) scanForPlaceholders(val);
+      }
+    }
+
+    if (placeholders.size > 0) {
+      const expand: Record<string, string[]> = {};
+      for (const attrName of placeholders) {
+        const values = attrValuesByName.get(attrName);
+        if (values && values.length > 0) {
+          expand[attrName] = values;
+        } else {
+          // Fallback: collect unique values from ifAttr tags in this BOM
+          const seen = new Set<string>();
+          for (const comp of bom.components) {
+            if (comp.ifAttr && comp.ifAttr[attrName]) seen.add(comp.ifAttr[attrName]);
+          }
+          if (seen.size > 0) expand[attrName] = [...seen];
+        }
+      }
+      if (Object.keys(expand).length > 0) bom.expand = expand;
     }
   }
 }

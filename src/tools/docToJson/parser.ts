@@ -21,8 +21,9 @@ const BRACKET_ATTR_NAMES: Record<string, string[]> = {
 
 // Maps the FIRST WORD of a plain (non-bracketed) product name to its attribute names
 // e.g. 'Диван "Нео-3 Механізм"' → first word "Диван" → sofa attribute names
+// NOTE: spellings must match Odoo exactly (e.g. "Пружиний" — one н)
 const PLAIN_PRODUCT_ATTR_NAMES: Record<string, string[]> = {
-  'Диван': ['Тканина', 'Диван Пружинний Блок', 'Диван Наповнювач Подушек'],
+  'Диван': ['Тканина', 'Диван Пружиний Блок', 'Диван Наповнювач Подушек'],
 };
 
 function getAttrNames(bracketName?: string, plainPrefix?: string): string[] {
@@ -53,6 +54,17 @@ interface ParsedComponent {
   qty: number;
   uom: string;
   isService: boolean;
+  ifAttr?: Record<string, string>;
+}
+
+// Strips a trailing "// @Attr=Value" tag from a line, returns { clean, ifAttr }
+function stripIfAttrTag(line: string): { clean: string; ifAttr?: Record<string, string> } {
+  const tagMatch = line.match(/^(.*?)\s*\/\/\s*@([^=]+?)=(.+?)\s*$/);
+  if (!tagMatch) return { clean: line };
+  return {
+    clean: tagMatch[1].trimEnd(),
+    ifAttr: { [tagMatch[2].trim()]: tagMatch[3].trim() },
+  };
 }
 
 // Splits a string by top-level commas (ignores commas inside nested parentheses)
@@ -217,8 +229,10 @@ function tryParseComponent(line: string): ParsedComponent | null {
   const trimmed = line.trim();
   if (!trimmed || isSkipLine(trimmed)) return null;
 
+  const { clean, ifAttr } = stripIfAttrTag(trimmed);
+
   // (Послуга) Name - qty uom
-  const serviceMatch = trimmed.match(/^\(Послуга\)\s+(.+?)\s+-\s+([\d,.]+)\s+([\S]+)\s*$/);
+  const serviceMatch = clean.match(/^\(Послуга\)\s+(.+?)\s+-\s+([\d,.]+)\s+([\S]+)\s*$/);
   if (serviceMatch) {
     return {
       templateName: serviceMatch[1].trim(),
@@ -226,10 +240,11 @@ function tryParseComponent(line: string): ParsedComponent | null {
       qty: parseFloat(serviceMatch[2].replace(',', '.')),
       uom: serviceMatch[3].trim().replace(/\.$/, ''),
       isService: true,
+      ifAttr,
     };
   }
 
-  const parts = splitLineParts(trimmed);
+  const parts = splitLineParts(clean);
   if (!parts || parts.qty === null) return null;
 
   const { prefix, attrStr, qty, uom } = parts;
@@ -248,12 +263,12 @@ function tryParseComponent(line: string): ParsedComponent | null {
       qty,
       uom,
       isService: false,
+      ifAttr,
     };
   }
 
   // Plain component: Name - qty uom (no parens in prefix)
   if (prefix && !attrStr) {
-    // Ensure prefix looks like a product name (not a stray line)
     if (prefix.length > 1) {
       return {
         templateName: prefix,
@@ -261,6 +276,7 @@ function tryParseComponent(line: string): ParsedComponent | null {
         qty,
         uom,
         isService: false,
+        ifAttr,
       };
     }
   }
@@ -274,6 +290,7 @@ function tryParseComponent(line: string): ParsedComponent | null {
       qty,
       uom,
       isService: false,
+      ifAttr,
     };
   }
 
@@ -384,6 +401,7 @@ export function parseDoc(content: string): BomEntry[] {
       uom: c.uom,
       operationIndex: (c as any)._opIndex ?? 0,
       isService: c.isService || undefined,
+      ifAttr: c.ifAttr,
     }));
 
     boms.push({
@@ -520,6 +538,7 @@ export function parseDoc(content: string): BomEntry[] {
       uom: c.uom,
       operationIndex: (c as any)._opIndex ?? 0,
       isService: c.isService || undefined,
+      ifAttr: c.ifAttr,
     }));
     boms.push({
       product: {

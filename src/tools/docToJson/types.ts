@@ -17,6 +17,7 @@ export interface ComponentEntry {
   uom: string;
   operationIndex: number;
   isService?: boolean;
+  ifAttr?: Record<string, string>;
   odooTemplateId?: number;
   odooVariantId?: number;
   odooUomId?: number;
@@ -33,6 +34,7 @@ export interface BomEntry {
   };
   operations: OperationEntry[];
   components: ComponentEntry[];
+  expand?: Record<string, string[]>;
 }
 
 export interface OdooImportJson {
