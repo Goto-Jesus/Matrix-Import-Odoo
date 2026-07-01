@@ -1,43 +1,48 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from "fs";
+import * as path from "path";
 
 // Авто-виправлення типових помилок форматування сирих документів.
 // Не змінює смислову структуру — тільки текстові артефакти.
 
 // Emoji-символи що мають стояти ПЕРЕД дужкою, не всередині
-const EMOJI_PREFIXES = ['🪵', '🧩', '🪤🧽', '🪤'];
+const EMOJI_PREFIXES = ["🪵", "🧩", "🪤🧽", "🪤"];
 
 // Виправлення назв матеріалів (lowercase → правильна назва)
 const MATERIAL_FIXES: Record<string, string> = {
-  'деровина': 'деревина',
-  'компонети': 'компоненти',
-  'крошка ппу': 'Крихта ППУ',
-  'холофайдер': 'Холофайбер',  // product template name in Odoo
-  'карказ': 'Каркас',
-  'cинтепон': 'Синтепон',     // латинська C замість кириличної С
+  деровина: "деревина",
+  компонети: "компоненти",
+  "крошка ппу": "Крихта ППУ",
+  холофайдер: "Холофайбер", // product template name in Odoo
+  карказ: "Каркас",
+  cинтепон: "Синтепон", // латинська C замість кириличної С
 };
-
 
 // UOM нормалізація: неправильні форми → канонічна форма
 const UOM_NORMALIZE: Record<string, string> = {
-  'kg': 'кг',
-  'кg': 'кг',   // мікс кирилиці+латиниці
-  'кг': 'кг',   // вже правильно, для уніфікації пробілу
-  'g': 'г',
-  'м': 'm',
-  'метр': 'm',
-  'м2': 'm²',
-  'm2': 'm²',
-  'м3': 'm³',
-  'm3': 'm³',
-  'шт': 'шт.',
+  kg: "кг",
+  кg: "кг", // мікс кирилиці+латиниці
+  кг: "кг", // вже правильно, для уніфікації пробілу
+  g: "г",
+  м: "m",
+  метр: "m",
+  м2: "m²",
+  m2: "m²",
+  м3: "m³",
+  m3: "m³",
+  шт: "шт.",
 };
 
 // Прибрати зайві пробіли: leading whitespace + consecutive spaces → single space
 function fixLineWhitespace(line: string): string {
   const trimmed = line.trimStart();
-  if (!trimmed || trimmed.startsWith('//') || trimmed.startsWith('<<') || trimmed.startsWith('#')) return line;
-  return trimmed.replace(/[ \t]{2,}/g, ' ').trimEnd();
+  if (
+    !trimmed ||
+    trimmed.startsWith("//") ||
+    trimmed.startsWith("<<") ||
+    trimmed.startsWith("#")
+  )
+    return line;
+  return trimmed.replace(/[ \t]{2,}/g, " ").trimEnd();
 }
 
 // Зчитати які атрибути є ✅ (активними) з секції АТРИБУТИ документу
@@ -47,8 +52,8 @@ function parseActiveAttrs(content: string): Set<string> {
   let m;
   while ((m = re.exec(content)) !== null) {
     let name = m[1].trim();
-    // Нормалізувати до Odoo-написання (один н в "Пружиний")
-    name = name.replace('Пружинний', 'Пружиний');
+    // Нормалізувати до Odoo-написання (один н в "Пружинний")
+    name = name.replace("Пружинний", "Пружинний");
     active.add(name);
   }
   return active;
@@ -70,7 +75,7 @@ function fixEmojiPosition(line: string): string {
 function fixAttributeSpaces(line: string): string {
   // "(Б. Нео)" → "(Б.Нео)"
   return line.replace(/\(([^)]+)\)/g, (match, inner) => {
-    const fixed = inner.replace(/\.\s+/g, '.');
+    const fixed = inner.replace(/\.\s+/g, ".");
     return `(${fixed})`;
   });
 }
@@ -89,7 +94,7 @@ function fixAttributeCapitalization(line: string): string {
 
 function fixAttributeSpacing100dsp(line: string): string {
   return line.replace(/\(([^)]*)\)/g, (match, inner) => {
-    const fixed = inner.replace(/100\s+ДСП/g, '100ДСП');
+    const fixed = inner.replace(/100\s+ДСП/g, "100ДСП");
     return `(${fixed})`;
   });
 }
@@ -97,14 +102,17 @@ function fixAttributeSpacing100dsp(line: string): string {
 function fixMaterialNames(line: string): string {
   let result = line;
   for (const [wrong, correct] of Object.entries(MATERIAL_FIXES)) {
-    const re = new RegExp(wrong, 'gi');
+    const re = new RegExp(wrong, "gi");
     result = result.replace(re, correct);
   }
   return result;
 }
 
 function fixTrailingSpacesInBrackets(line: string): string {
-  return line.replace(/\[\s*([^\]]+?)\s*\]/g, (match, inner) => `[${inner.trim()}]`);
+  return line.replace(
+    /\[\s*([^\]]+?)\s*\]/g,
+    (match, inner) => `[${inner.trim()}]`,
+  );
 }
 
 function fixMissingSpaceBeforeDash(line: string): string {
@@ -112,12 +120,12 @@ function fixMissingSpaceBeforeDash(line: string): string {
 }
 
 function fixPriceTypo(line: string): string {
-  return line.replace(/Цшна\b/gi, 'Ціна');
+  return line.replace(/Цшна\b/gi, "Ціна");
 }
 
 function fixWorkshopHeaders(line: string): string {
   if (/^Цех\s+№/.test(line.trim())) {
-    return '# ' + line.trimStart();
+    return "# " + line.trimStart();
   }
   return line;
 }
@@ -126,13 +134,16 @@ function fixWorkshopHeaders(line: string): string {
 function fixMissingAttrParens(line: string): string {
   return line.replace(
     /(\[[^\]]+\])\s+([^(\s-][^\s-]*)\s+-\s*([\d])/,
-    '$1 ($2) - $3',
+    "$1 ($2) - $3",
   );
 }
 
 // "(Д.Верадо )" → "(Д.Верадо)" — trailing/leading пробіли всередині круглих дужок
 function fixTrailingSpacesInParens(line: string): string {
-  return line.replace(/\(\s*([^)]+?)\s*\)/g, (_m, inner) => `(${inner.trim()})`);
+  return line.replace(
+    /\(\s*([^)]+?)\s*\)/g,
+    (_m, inner) => `(${inner.trim()})`,
+  );
 }
 
 // "(Д.Верадо - 1.00 шт." → "(Д.Верадо) - 1.00 шт."  — відсутня закриваюча дужка
@@ -140,7 +151,7 @@ function fixUnclosedParen(line: string): string {
   const open = (line.match(/\(/g) || []).length;
   const close = (line.match(/\)/g) || []).length;
   if (open <= close) return line;
-  return line.replace(/(\([^)]+?)\s*(-\s*[\d,.]+)/, '$1) $2');
+  return line.replace(/(\([^)]+?)\s*(-\s*[\d,.]+)/, "$1) $2");
 }
 
 // ") -qty uom" або ")-qty uom" → ") - qty uom"
@@ -148,7 +159,7 @@ function fixUnclosedParen(line: string): string {
 function fixDashBeforeQty(line: string): string {
   return line.replace(
     /([\]\)])\s*-(\d[\d,.]*\s*[а-яА-ЯҐЄІЇa-zA-Z²³])/g,
-    '$1 - $2',
+    "$1 - $2",
   );
 }
 
@@ -157,8 +168,9 @@ function fixUom(line: string): string {
   return line.replace(
     /(-\s*)([\d,.]+)\s*([а-яА-ЯҐЄІЇa-zA-Z][а-яА-ЯҐЄІЇa-zA-Z0-9]*\.?)\s*$/,
     (_match, dash, qty, uom) => {
-      const raw = uom.replace(/\.$/, '');
-      const normalized = UOM_NORMALIZE[raw.toLowerCase()] ?? UOM_NORMALIZE[raw] ?? uom;
+      const raw = uom.replace(/\.$/, "");
+      const normalized =
+        UOM_NORMALIZE[raw.toLowerCase()] ?? UOM_NORMALIZE[raw] ?? uom;
       return `${dash}${qty} ${normalized}`;
     },
   );
@@ -184,15 +196,20 @@ function fixVoylokFormat(line: string): string {
 // "ДВП qtyuom" (no dash) → "[ДВП] (Звичайний) - qtyuom"
 function fixBareProducts(line: string): string {
   const trimmed = line.trim();
-  if (trimmed.startsWith('[') || trimmed.startsWith('#') || trimmed.startsWith('//')) return line;
+  if (
+    trimmed.startsWith("[") ||
+    trimmed.startsWith("#") ||
+    trimmed.startsWith("//")
+  )
+    return line;
   // ДСП with dash
-  line = line.replace(/^(\s*)ДСП(\s+-)/, '$1[ДСП]$2');
+  line = line.replace(/^(\s*)ДСП(\s+-)/, "$1[ДСП]$2");
   // ДСП without dash (qty directly follows)
-  line = line.replace(/^(\s*)ДСП\s+([\d,.])/, '$1[ДСП] - $2');
+  line = line.replace(/^(\s*)ДСП\s+([\d,.])/, "$1[ДСП] - $2");
   // ДВП with dash
-  line = line.replace(/^(\s*)ДВП(\s+-)/, '$1[ДВП] (Звичайний)$2');
+  line = line.replace(/^(\s*)ДВП(\s+-)/, "$1[ДВП] (Звичайний)$2");
   // ДВП without dash (qty directly follows)
-  line = line.replace(/^(\s*)ДВП\s+([\d,.])/, '$1[ДВП] (Звичайний) - $2');
+  line = line.replace(/^(\s*)ДВП\s+([\d,.])/, "$1[ДВП] (Звичайний) - $2");
   return line;
 }
 
@@ -212,40 +229,49 @@ function fixConnectorFormat(line: string): string {
   // "Соединитель 83 эконом-2шт" or "Соединитель 83 эконом-2 шт." → "[Соединитель] (83 эконом) - 2 шт."
   return line.replace(
     /^(\s*)Соединитель\s+(.+?)-(\d+)\s*шт\.?\s*$/,
-    '$1[Соединитель] ($2) - $3 шт.',
+    "$1[Соединитель] ($2) - $3 шт.",
   );
 }
 
 // "Зацеп краб 10-шт" → "Зацеп краб - 10 шт."  (qty-uom stuck together without space)
 function fixQtyDashUom(line: string): string {
   const trimmed = line.trim();
-  if (trimmed.startsWith('[') || trimmed.startsWith('#') || trimmed.startsWith('//') || !trimmed) return line;
+  if (
+    trimmed.startsWith("[") ||
+    trimmed.startsWith("#") ||
+    trimmed.startsWith("//") ||
+    !trimmed
+  )
+    return line;
   return line.replace(
     /^(\s*)(.+?)\s+(\d+(?:[.,]\d+)?)-(шт\.?)\s*$/,
-    '$1$2 - $3 шт.',
+    "$1$2 - $3 шт.",
   );
 }
 
 // "Фанера 0.83м2" → "Фанера - 0.83м2"  (UOM normalised later by fixUom)
 function fixMissingDashForBareMaterial(line: string): string {
-  return line.replace(/^(\s*)(Фанера)\s+([\d,.]+)/, '$1$2 - $3');
+  return line.replace(/^(\s*)(Фанера)\s+([\d,.]+)/, "$1$2 - $3");
 }
 
 // "Планка 198 - 1шт." → "🧩[Планка - нарізані деталі] (Планка 198) - 1 шт."
 function fixPlankaBareComponent(line: string): string {
   return line.replace(
     /^(\s*)Планка\s+(\S+)\s+-\s*([\d,.]+)\s*шт\.?\s*$/,
-    '$1🧩[Планка - нарізані деталі] (Планка $2) - $3 шт.',
+    "$1🧩[Планка - нарізані деталі] (Планка $2) - $3 шт.",
   );
 }
 
 // "Ціна 7грн" → "Ціна 7 грн"
 function fixPriceFormat(line: string): string {
-  return line.replace(/^(\s*Ціна\s+[\d.]+)(грн)\s*$/i, '$1 $2');
+  return line.replace(/^(\s*Ціна\s+[\d.]+)(грн)\s*$/i, "$1 $2");
 }
 
 // Document-level: copy attribute from "🧩[X - нарізані ...] (Attr)" to adjacent "🪤[X - напівфабрикат]"
-function fixMissingNapivfabrykatAttr(lines: string[], changes: string[]): string[] {
+function fixMissingNapivfabrykatAttr(
+  lines: string[],
+  changes: string[],
+): string[] {
   const result = [...lines];
   for (let i = 0; i < result.length; i++) {
     const m = result[i].match(/^(.*🪤\[([^\]]+?)\s*-\s*напівфабрикат\])\s*$/);
@@ -254,11 +280,15 @@ function fixMissingNapivfabrykatAttr(lines: string[], changes: string[]): string
     const key = m[2].trim().toLowerCase();
     for (let j = i + 1; j < result.length && j < i + 20; j++) {
       const next = result[j].trim();
-      if (next.startsWith('#') && next.includes('№')) break;
-      const cm = next.match(/🧩\[([^\]]+?)\s*-\s*нарізані[^\]]*\]\s*\(([^)]+)\)/);
+      if (next.startsWith("#") && next.includes("№")) break;
+      const cm = next.match(
+        /🧩\[([^\]]+?)\s*-\s*нарізані[^\]]*\]\s*\(([^)]+)\)/,
+      );
       if (cm && cm[1].trim().toLowerCase() === key) {
         result[i] = `${prefix} (${cm[2]})`;
-        changes.push(`Рядок ${i + 1}: додано атрибут напівфабрикату "(${cm[2]})"`);
+        changes.push(
+          `Рядок ${i + 1}: додано атрибут напівфабрикату "(${cm[2]})"`,
+        );
         break;
       }
     }
@@ -271,16 +301,16 @@ function insertMissingPrices(lines: string[], changes: string[]): string[] {
   const result: string[] = [];
   let inWorkshop = false;
   let workshopHasPrice = false;
-  let workshopLabel = '';
+  let workshopLabel = "";
 
   for (let i = 0; i < lines.length; i++) {
     const trimmed = lines[i].trim();
-    const isHeader = trimmed.startsWith('#') && trimmed.includes('№');
+    const isHeader = trimmed.startsWith("#") && trimmed.includes("№");
 
     if (isHeader) {
       if (inWorkshop && !workshopHasPrice) {
-        result.push('Ціна 0 грн');
-        result.push('');
+        result.push("Ціна 0 грн");
+        result.push("");
         changes.push(`Цех "${workshopLabel}": додано відсутню "Ціна 0 грн"`);
       }
       workshopLabel = trimmed.match(/^#+\s*(Цех\s+№[\w-]+)/)?.[1] ?? trimmed;
@@ -296,7 +326,7 @@ function insertMissingPrices(lines: string[], changes: string[]): string[] {
   }
 
   if (inWorkshop && !workshopHasPrice) {
-    result.push('Ціна 0 грн');
+    result.push("Ціна 0 грн");
     changes.push(`Цех "${workshopLabel}": додано відсутню "Ціна 0 грн"`);
   }
 
@@ -307,13 +337,14 @@ function insertMissingPrices(lines: string[], changes: string[]): string[] {
 function fixLaminateName(line: string): string {
   return line.replace(
     /\[Ламінат\](\s*)(\([^)]+\))/g,
-    (_m, space, parens) => `🧩[Ламінат - лист]${space || ' '}${parens.replace(/х/g, 'x')}`,
+    (_m, space, parens) =>
+      `🧩[Ламінат - лист]${space || " "}${parens.replace(/х/g, "x")}`,
   );
 }
 
 // "[Тканина] (Рене 4) - N m" → "[Тканина] (%Тканина%) - N m"  (тільки якщо Тканина ✅)
 function fixTkanynaPlaceholder(line: string, activeAttrs: Set<string>): string {
-  if (!activeAttrs.has('Тканина')) return line;
+  if (!activeAttrs.has("Тканина")) return line;
   // Не чіпати якщо вже є % (placeholder)
   return line.replace(
     /(\[Тканина\]\s*)\(([^%][^)]*)\)/,
@@ -323,26 +354,31 @@ function fixTkanynaPlaceholder(line: string, activeAttrs: Set<string>): string {
 
 // Додати // @Діван Наповнювач Подушек=... до рядків з Холофайбером і Крихтою ППУ (якщо атрибут ✅)
 function fixFillingTag(line: string, activeAttrs: Set<string>): string {
-  if (!activeAttrs.has('Диван Наповнювач Подушек')) return line;
-  if (line.includes('// @')) return line; // вже є тег
+  if (!activeAttrs.has("Диван Наповнювач Подушек")) return line;
+  if (line.includes("// @")) return line; // вже є тег
   const t = line.trim();
   if (/^Холофайбер\s+-/.test(t)) {
-    return line.trimEnd() + ' // @Диван Наповнювач Подушек=Холофайдер';
+    return line.trimEnd() + " // @Диван Наповнювач Подушек=Холофайдер";
   }
   if (/^Крихта ППУ\s+-/.test(t)) {
-    return line.trimEnd() + ' // @Диван Наповнювач Подушек=ППУ Крихта';
+    return line.trimEnd() + " // @Диван Наповнювач Подушек=ППУ Крихта";
   }
   return line;
 }
 
 // Виправити написання в // @ тегах до Odoo-стандарту
 function fixAttrTagSpelling(line: string): string {
-  if (!line.includes('// @')) return line;
-  return line
-    // "Пружинний" (два н) → "Пружиний" (один н) в назві атрибута
-    .replace(/\/\/\s*@Диван Пружинний Блок=/g, '// @Диван Пружиний Блок=')
-    // "Посилений" (один н) → "Посиленний" (два н) у значенні атрибута
-    .replace(/(\/\/\s*@Диван Пружиний Блок=Посилений)\b/g, '// @Диван Пружиний Блок=Посиленний');
+  if (!line.includes("// @")) return line;
+  return (
+    line
+      // "Пружинний" (два н) → "Пружинний" (один н) в назві атрибута
+      .replace(/\/\/\s*@Диван Пружинний Блок=/g, "// @Диван Пружинний Блок=")
+      // "Посилений" (один н) → "Посиленний" (два н) у значенні атрибута
+      .replace(
+        /(\/\/\s*@Диван Пружинний Блок=Посилений)\b/g,
+        "// @Диван Пружинний Блок=Посиленний",
+      )
+  );
 }
 
 export interface FormatterResult {
@@ -351,8 +387,8 @@ export interface FormatterResult {
 }
 
 export function formatDocument(inputPath: string): FormatterResult {
-  const original = fs.readFileSync(inputPath, 'utf-8');
-  const originalLines = original.split('\n');
+  const original = fs.readFileSync(inputPath, "utf-8");
+  const originalLines = original.split("\n");
   const changes: string[] = [];
 
   const activeAttrs = parseActiveAttrs(original);
@@ -367,34 +403,55 @@ export function formatDocument(inputPath: string): FormatterResult {
       if (fixed !== prev) changes.push(`Рядок ${lineNum}: ${msg}`);
     };
 
-    apply(fixLineWhitespace, 'зайві пробіли прибрано');
-    apply(fixEmojiPosition, 'emoji перенесено перед дужку');
-    apply(fixTrailingSpacesInBrackets, 'пробіли в квадратних дужках видалено');
-    apply(fixTrailingSpacesInParens, 'пробіли в круглих дужках видалено');
-    apply(fixUnclosedParen, 'додано відсутню закриваючу дужку');
-    apply(fixMissingAttrParens, '[Назва] атрибут → [Назва] (атрибут)');
-    apply(fixMissingSpaceBeforeDash, 'додано пробіл перед тире в назві');
-    apply(fixDashBeforeQty, 'пробіл після дефіса перед числом додано');
-    apply(fixAttributeSpaces, 'пробіл після крапки в атрибуті прибрано');
-    apply(fixAttributeCapitalization, 'капіталізація в атрибуті виправлена');
+    apply(fixLineWhitespace, "зайві пробіли прибрано");
+    apply(fixEmojiPosition, "emoji перенесено перед дужку");
+    apply(fixTrailingSpacesInBrackets, "пробіли в квадратних дужках видалено");
+    apply(fixTrailingSpacesInParens, "пробіли в круглих дужках видалено");
+    apply(fixUnclosedParen, "додано відсутню закриваючу дужку");
+    apply(fixMissingAttrParens, "[Назва] атрибут → [Назва] (атрибут)");
+    apply(fixMissingSpaceBeforeDash, "додано пробіл перед тире в назві");
+    apply(fixDashBeforeQty, "пробіл після дефіса перед числом додано");
+    apply(fixAttributeSpaces, "пробіл після крапки в атрибуті прибрано");
+    apply(fixAttributeCapitalization, "капіталізація в атрибуті виправлена");
     apply(fixAttributeSpacing100dsp, '"100 ДСП" → "100ДСП"');
-    apply(fixBareProducts, 'ДСП/ДВП → [ДСП]/[ДВП] (Звичайний)');
-    apply(fixDefaultUomForSheetMaterials, 'додано відсутню одиницю виміру m² для ДСП/ДВП');
-    apply(fixMissingDashForBareMaterial, 'додано пропущений дефіс перед кількістю');
-    apply(fixPlankaBareComponent, 'Планка NNN - qty → 🧩[Планка - нарізані деталі] (Планка NNN)');
-    apply(fixConnectorFormat, 'Соединитель: → [Соединитель] (атрибут) - qty шт.');
-    apply(fixQtyDashUom, 'qty-шт → - qty шт.');
-    apply(fixPorolonFormat, 'Поролон: два парени → [Поролон] (код (розмір))');
-    apply(fixVoylokFormat, 'Войлок: додано дужки та квадратні дужки');
-    apply(fixLaminateName, '[Ламінат] (розмір) → 🧩[Ламінат - лист] (розмір)');
-    apply(fixMaterialNames, 'назву матеріалу виправлено');
+    apply(fixBareProducts, "ДСП/ДВП → [ДСП]/[ДВП] (Звичайний)");
+    apply(
+      fixDefaultUomForSheetMaterials,
+      "додано відсутню одиницю виміру m² для ДСП/ДВП",
+    );
+    apply(
+      fixMissingDashForBareMaterial,
+      "додано пропущений дефіс перед кількістю",
+    );
+    apply(
+      fixPlankaBareComponent,
+      "Планка NNN - qty → 🧩[Планка - нарізані деталі] (Планка NNN)",
+    );
+    apply(
+      fixConnectorFormat,
+      "Соединитель: → [Соединитель] (атрибут) - qty шт.",
+    );
+    apply(fixQtyDashUom, "qty-шт → - qty шт.");
+    apply(fixPorolonFormat, "Поролон: два парени → [Поролон] (код (розмір))");
+    apply(fixVoylokFormat, "Войлок: додано дужки та квадратні дужки");
+    apply(fixLaminateName, "[Ламінат] (розмір) → 🧩[Ламінат - лист] (розмір)");
+    apply(fixMaterialNames, "назву матеріалу виправлено");
     apply(fixPriceTypo, '"Цшна" → "Ціна"');
     apply(fixPriceFormat, '"Ціна Nгрн" → "Ціна N грн"');
     apply(fixWorkshopHeaders, 'заголовок цеху отримав "# " префікс');
-    apply(fixUom, 'одиницю виміру нормалізовано');
-    apply((l) => fixTkanynaPlaceholder(l, activeAttrs), '[Тканина] (назва) → [Тканина] (%Тканина%)');
-    apply((l) => fixFillingTag(l, activeAttrs), 'додано // @Диван Наповнювач Подушек=... тег');
-    apply(fixAttrTagSpelling, 'написання в // @ тегу виправлено до Odoo-стандарту');
+    apply(fixUom, "одиницю виміру нормалізовано");
+    apply(
+      (l) => fixTkanynaPlaceholder(l, activeAttrs),
+      "[Тканина] (назва) → [Тканина] (%Тканина%)",
+    );
+    apply(
+      (l) => fixFillingTag(l, activeAttrs),
+      "додано // @Диван Наповнювач Подушек=... тег",
+    );
+    apply(
+      fixAttrTagSpelling,
+      "написання в // @ тегу виправлено до Odoo-стандарту",
+    );
 
     return fixed;
   });
@@ -404,16 +461,19 @@ export function formatDocument(inputPath: string): FormatterResult {
   processedLines = insertMissingPrices(processedLines, changes);
 
   return {
-    content: processedLines.join('\n'),
+    content: processedLines.join("\n"),
     changes,
   };
 }
 
-export function writeFormattedDocument(inputPath: string, outputDir: string): FormatterResult {
+export function writeFormattedDocument(
+  inputPath: string,
+  outputDir: string,
+): FormatterResult {
   const result = formatDocument(inputPath);
   const fileName = path.basename(inputPath);
   const outPath = path.join(outputDir, fileName);
   fs.mkdirSync(outputDir, { recursive: true });
-  fs.writeFileSync(outPath, result.content, 'utf-8');
+  fs.writeFileSync(outPath, result.content, "utf-8");
   return result;
 }

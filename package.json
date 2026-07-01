@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "validate": "ts-node src/index.ts validate",
+    "validate-all": "ts-node src/index.ts validate-all",
     "import": "ts-node src/index.ts import",
     "check": "ts-node src/index.ts check",
     "snapshot": "ts-node src/index.ts snapshot",

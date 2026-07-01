@@ -1,6 +1,7 @@
 import { runSnapshot } from './commands/snapshot';
 import { runRestore } from './commands/restore';
 import { runValidate } from './commands/validate';
+import { runValidateAll } from './commands/validateAll';
 import { runImport } from './commands/importSpec';
 import { runCheck } from './commands/check';
 import { createAllBoms } from './bom/creator';
@@ -22,6 +23,10 @@ async function main() {
       await runValidate(args[0]);
       break;
 
+    case 'validate-all':
+      await runValidateAll(args[0]);
+      break;
+
     case 'import':
       await runImport(args[0]);
       break;
@@ -37,7 +42,8 @@ async function main() {
     default:
       console.log(`
 Використання:
-  npm run validate "<файл>"   — авто-форматування + список помилок
+  npm run validate "<файл>"       — авто-форматування + список помилок
+  npm run validate-all [папка]   — валідація всіх .md у папці (default: documents/)
   npm run import "<файл>"     — парсинг та імпорт специфікації в Odoo
   npm run check "<продукт>"   — перевірити чи продукт існує в Odoo
   npm run snapshot [мітка]    — зберегти поточний стан Odoo

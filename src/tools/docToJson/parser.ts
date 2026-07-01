@@ -1,47 +1,54 @@
-import { AttributeVal, BomEntry, ComponentEntry, OperationEntry } from './types';
+import {
+  AttributeVal,
+  BomEntry,
+  ComponentEntry,
+  OperationEntry,
+} from "./types";
 
-const DEFAULT_ATTR_NAMES = ['Модель', 'Тканина', 'Наповнювач'];
+const DEFAULT_ATTR_NAMES = ["Модель", "Тканина", "Наповнювач"];
 
 // Maps bracket name (without emoji/brackets) to the attribute name(s) for that product
 const BRACKET_ATTR_NAMES: Record<string, string[]> = {
-  'ДВП':            ['ДВП'],
-  'ДСП':            ['ДСП'],
-  'Ламінат - лист': ['Ламінат Розмір'],
-  'Поролон':        ['Поролон'],
-  'Войлок':         ['Войлок'],
-  'Боннель':        ['Боннель'],
-  'Соединитель':    ['Соединитель'],
-  'Петля':          ['Петля'],
-  'Ніжка':          ['Ніжка'],
-  'Синтепон':       ['Синтепон'],
-  'Тканина':        ['Тканина'],
-  'Флізелін':       ['Флізелін'],
-  'Накладка':       ['Накладка'],
+  ДВП: ["ДВП"],
+  ДСП: ["ДСП"],
+  "Ламінат - лист": ["Ламінат Розмір"],
+  Поролон: ["Поролон"],
+  Войлок: ["Войлок"],
+  Боннель: ["Боннель"],
+  Соединитель: ["Соединитель"],
+  Петля: ["Петля"],
+  Ніжка: ["Ніжка"],
+  Синтепон: ["Синтепон"],
+  Тканина: ["Тканина"],
+  Флізелін: ["Флізелін"],
+  Накладка: ["Накладка"],
 };
 
 // Maps the FIRST WORD of a plain (non-bracketed) product name to its attribute names
 // e.g. 'Диван "Нео-3 Механізм"' → first word "Диван" → sofa attribute names
-// NOTE: spellings must match Odoo exactly (e.g. "Пружиний" — one н)
+// NOTE: spellings must match Odoo exactly (e.g. "Пружинний" — one н)
 const PLAIN_PRODUCT_ATTR_NAMES: Record<string, string[]> = {
-  'Диван': ['Тканина', 'Диван Пружиний Блок', 'Диван Наповнювач Подушек'],
+  Диван: ["Тканина", "Диван Пружинний Блок", "Диван Наповнювач Подушек"],
 };
 
 function getAttrNames(bracketName?: string, plainPrefix?: string): string[] {
-  if (bracketName && BRACKET_ATTR_NAMES[bracketName]) return BRACKET_ATTR_NAMES[bracketName];
+  if (bracketName && BRACKET_ATTR_NAMES[bracketName])
+    return BRACKET_ATTR_NAMES[bracketName];
   if (plainPrefix) {
     const firstWord = plainPrefix.split(/[\s"«»]/)[0].trim();
-    if (PLAIN_PRODUCT_ATTR_NAMES[firstWord]) return PLAIN_PRODUCT_ATTR_NAMES[firstWord];
+    if (PLAIN_PRODUCT_ATTR_NAMES[firstWord])
+      return PLAIN_PRODUCT_ATTR_NAMES[firstWord];
   }
   return DEFAULT_ATTR_NAMES;
 }
 
 interface WorkshopInfo {
-  fullName: string;        // "Цех №1 Дерева (нарізка)"
+  fullName: string; // "Цех №1 Дерева (нарізка)"
   operationPrefix: string; // "Операція (Цех №1)"
 }
 
 interface ParsedProduct {
-  templateName: string;    // "🪵[Каркас - нарізана деревина]" or "Диван"
+  templateName: string; // "🪵[Каркас - нарізана деревина]" or "Диван"
   isBracketed: boolean;
   attributes: AttributeVal[];
   variantDisplayName: string;
@@ -58,7 +65,10 @@ interface ParsedComponent {
 }
 
 // Strips a trailing "// @Attr=Value" tag from a line, returns { clean, ifAttr }
-function stripIfAttrTag(line: string): { clean: string; ifAttr?: Record<string, string> } {
+function stripIfAttrTag(line: string): {
+  clean: string;
+  ifAttr?: Record<string, string>;
+} {
   const tagMatch = line.match(/^(.*?)\s*\/\/\s*@([^=]+?)=(.+?)\s*$/);
   if (!tagMatch) return { clean: line };
   return {
@@ -70,14 +80,14 @@ function stripIfAttrTag(line: string): { clean: string; ifAttr?: Record<string, 
 // Splits a string by top-level commas (ignores commas inside nested parentheses)
 function splitTopLevel(s: string): string[] {
   let depth = 0;
-  let current = '';
+  let current = "";
   const parts: string[] = [];
   for (const ch of s) {
-    if (ch === '(') depth++;
-    else if (ch === ')') depth--;
-    if (ch === ',' && depth === 0) {
+    if (ch === "(") depth++;
+    else if (ch === ")") depth--;
+    if (ch === "," && depth === 0) {
       if (current.trim()) parts.push(current.trim());
-      current = '';
+      current = "";
     } else {
       current += ch;
     }
@@ -89,12 +99,16 @@ function splitTopLevel(s: string): string[] {
 // Extracts attribute values from a "(val1, val2)" string with possible nested parens
 function parseAttrString(raw: string): string[] {
   const trimmed = raw.trim();
-  if (!trimmed.startsWith('(') || !trimmed.endsWith(')')) return [];
+  if (!trimmed.startsWith("(") || !trimmed.endsWith(")")) return [];
   const inner = trimmed.slice(1, -1);
   return splitTopLevel(inner);
 }
 
-function valuesToAttributes(values: string[], bracketName?: string, plainPrefix?: string): AttributeVal[] {
+function valuesToAttributes(
+  values: string[],
+  bracketName?: string,
+  plainPrefix?: string,
+): AttributeVal[] {
   const names = getAttrNames(bracketName, plainPrefix);
   return values.map((value, i) => ({
     attributeName: names[i] ?? `Атрибут${i + 1}`,
@@ -104,38 +118,40 @@ function valuesToAttributes(values: string[], bracketName?: string, plainPrefix?
 
 // Finds the FIRST complete outer parenthesized group in s (respects nested parens)
 function extractFirstOuterParen(s: string): string {
-  const start = s.indexOf('(');
-  if (start === -1) return '';
+  const start = s.indexOf("(");
+  if (start === -1) return "";
   let depth = 0;
   for (let i = start; i < s.length; i++) {
-    if (s[i] === '(') depth++;
-    else if (s[i] === ')') {
+    if (s[i] === "(") depth++;
+    else if (s[i] === ")") {
       depth--;
       if (depth === 0) return s.slice(start, i + 1);
     }
   }
-  return '';
+  return "";
 }
 
 // Splits a full product line into: emoji+template, attrString, qty, uom
 // Correctly handles nested parens: "[Поролон] (ST-2535 (2000x1600x20)) - 2.4 кг"
 //   → prefix="[Поролон]", attrStr="(ST-2535 (2000x1600x20))", qty=2.4, uom="кг"
-function splitLineParts(line: string): { prefix: string; attrStr: string; qty: number | null; uom: string } | null {
+function splitLineParts(
+  line: string,
+): { prefix: string; attrStr: string; qty: number | null; uom: string } | null {
   // Strip qty+uom from the end: " - qty uom"
   const qtyMatch = line.match(/\s+-\s+([\d,.]+)\s+([\S]+)\s*$/);
   let qty: number | null = null;
-  let uom = '';
+  let uom = "";
   let body = line;
 
   if (qtyMatch) {
-    qty = parseFloat(qtyMatch[1].replace(',', '.'));
-    uom = qtyMatch[2].trim().replace(/\.$/, '');
+    qty = parseFloat(qtyMatch[1].replace(",", "."));
+    uom = qtyMatch[2].trim().replace(/\.$/, "");
     body = line.slice(0, line.length - qtyMatch[0].length);
   }
 
   // body is now: "emoji[Name] (attrs)", "emoji[Name]", or "Name (attrs)"
-  const bracketOpen = body.indexOf('[');
-  const bracketClose = body.lastIndexOf(']');
+  const bracketOpen = body.indexOf("[");
+  const bracketClose = body.lastIndexOf("]");
 
   if (bracketOpen !== -1 && bracketClose !== -1) {
     // Has brackets — prefix is everything through ']' (includes emoji)
@@ -146,31 +162,41 @@ function splitLineParts(line: string): { prefix: string; attrStr: string; qty: n
     return { prefix, attrStr, qty, uom };
   } else {
     // No brackets — split at first '('
-    const parenIdx = body.indexOf('(');
+    const parenIdx = body.indexOf("(");
     if (parenIdx !== -1) {
       const prefix = body.slice(0, parenIdx).trim();
       const attrStr = extractFirstOuterParen(body.slice(parenIdx));
       return { prefix, attrStr, qty, uom };
     }
     // No parens either — just a plain name with optional qty
-    return { prefix: body.trim(), attrStr: '', qty, uom };
+    return { prefix: body.trim(), attrStr: "", qty, uom };
   }
 }
 
 // Returns the full template name including emoji and brackets
-function buildTemplateName(emoji: string, bracketName: string, isBracketed: boolean): string {
+function buildTemplateName(
+  emoji: string,
+  bracketName: string,
+  isBracketed: boolean,
+): string {
   if (isBracketed) return `${emoji}[${bracketName}]`;
   return bracketName;
 }
 
-function buildVariantDisplayName(templateName: string, attrValues: string[]): string {
+function buildVariantDisplayName(
+  templateName: string,
+  attrValues: string[],
+): string {
   if (attrValues.length === 0) return templateName;
-  return `${templateName} (${attrValues.join(', ')})`;
+  return `${templateName} (${attrValues.join(", ")})`;
 }
 
 // Try to parse a line as a product (main BOM output)
 // Returns null if the line doesn't look like a product at all
-function tryParseProduct(line: string, isFirstInSection: boolean): ParsedProduct | null {
+function tryParseProduct(
+  line: string,
+  isFirstInSection: boolean,
+): ParsedProduct | null {
   const trimmed = line.trim();
   if (!trimmed || isSkipLine(trimmed)) return null;
 
@@ -180,17 +206,22 @@ function tryParseProduct(line: string, isFirstInSection: boolean): ParsedProduct
   const { prefix, attrStr, qty, uom } = parts;
 
   // Check for (Послуга) prefix — service, treat as component not product
-  if (trimmed.startsWith('(Послуга)')) return null;
+  if (trimmed.startsWith("(Послуга)")) return null;
 
   // Bracketed product: emoji[Name]
-  const bracketMatch = prefix.match(/^([\p{Emoji}\u{1F000}-\u{1FFFF}\u{2600}-\u{27FF}🪤🧩🪵🧽]*)\[([^\]]+)\]$/u);
+  const bracketMatch = prefix.match(
+    /^([\p{Emoji}\u{1F000}-\u{1FFFF}\u{2600}-\u{27FF}🪤🧩🪵🧽]*)\[([^\]]+)\]$/u,
+  );
   if (bracketMatch) {
     const emoji = bracketMatch[1].trim();
     const bracketName = bracketMatch[2].trim();
     const attrValues = attrStr ? parseAttrString(attrStr) : [];
     const templateName = buildTemplateName(emoji, bracketName, true);
     const attributes = valuesToAttributes(attrValues, bracketName);
-    const variantDisplayName = buildVariantDisplayName(templateName, attrValues);
+    const variantDisplayName = buildVariantDisplayName(
+      templateName,
+      attrValues,
+    );
 
     // If it has qty but we already have a product, treat as component (caller checks)
     if (qty !== null && !isFirstInSection) return null;
@@ -232,13 +263,15 @@ function tryParseComponent(line: string): ParsedComponent | null {
   const { clean, ifAttr } = stripIfAttrTag(trimmed);
 
   // (Послуга) Name - qty uom
-  const serviceMatch = clean.match(/^\(Послуга\)\s+(.+?)\s+-\s+([\d,.]+)\s+([\S]+)\s*$/);
+  const serviceMatch = clean.match(
+    /^\(Послуга\)\s+(.+?)\s+-\s+([\d,.]+)\s+([\S]+)\s*$/,
+  );
   if (serviceMatch) {
     return {
       templateName: serviceMatch[1].trim(),
       attributes: [],
-      qty: parseFloat(serviceMatch[2].replace(',', '.')),
-      uom: serviceMatch[3].trim().replace(/\.$/, ''),
+      qty: parseFloat(serviceMatch[2].replace(",", ".")),
+      uom: serviceMatch[3].trim().replace(/\.$/, ""),
       isService: true,
       ifAttr,
     };
@@ -251,7 +284,9 @@ function tryParseComponent(line: string): ParsedComponent | null {
   if (qty <= 0) return null;
 
   // Bracketed component: emoji[Name] (attrs) - qty uom
-  const bracketMatch = prefix.match(/^([\p{Emoji}\u{1F000}-\u{1FFFF}\u{2600}-\u{27FF}🪤🧩🪵🧽]*)\[([^\]]+)\]$/u);
+  const bracketMatch = prefix.match(
+    /^([\p{Emoji}\u{1F000}-\u{1FFFF}\u{2600}-\u{27FF}🪤🧩🪵🧽]*)\[([^\]]+)\]$/u,
+  );
   if (bracketMatch) {
     const emoji = bracketMatch[1].trim();
     const bracketName = bracketMatch[2].trim();
@@ -302,26 +337,26 @@ function isSkipLine(line: string): boolean {
   const t = line.trim();
   return (
     !t ||
-    t.startsWith('//') ||
-    t.startsWith('<<') ||
-    t.startsWith('>>') ||
-    t === 'або' ||
-    t === 'Або' ||
-    t === '---' ||
-    t.startsWith('Ціна') ||
-    t.startsWith('#') ||
-    t.startsWith('[') && !t.includes(']') // malformed bracket
+    t.startsWith("//") ||
+    t.startsWith("<<") ||
+    t.startsWith(">>") ||
+    t === "або" ||
+    t === "Або" ||
+    t === "---" ||
+    t.startsWith("Ціна") ||
+    t.startsWith("#") ||
+    (t.startsWith("[") && !t.includes("]")) // malformed bracket
   );
 }
 
 function parsePrice(line: string): number {
   const m = line.match(/Ціна\s+([\d,.]+)/);
-  return m ? parseFloat(m[1].replace(',', '.')) : 0;
+  return m ? parseFloat(m[1].replace(",", ".")) : 0;
 }
 
 function parseWorkshopHeader(line: string): WorkshopInfo | null {
   const trimmed = line.trim();
-  if (!trimmed.startsWith('#')) return null;
+  if (!trimmed.startsWith("#")) return null;
 
   // Standard: # Цех №1 Name - Code “OperationPrefix”
   // Two-step: first extract workshop number/name/code, then pull operation from last quoted group
@@ -334,7 +369,7 @@ function parseWorkshopHeader(line: string): WorkshopInfo | null {
     const remainder = trimmed.slice(baseMatch[0].length).trim();
     // Quotes: ASCII “ (U+0022), LEFT “ (U+201C), RIGHT “ (U+201D)
     // Use new RegExp to guarantee correct Unicode escapes regardless of source file encoding
-    const Q = '[\\u201C\\u201D\\u0022]';
+    const Q = "[\\u201C\\u201D\\u0022]";
     const opMatch = remainder.match(new RegExp(`^${Q}(.+?)${Q}\\s*$`));
     if (opMatch) {
       return {
@@ -353,8 +388,8 @@ function parseWorkshopHeader(line: string): WorkshopInfo | null {
   const vtk = trimmed.match(/^#+\s*(ВТК)\s*$/);
   if (vtk) {
     return {
-      fullName: 'ВТК',
-      operationPrefix: 'ВТК',
+      fullName: "ВТК",
+      operationPrefix: "ВТК",
     };
   }
 
@@ -363,16 +398,16 @@ function parseWorkshopHeader(line: string): WorkshopInfo | null {
 
 // Main parsing function — returns array of BomEntry
 export function parseDoc(content: string): BomEntry[] {
-  const lines = content.split('\n');
+  const lines = content.split("\n");
   const boms: BomEntry[] = [];
 
   let currentWorkshop: WorkshopInfo | null = null;
   let currentProduct: ParsedProduct | null = null;
   let currentComponents: ParsedComponent[] = [];
-  let currentOpIndex = 0;    // which operation index we're currently filling
-  let inHeader = true;        // skip preamble before first workshop
+  let currentOpIndex = 0; // which operation index we're currently filling
+  let inHeader = true; // skip preamble before first workshop
   let isFirstInSection = true; // true after header/або/---
-  let isNewWorkshop = false;   // true when a new # Цех header was just seen
+  let isNewWorkshop = false; // true when a new # Цех header was just seen
 
   // Built-up operations for the CURRENT bom (may span multiple workshops)
   let currentOperations: OperationEntry[] = [];
@@ -394,7 +429,7 @@ export function parseDoc(content: string): BomEntry[] {
       return;
     }
 
-    const components: ComponentEntry[] = currentComponents.map(c => ({
+    const components: ComponentEntry[] = currentComponents.map((c) => ({
       templateName: c.templateName,
       attributes: c.attributes,
       qty: c.qty,
@@ -431,7 +466,7 @@ export function parseDoc(content: string): BomEntry[] {
     const trimmed = line.trim();
 
     // Workshop header
-    if (trimmed.startsWith('#')) {
+    if (trimmed.startsWith("#")) {
       const wh = parseWorkshopHeader(trimmed);
       if (wh) {
         // New workshop — if we transition to a new BOM workshop (not just extending),
@@ -452,11 +487,17 @@ export function parseDoc(content: string): BomEntry[] {
     if (!currentWorkshop) continue;
 
     // Skip comments and empty lines
-    if (!trimmed || trimmed.startsWith('//') || trimmed.startsWith('<<') || trimmed.startsWith('>>')) continue;
+    if (
+      !trimmed ||
+      trimmed.startsWith("//") ||
+      trimmed.startsWith("<<") ||
+      trimmed.startsWith(">>")
+    )
+      continue;
 
     // Price line — apply to last operation of current BOM AND all previously
     // flushed BOMs in this workshop section (для "або" variants sharing one price)
-    if (trimmed.startsWith('Ціна')) {
+    if (trimmed.startsWith("Ціна")) {
       const price = parsePrice(trimmed);
       if (currentOperations.length > 0) {
         currentOperations[currentOperations.length - 1].priceRate = price;
@@ -469,14 +510,14 @@ export function parseDoc(content: string): BomEntry[] {
     }
 
     // "або" separator — flush current BOM, start new variant in same workshop
-    if (trimmed === 'або' || trimmed === 'Або') {
+    if (trimmed === "або" || trimmed === "Або") {
       flushVariant();
       isFirstInSection = true;
       continue;
     }
 
     // "---" separator — flush, new section in same workshop
-    if (trimmed === '---') {
+    if (trimmed === "---") {
       flushVariant();
       isFirstInSection = true;
       continue;
@@ -531,7 +572,7 @@ export function parseDoc(content: string): BomEntry[] {
 
   // Flush last accumulated BOM
   if (currentProduct && currentProduct.qty !== 0) {
-    const components: ComponentEntry[] = currentComponents.map(c => ({
+    const components: ComponentEntry[] = currentComponents.map((c) => ({
       templateName: c.templateName,
       attributes: c.attributes,
       qty: c.qty,
