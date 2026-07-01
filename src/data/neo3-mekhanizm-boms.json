@@ -557,7 +557,7 @@
       {
         "status": "CREATE",
         "ref": "bom_ceh42_KarNF_100DspMekh",
-        "цех": "Цех №4-2 Сборка Карказ",
+        "цех": "Цех №4-2 Сборка Каркаc",
         "model": "mrp.bom",
         "fields": {
           "product_tmpl_id": 33,

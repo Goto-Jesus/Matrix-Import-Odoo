@@ -419,7 +419,7 @@
       "operations": [
         {
           "name": "Операція (Цех №4-2) 🪤[Каркас - напівфабрикат] (100ДСП Механізм)",
-          "workcenterName": "Цех №4-2 Сборка Карказ",
+          "workcenterName": "Цех №4-2 Сборка Каркаc",
           "priceRate": 0,
           "odooWorkcenterId": 5
         }

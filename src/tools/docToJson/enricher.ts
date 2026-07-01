@@ -1,8 +1,19 @@
-import { BomEntry } from './types';
+import { BomEntry } from "./types";
 
-interface SnapshotEntity { id: number; name: string; }
-interface SnapshotVariant { id: number; display_name: string; product_tmpl_id: [number, string]; }
-interface SnapshotAttrValue { id: number; name: string; attribute_id: [number, string]; }
+interface SnapshotEntity {
+  id: number;
+  name: string;
+}
+interface SnapshotVariant {
+  id: number;
+  display_name: string;
+  product_tmpl_id: [number, string];
+}
+interface SnapshotAttrValue {
+  id: number;
+  name: string;
+  attribute_id: [number, string];
+}
 
 export interface SnapshotData {
   productTemplates: SnapshotEntity[];
@@ -13,33 +24,38 @@ export interface SnapshotData {
 }
 
 const UOM_ALIAS: Record<string, string> = {
-  'шт': 'Одиниці',
+  шт: "Одиниці",
 };
 
 // Workcenter names in the document that map to a different (existing) name in Odoo
 const WORKCENTER_ALIAS: Record<string, string> = {
-  'Цех №4-1 Сборка Бильце': 'Цех №4 Сборка [полуфабрикатів]',
-  'Цех №4-2 Сборка Карказ': 'Цех №4 Сборка [полуфабрикатів]',
-  'ВТК':                    'Цех Відділ Технічного котнтролю',
+  "Цех №4-1 Сборка Бильце": "Цех №4 Сборка [полуфабрикатів]",
+  "Цех №4-2 Сборка Каркаc": "Цех №4 Сборка [полуфабрикатів]",
+  ВТК: "Цех Відділ Технічного котнтролю",
 };
 
-function buildDisplayName(templateName: string, attrValues: { value: string }[]): string {
+function buildDisplayName(
+  templateName: string,
+  attrValues: { value: string }[],
+): string {
   if (!attrValues.length) return templateName;
-  return `${templateName} (${attrValues.map(a => a.value).join(', ')})`;
+  return `${templateName} (${attrValues.map((a) => a.value).join(", ")})`;
 }
 
 export function enrichBoms(boms: BomEntry[], snapshot: SnapshotData): void {
   const templateByName = new Map<string, number>();
-  snapshot.productTemplates.forEach(t => templateByName.set(t.name, t.id));
+  snapshot.productTemplates.forEach((t) => templateByName.set(t.name, t.id));
 
   const variantByDisplayName = new Map<string, number>();
-  snapshot.productVariants.forEach(v => variantByDisplayName.set(v.display_name, v.id));
+  snapshot.productVariants.forEach((v) =>
+    variantByDisplayName.set(v.display_name, v.id),
+  );
 
   const workcenterByName = new Map<string, number>();
-  snapshot.workcenters.forEach(w => workcenterByName.set(w.name, w.id));
+  snapshot.workcenters.forEach((w) => workcenterByName.set(w.name, w.id));
 
   const uomByName = new Map<string, number>();
-  snapshot.uoms.forEach(u => uomByName.set(u.name, u.id));
+  snapshot.uoms.forEach((u) => uomByName.set(u.name, u.id));
 
   function resolveUomId(uom: string): number | undefined {
     return uomByName.get(UOM_ALIAS[uom] ?? uom);
@@ -63,7 +79,8 @@ export function enrichBoms(boms: BomEntry[], snapshot: SnapshotData): void {
     if (varId !== undefined) bom.product.odooVariantId = varId;
 
     for (const op of bom.operations) {
-      const resolvedName = WORKCENTER_ALIAS[op.workcenterName] ?? op.workcenterName;
+      const resolvedName =
+        WORKCENTER_ALIAS[op.workcenterName] ?? op.workcenterName;
       const wcId = workcenterByName.get(resolvedName);
       if (wcId !== undefined) op.odooWorkcenterId = wcId;
     }
@@ -119,7 +136,8 @@ export function enrichBoms(boms: BomEntry[], snapshot: SnapshotData): void {
           // Fallback: collect unique values from ifAttr tags in this BOM
           const seen = new Set<string>();
           for (const comp of bom.components) {
-            if (comp.ifAttr && comp.ifAttr[attrName]) seen.add(comp.ifAttr[attrName]);
+            if (comp.ifAttr && comp.ifAttr[attrName])
+              seen.add(comp.ifAttr[attrName]);
           }
           if (seen.size > 0) expand[attrName] = [...seen];
         }
