@@ -184,7 +184,7 @@ function fixPorolonFormat(line: string): string {
   );
 }
 
-// "Войлок 1.60 - 2.00 m" → "[Войлок] (1.60) - 2.00 m"
+// "Войлок 1.60 - 2 m" → "[Войлок] (1.60) - 2 m"
 function fixVoylokFormat(line: string): string {
   return line.replace(
     /^(\s*)Войлок\s+([\d.]+)\s*-/,
