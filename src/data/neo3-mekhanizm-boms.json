@@ -10,7 +10,7 @@
       "Spec 'Крихта ППУ' = Odoo 'ППУ Крихта' (attr_val id:375) — same material, different word order",
       "Spec 'Холофайбер' = Odoo 'Холофайдер' (attr_val id:374) — same material, typo in Odoo",
       "Spec '[Петля] (К.11301)' = Odoo '[Петля] (K 113.01)' (variant id:337) — different encoding",
-      "Spec '[Поролон] (ST-2535 2000x1600x20)' = Odoo variant id:302 (uses Cyrillic х in dims)",
+      "Spec '[Поролон] (ST-2535 2000x1600x20)' = Odoo variant id:302 (uses Cyrillicxin dims)",
       "Тік-так Odoo name is 'Tік-так' (Latin T) — same product, variant id:45",
       "RISK: Adding 'Діван Наповнювач Подушек' attr to Подушка template archives existing variant 1330. Check BOMs referencing it before executing phase_2 step for Подушка."
     ]

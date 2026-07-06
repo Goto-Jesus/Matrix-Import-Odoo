@@ -146,7 +146,7 @@ function fixTrailingSpacesInParens(line: string): string {
   );
 }
 
-// "(Д.Верадо - 1.00 шт." → "(Д.Верадо) - 1.00 шт."  — відсутня закриваюча дужка
+// "(Д.Верадо - 1 шт." → "(Д.Верадо) - 1 шт."  — відсутня закриваюча дужка
 function fixUnclosedParen(line: string): string {
   const open = (line.match(/\(/g) || []).length;
   const close = (line.match(/\)/g) || []).length;
@@ -333,7 +333,7 @@ function insertMissingPrices(lines: string[], changes: string[]): string[] {
   return result;
 }
 
-// "[Ламінат] (712x220)" → "🧩[Ламінат - лист] (712x220)", Cyrillic х → Latin x in sizes
+// "[Ламінат] (712x220)" → "🧩[Ламінат - лист] (712x220)", Cyrillicx→ Latin x in sizes
 function fixLaminateName(line: string): string {
   return line.replace(
     /\[Ламінат\](\s*)(\([^)]+\))/g,

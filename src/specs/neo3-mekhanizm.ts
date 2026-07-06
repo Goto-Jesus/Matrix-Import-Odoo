@@ -423,14 +423,14 @@ export const neo3Boms: BomDef[] = [
       },
       {
         product: "[Боннель]",
-        variants: ["910 х 600"],
+        variants: ["910x600"],
         qty: 3,
         uomId: UOM.UNITS,
         operationIndex: 0,
       },
       {
         product: "[Боннель]",
-        variants: ["910 х 750"],
+        variants: ["910x750"],
         qty: 3,
         uomId: UOM.UNITS,
         operationIndex: 0,
@@ -474,14 +474,14 @@ export const neo3Boms: BomDef[] = [
       },
       {
         product: "[Боннель]",
-        variants: ["910 х 600"],
+        variants: ["910x600"],
         qty: 3,
         uomId: UOM.UNITS,
         operationIndex: 0,
       },
       {
         product: "[Боннель]",
-        variants: ["910 х 750"],
+        variants: ["910x750"],
         qty: 3,
         uomId: UOM.UNITS,
         operationIndex: 0,

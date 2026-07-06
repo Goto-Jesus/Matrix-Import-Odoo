@@ -1218,32 +1218,32 @@
       },
       {
         "id": 24,
-        "name": "1900 х 600",
+        "name": "1900x600",
         "attribute_id": [9, "Боннель"]
       },
       {
         "id": 25,
-        "name": "1900 х 700",
+        "name": "1900x700",
         "attribute_id": [9, "Боннель"]
       },
       {
         "id": 166,
-        "name": "1870 х 750",
+        "name": "1870x750",
         "attribute_id": [9, "Боннель"]
       },
       {
         "id": 207,
-        "name": "910 х 600",
+        "name": "910x600",
         "attribute_id": [9, "Боннель"]
       },
       {
         "id": 208,
-        "name": "910 х 750",
+        "name": "910x750",
         "attribute_id": [9, "Боннель"]
       },
       {
         "id": 209,
-        "name": "910 х 1330",
+        "name": "910x1330",
         "attribute_id": [9, "Боннель"]
       },
       {
@@ -2255,7 +2255,7 @@
       {
         "id": 54,
         "name": "[Боннель]",
-        "display_name": "[Боннель] (1900 х 600)",
+        "display_name": "[Боннель] (1900x600)",
         "product_tmpl_id": [24, "[Боннель]"],
         "product_template_attribute_value_ids": [17],
         "active": true
@@ -2263,7 +2263,7 @@
       {
         "id": 55,
         "name": "[Боннель]",
-        "display_name": "[Боннель] (1900 х 700)",
+        "display_name": "[Боннель] (1900x700)",
         "product_tmpl_id": [24, "[Боннель]"],
         "product_template_attribute_value_ids": [18],
         "active": true
@@ -2271,7 +2271,7 @@
       {
         "id": 313,
         "name": "[Боннель]",
-        "display_name": "[Боннель] (1870 х 750)",
+        "display_name": "[Боннель] (1870x750)",
         "product_tmpl_id": [24, "[Боннель]"],
         "product_template_attribute_value_ids": [138],
         "active": true
@@ -2279,7 +2279,7 @@
       {
         "id": 521,
         "name": "[Боннель]",
-        "display_name": "[Боннель] (910 х 600)",
+        "display_name": "[Боннель] (910x600)",
         "product_tmpl_id": [24, "[Боннель]"],
         "product_template_attribute_value_ids": [321],
         "active": true
@@ -2287,7 +2287,7 @@
       {
         "id": 522,
         "name": "[Боннель]",
-        "display_name": "[Боннель] (910 х 750)",
+        "display_name": "[Боннель] (910x750)",
         "product_tmpl_id": [24, "[Боннель]"],
         "product_template_attribute_value_ids": [322],
         "active": true
@@ -2295,7 +2295,7 @@
       {
         "id": 523,
         "name": "[Боннель]",
-        "display_name": "[Боннель] (910 х 1330)",
+        "display_name": "[Боннель] (910x1330)",
         "product_tmpl_id": [24, "[Боннель]"],
         "product_template_attribute_value_ids": [323],
         "active": true
@@ -2527,7 +2527,7 @@
       {
         "id": 1337,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 758х456)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 758х456)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 708],
         "active": true
@@ -2535,7 +2535,7 @@
       {
         "id": 1338,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 500х260)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 500х260)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 709],
         "active": true
@@ -2543,7 +2543,7 @@
       {
         "id": 1339,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 1006х198)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 1006х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 710],
         "active": true
@@ -2551,7 +2551,7 @@
       {
         "id": 1340,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 920Х198)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 920Х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 711],
         "active": true
@@ -2559,7 +2559,7 @@
       {
         "id": 1341,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 1250х300)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 1250х300)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 712],
         "active": true
@@ -2567,7 +2567,7 @@
       {
         "id": 1342,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 750х198)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 750х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 713],
         "active": true
@@ -2575,7 +2575,7 @@
       {
         "id": 1343,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 1000х165)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 1000х165)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 714],
         "active": true
@@ -2583,7 +2583,7 @@
       {
         "id": 1344,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 1260х205)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 1260х205)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 715],
         "active": true
@@ -2591,7 +2591,7 @@
       {
         "id": 1345,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 1940х70)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 1940х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 716],
         "active": true
@@ -2599,7 +2599,7 @@
       {
         "id": 1346,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 250х70)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 250х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 717],
         "active": true
@@ -2607,7 +2607,7 @@
       {
         "id": 1347,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 1370х70)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 1370х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 718],
         "active": true
@@ -2615,7 +2615,7 @@
       {
         "id": 1348,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 700х70)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 700х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 719],
         "active": true
@@ -2623,7 +2623,7 @@
       {
         "id": 1349,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 1090х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 1090х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 720],
         "active": true
@@ -2631,7 +2631,7 @@
       {
         "id": 1350,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 1660х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 1660х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 721],
         "active": true
@@ -2639,7 +2639,7 @@
       {
         "id": 1351,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 722],
         "active": true
@@ -2647,7 +2647,7 @@
       {
         "id": 1352,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 723],
         "active": true
@@ -2655,7 +2655,7 @@
       {
         "id": 1353,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 724],
         "active": true
@@ -2663,7 +2663,7 @@
       {
         "id": 1354,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 1070х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 1070х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 725],
         "active": true
@@ -2671,7 +2671,7 @@
       {
         "id": 1355,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 240х303)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 240х303)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 726],
         "active": true
@@ -2679,7 +2679,7 @@
       {
         "id": 1356,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Венге, 100х303)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 100х303)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 727],
         "active": true
@@ -2687,7 +2687,7 @@
       {
         "id": 1357,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 758х456)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 758х456)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 708],
         "active": true
@@ -2695,7 +2695,7 @@
       {
         "id": 1358,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 500х260)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 500х260)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 709],
         "active": true
@@ -2703,7 +2703,7 @@
       {
         "id": 1359,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 1006х198)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 1006х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 710],
         "active": true
@@ -2711,7 +2711,7 @@
       {
         "id": 1360,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 920Х198)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 920Х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 711],
         "active": true
@@ -2719,7 +2719,7 @@
       {
         "id": 1361,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 1250х300)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 1250х300)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 712],
         "active": true
@@ -2727,7 +2727,7 @@
       {
         "id": 1362,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 750х198)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 750х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 713],
         "active": true
@@ -2735,7 +2735,7 @@
       {
         "id": 1363,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 1000х165)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 1000х165)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 714],
         "active": true
@@ -2743,7 +2743,7 @@
       {
         "id": 1364,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 1260х205)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 1260х205)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 715],
         "active": true
@@ -2751,7 +2751,7 @@
       {
         "id": 1365,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 1940х70)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 1940х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 716],
         "active": true
@@ -2759,7 +2759,7 @@
       {
         "id": 1366,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 250х70)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 250х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 717],
         "active": true
@@ -2767,7 +2767,7 @@
       {
         "id": 1367,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 1370х70)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 1370х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 718],
         "active": true
@@ -2775,7 +2775,7 @@
       {
         "id": 1368,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 700х70)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 700х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 719],
         "active": true
@@ -2783,7 +2783,7 @@
       {
         "id": 1369,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 1090х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 1090х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 720],
         "active": true
@@ -2791,7 +2791,7 @@
       {
         "id": 1370,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 1660х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 1660х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 721],
         "active": true
@@ -2799,7 +2799,7 @@
       {
         "id": 1371,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 722],
         "active": true
@@ -2807,7 +2807,7 @@
       {
         "id": 1372,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 723],
         "active": true
@@ -2815,7 +2815,7 @@
       {
         "id": 1373,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 724],
         "active": true
@@ -2823,7 +2823,7 @@
       {
         "id": 1374,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 1070х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 1070х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 725],
         "active": true
@@ -2831,7 +2831,7 @@
       {
         "id": 1375,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 240х303)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 240х303)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 726],
         "active": true
@@ -2839,7 +2839,7 @@
       {
         "id": 1376,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, Трюфель, 100х303)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 100х303)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 727],
         "active": true
@@ -2847,7 +2847,7 @@
       {
         "id": 1377,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 758х456)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 758х456)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 708],
         "active": true
@@ -2855,7 +2855,7 @@
       {
         "id": 1378,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 500х260)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 500х260)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 709],
         "active": true
@@ -2863,7 +2863,7 @@
       {
         "id": 1379,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 1006х198)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 1006х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 710],
         "active": true
@@ -2871,7 +2871,7 @@
       {
         "id": 1380,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 920Х198)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 920Х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 711],
         "active": true
@@ -2879,7 +2879,7 @@
       {
         "id": 1381,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 1250х300)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 1250х300)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 712],
         "active": true
@@ -2887,7 +2887,7 @@
       {
         "id": 1382,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 750х198)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 750х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 713],
         "active": true
@@ -2895,7 +2895,7 @@
       {
         "id": 1383,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 1000х165)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 1000х165)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 714],
         "active": true
@@ -2903,7 +2903,7 @@
       {
         "id": 1384,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 1260х205)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 1260х205)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 715],
         "active": true
@@ -2911,7 +2911,7 @@
       {
         "id": 1385,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 1940х70)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 1940х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 716],
         "active": true
@@ -2919,7 +2919,7 @@
       {
         "id": 1386,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 250х70)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 250х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 717],
         "active": true
@@ -2927,7 +2927,7 @@
       {
         "id": 1387,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 1370х70)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 1370х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 718],
         "active": true
@@ -2935,7 +2935,7 @@
       {
         "id": 1388,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 700х70)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 700х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 719],
         "active": true
@@ -2943,7 +2943,7 @@
       {
         "id": 1389,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 1090х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 1090х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 720],
         "active": true
@@ -2951,7 +2951,7 @@
       {
         "id": 1390,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 1660х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 1660х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 721],
         "active": true
@@ -2959,7 +2959,7 @@
       {
         "id": 1391,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 722],
         "active": true
@@ -2967,7 +2967,7 @@
       {
         "id": 1392,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 723],
         "active": true
@@ -2975,7 +2975,7 @@
       {
         "id": 1393,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 724],
         "active": true
@@ -2983,7 +2983,7 @@
       {
         "id": 1394,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 1070х250)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 1070х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 725],
         "active": true
@@ -2991,7 +2991,7 @@
       {
         "id": 1395,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 240х303)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 240х303)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 726],
         "active": true
@@ -2999,7 +2999,7 @@
       {
         "id": 1396,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Леон-Люкс, ДК Білий, 100х303)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 100х303)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 727],
         "active": true
@@ -3007,7 +3007,7 @@
       {
         "id": 1397,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 758х456)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 758х456)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 708],
         "active": true
@@ -3015,7 +3015,7 @@
       {
         "id": 1398,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 500х260)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 500х260)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 709],
         "active": true
@@ -3023,7 +3023,7 @@
       {
         "id": 1399,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 1006х198)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 1006х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 710],
         "active": true
@@ -3031,7 +3031,7 @@
       {
         "id": 1400,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 920Х198)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 920Х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 711],
         "active": true
@@ -3039,7 +3039,7 @@
       {
         "id": 1401,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 1250х300)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 1250х300)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 712],
         "active": true
@@ -3047,7 +3047,7 @@
       {
         "id": 1402,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 750х198)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 750х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 713],
         "active": true
@@ -3055,7 +3055,7 @@
       {
         "id": 1403,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 1000х165)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 1000х165)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 714],
         "active": true
@@ -3063,7 +3063,7 @@
       {
         "id": 1404,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 1260х205)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 1260х205)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 715],
         "active": true
@@ -3071,7 +3071,7 @@
       {
         "id": 1405,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 1940х70)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 1940х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 716],
         "active": true
@@ -3079,7 +3079,7 @@
       {
         "id": 1406,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 250х70)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 250х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 717],
         "active": true
@@ -3087,7 +3087,7 @@
       {
         "id": 1407,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 1370х70)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 1370х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 718],
         "active": true
@@ -3095,7 +3095,7 @@
       {
         "id": 1408,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 700х70)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 700х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 719],
         "active": true
@@ -3103,7 +3103,7 @@
       {
         "id": 1409,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 1090х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 1090х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 720],
         "active": true
@@ -3111,7 +3111,7 @@
       {
         "id": 1410,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 1660х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 1660х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 721],
         "active": true
@@ -3119,7 +3119,7 @@
       {
         "id": 1411,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 722],
         "active": true
@@ -3127,7 +3127,7 @@
       {
         "id": 1412,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 723],
         "active": true
@@ -3135,7 +3135,7 @@
       {
         "id": 1413,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 724],
         "active": true
@@ -3143,7 +3143,7 @@
       {
         "id": 1414,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 1070х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 1070х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 725],
         "active": true
@@ -3151,7 +3151,7 @@
       {
         "id": 1415,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 240х303)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 240х303)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 726],
         "active": true
@@ -3159,7 +3159,7 @@
       {
         "id": 1416,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Венге, 100х303)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 100х303)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 727],
         "active": true
@@ -3167,7 +3167,7 @@
       {
         "id": 1417,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 758х456)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 758х456)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 708],
         "active": true
@@ -3175,7 +3175,7 @@
       {
         "id": 1418,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 500х260)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 500х260)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 709],
         "active": true
@@ -3183,7 +3183,7 @@
       {
         "id": 1419,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 1006х198)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 1006х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 710],
         "active": true
@@ -3191,7 +3191,7 @@
       {
         "id": 1420,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 920Х198)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 920Х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 711],
         "active": true
@@ -3199,7 +3199,7 @@
       {
         "id": 1421,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 1250х300)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 1250х300)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 712],
         "active": true
@@ -3207,7 +3207,7 @@
       {
         "id": 1422,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 750х198)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 750х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 713],
         "active": true
@@ -3215,7 +3215,7 @@
       {
         "id": 1423,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 1000х165)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 1000х165)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 714],
         "active": true
@@ -3223,7 +3223,7 @@
       {
         "id": 1424,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 1260х205)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 1260х205)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 715],
         "active": true
@@ -3231,7 +3231,7 @@
       {
         "id": 1425,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 1940х70)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 1940х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 716],
         "active": true
@@ -3239,7 +3239,7 @@
       {
         "id": 1426,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 250х70)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 250х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 717],
         "active": true
@@ -3247,7 +3247,7 @@
       {
         "id": 1427,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 1370х70)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 1370х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 718],
         "active": true
@@ -3255,7 +3255,7 @@
       {
         "id": 1428,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 700х70)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 700х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 719],
         "active": true
@@ -3263,7 +3263,7 @@
       {
         "id": 1429,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 1090х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 1090х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 720],
         "active": true
@@ -3271,7 +3271,7 @@
       {
         "id": 1430,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 1660х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 1660х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 721],
         "active": true
@@ -3279,7 +3279,7 @@
       {
         "id": 1431,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 722],
         "active": true
@@ -3287,7 +3287,7 @@
       {
         "id": 1432,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 723],
         "active": true
@@ -3295,7 +3295,7 @@
       {
         "id": 1433,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 724],
         "active": true
@@ -3303,7 +3303,7 @@
       {
         "id": 1434,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 1070х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 1070х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 725],
         "active": true
@@ -3311,7 +3311,7 @@
       {
         "id": 1435,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 240х303)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 240х303)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 726],
         "active": true
@@ -3319,7 +3319,7 @@
       {
         "id": 1436,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, Трюфель, 100х303)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 100х303)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 727],
         "active": true
@@ -3327,7 +3327,7 @@
       {
         "id": 1437,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 758х456)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 758х456)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 708],
         "active": true
@@ -3335,7 +3335,7 @@
       {
         "id": 1438,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 500х260)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 500х260)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 709],
         "active": true
@@ -3343,7 +3343,7 @@
       {
         "id": 1439,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 1006х198)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 1006х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 710],
         "active": true
@@ -3351,7 +3351,7 @@
       {
         "id": 1440,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 920Х198)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 920Х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 711],
         "active": true
@@ -3359,7 +3359,7 @@
       {
         "id": 1441,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 1250х300)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 1250х300)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 712],
         "active": true
@@ -3367,7 +3367,7 @@
       {
         "id": 1442,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 750х198)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 750х198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 713],
         "active": true
@@ -3375,7 +3375,7 @@
       {
         "id": 1443,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 1000х165)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 1000х165)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 714],
         "active": true
@@ -3383,7 +3383,7 @@
       {
         "id": 1444,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 1260х205)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 1260х205)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 715],
         "active": true
@@ -3391,7 +3391,7 @@
       {
         "id": 1445,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 1940х70)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 1940х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 716],
         "active": true
@@ -3399,7 +3399,7 @@
       {
         "id": 1446,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 250х70)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 250х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 717],
         "active": true
@@ -3407,7 +3407,7 @@
       {
         "id": 1447,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 1370х70)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 1370х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 718],
         "active": true
@@ -3415,7 +3415,7 @@
       {
         "id": 1448,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 700х70)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 700х70)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 719],
         "active": true
@@ -3423,7 +3423,7 @@
       {
         "id": 1449,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 1090х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 1090х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 720],
         "active": true
@@ -3431,7 +3431,7 @@
       {
         "id": 1450,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 1660х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 1660х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 721],
         "active": true
@@ -3439,7 +3439,7 @@
       {
         "id": 1451,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 722],
         "active": true
@@ -3447,7 +3447,7 @@
       {
         "id": 1452,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 723],
         "active": true
@@ -3455,7 +3455,7 @@
       {
         "id": 1453,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 1640х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 1640х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 724],
         "active": true
@@ -3463,7 +3463,7 @@
       {
         "id": 1454,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 1070х250)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 1070х250)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 725],
         "active": true
@@ -3471,7 +3471,7 @@
       {
         "id": 1455,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 240х303)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 240х303)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 726],
         "active": true
@@ -3479,7 +3479,7 @@
       {
         "id": 1456,
         "name": "[Накладка]",
-        "display_name": "[Накладка] (Д.Моліі, ДК Білий, 100х303)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 100х303)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 727],
         "active": true
@@ -15301,7 +15301,7 @@
       {
         "id": 391,
         "bom_id": [4, "Д.Моллі: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"],
-        "product_id": [55, "[Боннель] (1900 х 700)"],
+        "product_id": [55, "[Боннель] (1900x700)"],
         "product_qty": 1,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -15428,7 +15428,7 @@
           139,
           "Угол Нео-2 Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [521, "[Боннель] (910 х 600)"],
+        "product_id": [521, "[Боннель] (910x600)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -15520,7 +15520,7 @@
           166,
           "Д.Нео-3 Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [521, "[Боннель] (910 х 600)"],
+        "product_id": [521, "[Боннель] (910x600)"],
         "product_qty": 3,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -15558,7 +15558,7 @@
           175,
           "Д.Доррі-3 Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [521, "[Боннель] (910 х 600)"],
+        "product_id": [521, "[Боннель] (910x600)"],
         "product_qty": 3,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -15604,7 +15604,7 @@
           182,
           "Д.Доррі Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [521, "[Боннель] (910 х 600)"],
+        "product_id": [521, "[Боннель] (910x600)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -15634,7 +15634,7 @@
           187,
           "Угол Нео-3 Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [521, "[Боннель] (910 х 600)"],
+        "product_id": [521, "[Боннель] (910x600)"],
         "product_qty": 3,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -15696,7 +15696,7 @@
           200,
           "Угол Нео-2 Механізм: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [521, "[Боннель] (910 х 600)"],
+        "product_id": [521, "[Боннель] (910x600)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -15748,7 +15748,7 @@
           207,
           "Угол Нео-3 Механізм: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [521, "[Боннель] (910 х 600)"],
+        "product_id": [521, "[Боннель] (910x600)"],
         "product_qty": 3,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -15783,7 +15783,7 @@
           218,
           "Д.Доррі Механізм: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [521, "[Боннель] (910 х 600)"],
+        "product_id": [521, "[Боннель] (910x600)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -15829,7 +15829,7 @@
           227,
           "Д.Нео Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [521, "[Боннель] (910 х 600)"],
+        "product_id": [521, "[Боннель] (910x600)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -15875,7 +15875,7 @@
           234,
           "Д.Нео Механізм: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [521, "[Боннель] (910 х 600)"],
+        "product_id": [521, "[Боннель] (910x600)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -15921,7 +15921,7 @@
           245,
           "Д.Верадо Механізм: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [521, "[Боннель] (910 х 600)"],
+        "product_id": [521, "[Боннель] (910x600)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16211,7 +16211,7 @@
       {
         "id": 392,
         "bom_id": [4, "Д.Моллі: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"],
-        "product_id": [313, "[Боннель] (1870 х 750)"],
+        "product_id": [313, "[Боннель] (1870x750)"],
         "product_qty": 1,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16284,7 +16284,7 @@
           139,
           "Угол Нео-2 Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [522, "[Боннель] (910 х 750)"],
+        "product_id": [522, "[Боннель] (910x750)"],
         "product_qty": 1,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16335,7 +16335,7 @@
           166,
           "Д.Нео-3 Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [522, "[Боннель] (910 х 750)"],
+        "product_id": [522, "[Боннель] (910x750)"],
         "product_qty": 3,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16354,7 +16354,7 @@
           175,
           "Д.Доррі-3 Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [522, "[Боннель] (910 х 750)"],
+        "product_id": [522, "[Боннель] (910x750)"],
         "product_qty": 3,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16381,7 +16381,7 @@
           182,
           "Д.Доррі Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [522, "[Боннель] (910 х 750)"],
+        "product_id": [522, "[Боннель] (910x750)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16408,7 +16408,7 @@
           187,
           "Угол Нео-3 Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [522, "[Боннель] (910 х 750)"],
+        "product_id": [522, "[Боннель] (910x750)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16459,7 +16459,7 @@
           200,
           "Угол Нео-2 Механізм: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [522, "[Боннель] (910 х 750)"],
+        "product_id": [522, "[Боннель] (910x750)"],
         "product_qty": 1,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16497,7 +16497,7 @@
           207,
           "Угол Нео-3 Механізм: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [522, "[Боннель] (910 х 750)"],
+        "product_id": [522, "[Боннель] (910x750)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16524,7 +16524,7 @@
           218,
           "Д.Доррі Механізм: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [522, "[Боннель] (910 х 750)"],
+        "product_id": [522, "[Боннель] (910x750)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16551,7 +16551,7 @@
           227,
           "Д.Нео Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [522, "[Боннель] (910 х 750)"],
+        "product_id": [522, "[Боннель] (910x750)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16578,7 +16578,7 @@
           234,
           "Д.Нео Механізм: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [522, "[Боннель] (910 х 750)"],
+        "product_id": [522, "[Боннель] (910x750)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16605,7 +16605,7 @@
           245,
           "Д.Верадо Механізм: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [522, "[Боннель] (910 х 750)"],
+        "product_id": [522, "[Боннель] (910x750)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16635,7 +16635,7 @@
           253,
           "Д,Доррі-3 Механізм: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [521, "[Боннель] (910 х 600)"],
+        "product_id": [521, "[Боннель] (910x600)"],
         "product_qty": 3,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16673,7 +16673,7 @@
           773,
           "Д.Лофт Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [521, "[Боннель] (910 х 600)"],
+        "product_id": [521, "[Боннель] (910x600)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16684,7 +16684,7 @@
           774,
           "Д.Лофт Колеса, посилений блок: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [521, "[Боннель] (910 х 600)"],
+        "product_id": [521, "[Боннель] (910x600)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16755,7 +16755,7 @@
           807,
           "Д.Лофт-3 Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [521, "[Боннель] (910 х 600)"],
+        "product_id": [521, "[Боннель] (910x600)"],
         "product_qty": 3,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16766,7 +16766,7 @@
           808,
           "Д.Лофт-3 Колеса, посилений блок: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [521, "[Боннель] (910 х 600)"],
+        "product_id": [521, "[Боннель] (910x600)"],
         "product_qty": 3,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16860,7 +16860,7 @@
           139,
           "Угол Нео-2 Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [523, "[Боннель] (910 х 1330)"],
+        "product_id": [523, "[Боннель] (910x1330)"],
         "product_qty": 1,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16943,7 +16943,7 @@
           187,
           "Угол Нео-3 Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [523, "[Боннель] (910 х 1330)"],
+        "product_id": [523, "[Боннель] (910x1330)"],
         "product_qty": 1,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -16978,7 +16978,7 @@
           200,
           "Угол Нео-2 Механізм: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [523, "[Боннель] (910 х 1330)"],
+        "product_id": [523, "[Боннель] (910x1330)"],
         "product_qty": 1,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -17016,7 +17016,7 @@
           207,
           "Угол Нео-3 Механізм: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [523, "[Боннель] (910 х 1330)"],
+        "product_id": [523, "[Боннель] (910x1330)"],
         "product_qty": 1,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -17102,7 +17102,7 @@
           253,
           "Д,Доррі-3 Механізм: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [313, "[Боннель] (1870 х 750)"],
+        "product_id": [313, "[Боннель] (1870x750)"],
         "product_qty": 3,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -17140,7 +17140,7 @@
           773,
           "Д.Лофт Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [522, "[Боннель] (910 х 750)"],
+        "product_id": [522, "[Боннель] (910x750)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -17151,7 +17151,7 @@
           774,
           "Д.Лофт Колеса, посилений блок: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [522, "[Боннель] (910 х 750)"],
+        "product_id": [522, "[Боннель] (910x750)"],
         "product_qty": 2,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -17222,7 +17222,7 @@
           807,
           "Д.Лофт-3 Колеса: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [522, "[Боннель] (910 х 750)"],
+        "product_id": [522, "[Боннель] (910x750)"],
         "product_qty": 3,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -17233,7 +17233,7 @@
           808,
           "Д.Лофт-3 Колеса, посилений блок: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [522, "[Боннель] (910 х 750)"],
+        "product_id": [522, "[Боннель] (910x750)"],
         "product_qty": 3,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -18117,7 +18117,7 @@
           113,
           "Д.Леон-Люкс: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [54, "[Боннель] (1900 х 600)"],
+        "product_id": [54, "[Боннель] (1900x600)"],
         "product_qty": 1,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -18287,7 +18287,7 @@
           113,
           "Д.Леон-Люкс: 🪤🧽[Каркас + Поролон - напівфабрикат 2]"
         ],
-        "product_id": [55, "[Боннель] (1900 х 700)"],
+        "product_id": [55, "[Боннель] (1900x700)"],
         "product_qty": 1,
         "product_uom_id": [1, "Одиниці"],
         "operation_id": false
@@ -18898,7 +18898,7 @@
     "bomOperations": [
       {
         "id": 22,
-        "name": "Операція (Цех №7) [Чохол - нарізані матеріали] (Д.Леон-Люкс)",
+        "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали] (Д.Леон-Люкс)",
         "bom_id": [
           78,
           "Підготовлені матеріали для чохла: 🧩[Чохол - нарізані матеріали]"
@@ -18909,7 +18909,7 @@
       },
       {
         "id": 23,
-        "name": "Операція (Цех №7) [Чохол - нарізані матеріали] (Д.Леон-Люкс)",
+        "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали] (Д.Леон-Люкс)",
         "bom_id": [79, "Рене 23: 🧩[Чохол - нарізані матеріали]"],
         "workcenter_id": [7, "Цех №7 Закройка Тканини"],
         "time_cycle_manual": 0,
@@ -20063,7 +20063,7 @@
       },
       {
         "id": 10,
-        "name": "Операція (Цех №7) [Чохол - нарізані матеріали] (Д.Леон-Люкс)",
+        "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали] (Д.Леон-Люкс)",
         "bom_id": [8, "Рене 26: 🧩[Чохол - нарізані матеріали]"],
         "workcenter_id": [7, "Цех №7 Закройка Тканини"],
         "time_cycle_manual": 0,
@@ -20087,7 +20087,7 @@
       },
       {
         "id": 8,
-        "name": "Операція (Цех №8) [Чохол - напівфабрикат] (Д. Леон-Люкс)",
+        "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат] (Д. Леон-Люкс)",
         "bom_id": [12, "Полуфабрікат: 🪤[Чохол - напівфабрикат]"],
         "workcenter_id": [8, "Цех №8 Швейка"],
         "time_cycle_manual": 0,
