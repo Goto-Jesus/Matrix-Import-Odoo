@@ -1278,7 +1278,7 @@
       },
       {
         "id": 401,
-        "name": "920Х198",
+        "name": "920x198",
         "attribute_id": [10, "Ламінат Розмір"]
       },
       {
@@ -2551,7 +2551,7 @@
       {
         "id": 1340,
         "name": "[Накладка]",
-        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 920Х198)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Венге, 920x198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 701, 711],
         "active": true
@@ -2711,7 +2711,7 @@
       {
         "id": 1360,
         "name": "[Накладка]",
-        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 920Х198)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, Трюфель, 920x198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 702, 711],
         "active": true
@@ -2871,7 +2871,7 @@
       {
         "id": 1380,
         "name": "[Накладка]",
-        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 920Х198)",
+        "display_name": "🪤[Накладка] (Д.Леон-Люкс, ДК Білий, 920x198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [279, 703, 711],
         "active": true
@@ -3031,7 +3031,7 @@
       {
         "id": 1400,
         "name": "[Накладка]",
-        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 920Х198)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Венге, 920x198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 701, 711],
         "active": true
@@ -3191,7 +3191,7 @@
       {
         "id": 1420,
         "name": "[Накладка]",
-        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 920Х198)",
+        "display_name": "🪤[Накладка] (Д.Моліі, Трюфель, 920x198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 702, 711],
         "active": true
@@ -3351,7 +3351,7 @@
       {
         "id": 1440,
         "name": "[Накладка]",
-        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 920Х198)",
+        "display_name": "🪤[Накладка] (Д.Моліі, ДК Білий, 920x198)",
         "product_tmpl_id": [11, "[Накладка]"],
         "product_template_attribute_value_ids": [281, 703, 711],
         "active": true
