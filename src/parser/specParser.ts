@@ -1,6 +1,6 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import { BomDef, ComponentSpec, OperationSpec, UOM } from '../bom/types';
+import * as fs from "fs";
+import * as path from "path";
+import { BomDef, ComponentSpec, OperationSpec, UOM } from "../bom/types";
 
 interface WorkshopHeader {
   number: string;
@@ -32,34 +32,43 @@ interface RawVariant {
 }
 
 function parseUom(uomStr: string): number {
-  const s = uomStr.toLowerCase().replace(/\s+/g, '').replace(/\.$/, '');
-  if (s === 'шт' || s === 'шт.' || s === 'од' || s === 'штук' || s === 'pcs') return UOM.UNITS;
-  if (s.includes('m²') || s.includes('м²') || s === 'm2' || s === 'м2') return UOM.M2;
-  if (s.includes('m³') || s.includes('м³') || s === 'm3' || s === 'м3') return UOM.M3;
-  if (s === 'кг' || s === 'kg') return UOM.KG;
-  if (s === 'г' || s === 'g') return UOM.G;
-  if (s === 'm' || s === 'м' || s === 'метр') return UOM.M;
+  const s = uomStr.toLowerCase().replace(/\s+/g, "").replace(/\.$/, "");
+  if (s === "шт" || s === "шт." || s === "од" || s === "штук" || s === "pcs")
+    return UOM.UNITS;
+  if (s.includes("m²") || s.includes("м²") || s === "m2" || s === " m²")
+    return UOM.M2;
+  if (s.includes("m³") || s.includes("м³") || s === "m3" || s === " m³")
+    return UOM.M3;
+  if (s === "кг" || s === "kg") return UOM.KG;
+  if (s === "г" || s === "g") return UOM.G;
+  if (s === "m" || s === "м" || s === "метр") return UOM.M;
   console.warn(`  [parse] невідома UOM: "${uomStr}", використовується Одиниці`);
   return UOM.UNITS;
 }
 
 function parseQty(qtyStr: string): number {
-  return parseFloat(qtyStr.replace(',', '.')) || 0;
+  return parseFloat(qtyStr.replace(",", ".")) || 0;
 }
 
 // Regex для рядка з emoji-продуктом або звичайним продуктом
 // Відловлює: 🪤🧽[Назва] (Атр1, Атр2) - qty uom
-const PRODUCT_RE = /^([\s\S]*?)(?:([\u{1F000}-\u{1FFFF}\u{2600}-\u{27FF}🪤🧩🪵🧽]+))?\[([^\]]+)\]\s*(?:\(([^)]+)\))?\s*(?:-\s*([\d,.]+)\s*(.+?))?\s*$/u;
+const PRODUCT_RE =
+  /^([\s\S]*?)(?:([\u{1F000}-\u{1FFFF}\u{2600}-\u{27FF}🪤🧩🪵🧽]+))?\[([^\]]+)\]\s*(?:\(([^)]+)\))?\s*(?:-\s*([\d,.]+)\s*(.+?))?\s*$/u;
 
 // Рядок без дужок: "Диван (Атр1, Атр2)"
-const PLAIN_PRODUCT_RE = /^[\s]*([A-Za-zА-ЯҐЄІЇа-яґєії0-9 -]+?)\s*\(([^)]+)\)\s*(?:-\s*([\d,.]+)\s*(.+?))?\s*$/;
+const PLAIN_PRODUCT_RE =
+  /^[\s]*([A-Za-zА-ЯҐЄІЇа-яґєії0-9 -]+?)\s*\(([^)]+)\)\s*(?:-\s*([\d,.]+)\s*(.+?))?\s*$/;
 
 // Компонент (відступ + назва - кількість UOM)
-const COMPONENT_BRACKET_RE = /^(\s{2,})([\u{1F000}-\u{1FFFF}\u{2600}-\u{27FF}🪤🧩🪵🧽]*)\[([^\]]+)\]\s*(?:\(([^)]+)\))?\s*-\s*([\d,.]+)\s*(.+?)\s*$/u;
-const COMPONENT_PLAIN_RE = /^(\s{2,})([^[\n#\/\-].+?)\s*-\s*([\d,.]+)\s*(.+?)\s*$/;
+const COMPONENT_BRACKET_RE =
+  /^(\s{2,})([\u{1F000}-\u{1FFFF}\u{2600}-\u{27FF}🪤🧩🪵🧽]*)\[([^\]]+)\]\s*(?:\(([^)]+)\))?\s*-\s*([\d,.]+)\s*(.+?)\s*$/u;
+const COMPONENT_PLAIN_RE =
+  /^(\s{2,})([^[\n#\/\-].+?)\s*-\s*([\d,.]+)\s*(.+?)\s*$/;
 
 function parseWorkshopHeader(line: string): WorkshopHeader | null {
-  const m = line.match(/^#+\s*Цех\s+№([\w-]+)\s+(.+?)\s+-\s+(\S+)\s+[""](.+?)[""]\s*$/);
+  const m = line.match(
+    /^#+\s*Цех\s+№([\w-]+)\s+(.+?)\s+-\s+(\S+)\s+[""](.+?)[""]\s*$/,
+  );
   if (!m) return null;
   return {
     number: m[1].trim(),
@@ -71,15 +80,27 @@ function parseWorkshopHeader(line: string): WorkshopHeader | null {
 
 function tryParseProduct(line: string): RawProduct | null {
   const trimmed = line.trim();
-  if (!trimmed || trimmed.startsWith('//') || trimmed.startsWith('Ціна') || trimmed === 'або' || trimmed === '---') return null;
+  if (
+    !trimmed ||
+    trimmed.startsWith("//") ||
+    trimmed.startsWith("Ціна") ||
+    trimmed === "або" ||
+    trimmed === "---"
+  )
+    return null;
 
   // Спробуємо з дужками []
   const m = trimmed.match(PRODUCT_RE);
   if (m && m[3]) {
     return {
-      emoji: (m[2] || '').trim(),
+      emoji: (m[2] || "").trim(),
       name: m[3].trim(),
-      attributes: m[4] ? m[4].split(',').map(s => s.trim()).filter(Boolean) : [],
+      attributes: m[4]
+        ? m[4]
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean)
+        : [],
       qty: m[5] ? parseQty(m[5]) : undefined,
       uomStr: m[6]?.trim(),
     };
@@ -89,9 +110,12 @@ function tryParseProduct(line: string): RawProduct | null {
   const pm = trimmed.match(PLAIN_PRODUCT_RE);
   if (pm) {
     return {
-      emoji: '',
+      emoji: "",
       name: pm[1].trim(),
-      attributes: pm[2].split(',').map(s => s.trim()).filter(Boolean),
+      attributes: pm[2]
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
       qty: pm[3] ? parseQty(pm[3]) : undefined,
       uomStr: pm[4]?.trim(),
     };
@@ -107,9 +131,14 @@ function tryParseComponent(line: string): RawComponent | null {
     const qty = parseQty(bm[5]);
     if (qty <= 0) return null;
     return {
-      emoji: (bm[2] || '').trim(),
+      emoji: (bm[2] || "").trim(),
       name: bm[3].trim(),
-      attributes: bm[4] ? bm[4].split(',').map(s => s.trim()).filter(Boolean) : [],
+      attributes: bm[4]
+        ? bm[4]
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean)
+        : [],
       qty,
       uomStr: bm[6].trim(),
     };
@@ -119,11 +148,17 @@ function tryParseComponent(line: string): RawComponent | null {
   const pm = line.match(COMPONENT_PLAIN_RE);
   if (pm) {
     const name = pm[2].trim();
-    if (!name || name.startsWith('Ціна') || name.startsWith('або') || name === '---') return null;
+    if (
+      !name ||
+      name.startsWith("Ціна") ||
+      name.startsWith("або") ||
+      name === "---"
+    )
+      return null;
     const qty = parseQty(pm[3]);
     if (qty <= 0) return null;
     return {
-      emoji: '',
+      emoji: "",
       name,
       attributes: [],
       qty,
@@ -146,7 +181,7 @@ function rawProductToBomDef(
     priceRate: price,
   };
 
-  const bomComponents: ComponentSpec[] = components.map(c => ({
+  const bomComponents: ComponentSpec[] = components.map((c) => ({
     product: c.name,
     variants: c.attributes.length > 0 ? c.attributes : undefined,
     qty: c.qty,
@@ -165,12 +200,12 @@ function rawProductToBomDef(
 
 function parsePrice(line: string): number | undefined {
   const m = line.match(/Ціна\s+([\d,.]+)/);
-  return m ? parseFloat(m[1].replace(',', '.')) : undefined;
+  return m ? parseFloat(m[1].replace(",", ".")) : undefined;
 }
 
 export function parseSpecFile(filePath: string): BomDef[] {
-  const content = fs.readFileSync(filePath, 'utf-8');
-  const lines = content.split('\n');
+  const content = fs.readFileSync(filePath, "utf-8");
+  const lines = content.split("\n");
   const boms: BomDef[] = [];
 
   let currentWorkshop: WorkshopHeader | null = null;
@@ -182,8 +217,20 @@ export function parseSpecFile(filePath: string): BomDef[] {
   function flushVariant() {
     if (!currentWorkshop || !currentProduct) return;
     // Skip if product has qty=0 (empty placeholder)
-    if (currentProduct.qty !== undefined && currentProduct.qty <= 0 && currentComponents.length === 0) return;
-    boms.push(rawProductToBomDef(currentProduct, currentComponents, currentWorkshop, currentPrice));
+    if (
+      currentProduct.qty !== undefined &&
+      currentProduct.qty <= 0 &&
+      currentComponents.length === 0
+    )
+      return;
+    boms.push(
+      rawProductToBomDef(
+        currentProduct,
+        currentComponents,
+        currentWorkshop,
+        currentPrice,
+      ),
+    );
   }
 
   for (let i = 0; i < lines.length; i++) {
@@ -191,7 +238,7 @@ export function parseSpecFile(filePath: string): BomDef[] {
     const trimmed = line.trim();
 
     // Workshop header: "# Цех №N ..."
-    if (trimmed.startsWith('#') && trimmed.includes('Цех')) {
+    if (trimmed.startsWith("#") && trimmed.includes("Цех")) {
       const wh = parseWorkshopHeader(trimmed);
       if (wh) {
         flushVariant();
@@ -208,16 +255,22 @@ export function parseSpecFile(filePath: string): BomDef[] {
     if (!currentWorkshop) continue;
 
     // Skip comments and empty lines (but don't break state)
-    if (!trimmed || trimmed.startsWith('//') || trimmed.startsWith('<<') || trimmed.startsWith('>>')) continue;
+    if (
+      !trimmed ||
+      trimmed.startsWith("//") ||
+      trimmed.startsWith("<<") ||
+      trimmed.startsWith(">>")
+    )
+      continue;
 
     // Price line
-    if (trimmed.startsWith('Ціна')) {
+    if (trimmed.startsWith("Ціна")) {
       currentPrice = parsePrice(trimmed);
       continue;
     }
 
     // "або" separator — flush current variant, start new one within same workshop
-    if (trimmed === 'або' || trimmed === 'Або') {
+    if (trimmed === "або" || trimmed === "Або") {
       flushVariant();
       currentProduct = null;
       currentComponents = [];
@@ -225,7 +278,7 @@ export function parseSpecFile(filePath: string): BomDef[] {
     }
 
     // Section separator "---" — flush current variant
-    if (trimmed === '---') {
+    if (trimmed === "---") {
       flushVariant();
       currentProduct = null;
       currentComponents = [];

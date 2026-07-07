@@ -25,9 +25,9 @@ const UOM_NORMALIZE: Record<string, string> = {
   g: "г",
   м: "m",
   метр: "m",
-  м2: "m²",
+   m²: "m²",
   m2: "m²",
-  м3: "m³",
+   m³: "m³",
   m3: "m³",
   шт: "шт.",
 };
@@ -163,7 +163,7 @@ function fixDashBeforeQty(line: string): string {
   );
 }
 
-// Нормалізація одиниць виміру: "1.60 kg" → "1.60 кг", "0.042м3" → "0.042 m³"
+// Нормалізація одиниць виміру: "1.60 kg" → "1.60 кг", "0.042 m³" → "0.042 m³"
 function fixUom(line: string): string {
   return line.replace(
     /(-\s*)([\d,.]+)\s*([а-яА-ЯҐЄІЇa-zA-Z][а-яА-ЯҐЄІЇa-zA-Z0-9]*\.?)\s*$/,
@@ -249,7 +249,7 @@ function fixQtyDashUom(line: string): string {
   );
 }
 
-// "Фанера 0.83м2" → "Фанера - 0.83м2"  (UOM normalised later by fixUom)
+// "Фанера 0.83 m²" → "Фанера - 0.83 m²"  (UOM normalised later by fixUom)
 function fixMissingDashForBareMaterial(line: string): string {
   return line.replace(/^(\s*)(Фанера)\s+([\d,.]+)/, "$1$2 - $3");
 }

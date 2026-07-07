@@ -526,7 +526,7 @@ def main():
         edge_price = clean_price(edge_price)
         edge_length = clean_price(edge_length) if pd.notna(edge_length) else edge_length
 
-        # Перевірка на "БК" (без кромки)
+        # Перевірка на "БК" (БК)
         is_without_edge = 'БК' in size.upper() or 'бк' in size.lower()
 
         # Для пошуку варіанту очищаємо розмір від "БК"
