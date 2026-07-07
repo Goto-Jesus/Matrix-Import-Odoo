@@ -58,9 +58,9 @@ const UOM_SUGGESTION: Record<string, string> = {
   g: "г",
   м: "m",
   метр: "m",
-   m²: "m²",
+  "м2": "m²",
   m2: "m²",
-  " m³": "m³",
+  "м3": "m³",
   m3: "m³",
 };
 
