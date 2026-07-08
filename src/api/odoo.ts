@@ -81,3 +81,7 @@ export async function write(model: string, ids: number[], vals: object): Promise
 export async function unlink(model: string, ids: number[]): Promise<boolean> {
   return executeKw<boolean>(model, 'unlink', [ids]);
 }
+
+export async function fieldsGet(model: string, attributes = ['type', 'selection']): Promise<Record<string, any>> {
+  return executeKw(model, 'fields_get', [], { attributes });
+}

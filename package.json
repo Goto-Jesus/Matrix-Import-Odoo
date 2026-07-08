@@ -12,7 +12,8 @@
     "restore": "ts-node src/index.ts restore",
     "dev": "ts-node src/index.ts",
     "export-json": "ts-node src/commands/exportJson.ts",
-    "import-json": "ts-node src/commands/importJson.ts"
+    "import-json": "ts-node src/commands/importJson.ts",
+    "migrate-attr": "ts-node src/commands/migrateAttrValues.ts"
   },
   "keywords": [],
   "author": "",

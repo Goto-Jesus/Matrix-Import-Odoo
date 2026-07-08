@@ -110,10 +110,15 @@ function valuesToAttributes(
   plainPrefix?: string,
 ): AttributeVal[] {
   const names = getAttrNames(bracketName, plainPrefix);
-  return values.map((value, i) => ({
-    attributeName: names[i] ?? `Атрибут${i + 1}`,
-    value,
-  }));
+  return values.map((value, i) => {
+    // If the value itself is a %Placeholder%, use its name as the attribute name.
+    // This eliminates all position-based guessing for plain sofa products.
+    const placeholder = value.match(/^%([^%]+)%$/);
+    const attributeName = placeholder
+      ? placeholder[1]
+      : (names[i] ?? `Атрибут${i + 1}`);
+    return { attributeName, value };
+  });
 }
 
 // Finds the FIRST complete outer parenthesized group in s (respects nested parens)

@@ -1,7 +1,120 @@
-import { searchRead, create, write } from '../../api/odoo';
-import { findTemplate, getOrCreateAttribute, getOrCreateAttributeValue, resolveProduct } from '../../bom/product';
-import type { AttributeVal } from '../docToJson/types';
+import { searchRead, create, write, fieldsGet } from '../../api/odoo';
+import { findTemplate, cacheTemplate, getOrCreateAttribute, getOrCreateAttributeValue, resolveProduct, invalidateTemplateVariantCache } from '../../bom/product';
+import type { AttributeVal, BomEntry } from '../docToJson/types';
 import type { ResolvedProduct } from '../../bom/types';
+
+let _storableType: string | null = null;
+const _resolvedCache = new Map<string, ResolvedProduct | null>();
+const _variantByDisplayName = new Map<string, ResolvedProduct>();
+
+/**
+ * Pass 1: Для всіх вже-розгорнутих BomEntry зібрати потрібні атрибути по шаблонах
+ * та записати їх батчем (один write на рядок атрибута замість N write по одному).
+ * Odoo генерує всі варіанти ОДИН РАЗ після запису, а не N разів.
+ */
+export async function preSeedAttributeLines(entries: BomEntry[]): Promise<void> {
+  type TemplateInfo = { attrMap: Map<string, Set<string>>; isService: boolean };
+  const needed = new Map<string, TemplateInfo>();
+
+  const collect = (templateName: string, attrs: AttributeVal[], isService = false) => {
+    if (attrs.length === 0) return;
+    if (!needed.has(templateName)) needed.set(templateName, { attrMap: new Map(), isService });
+    const { attrMap } = needed.get(templateName)!;
+    for (const attr of attrs) {
+      if (attr.value.includes('%')) continue;
+      if (!attrMap.has(attr.attributeName)) attrMap.set(attr.attributeName, new Set());
+      attrMap.get(attr.attributeName)!.add(attr.value);
+    }
+  };
+
+  for (const entry of entries) {
+    collect(entry.product.templateName, entry.product.attributes, false);
+    for (const comp of entry.components) {
+      collect(comp.templateName, comp.attributes, comp.isService ?? false);
+    }
+  }
+
+  const sec = (t: number) => `${((Date.now() - t) / 1000).toFixed(2)}s`;
+
+  console.log(`\n[pre-seed] Шаблонів з атрибутами: ${needed.size}`);
+
+  for (const [templateName, { attrMap, isService }] of needed) {
+    let templateId: number;
+    const existing = await findTemplate(templateName);
+    if (existing) {
+      templateId = existing.id;
+    } else {
+      const t = Date.now();
+      templateId = await create('product.template', {
+        name: templateName,
+        type: isService ? 'service' : await getStorableType(),
+        uom_id: 1,
+      });
+      cacheTemplate(templateName, templateId);
+      console.log(`  [+] Шаблон: "${templateName}" (ID: ${templateId}) (${sec(t)})`);
+    }
+
+    for (const [attrName, valuesSet] of attrMap) {
+      const attrId = await getOrCreateAttribute(attrName);
+      const valueIds: number[] = [];
+      for (const v of valuesSet) {
+        valueIds.push(await getOrCreateAttributeValue(attrId, v));
+      }
+
+      const [existingLine] = await searchRead<{ id: number; value_ids: number[] }>(
+        'product.template.attribute.line',
+        [['product_tmpl_id', '=', templateId], ['attribute_id', '=', attrId]],
+        ['id', 'value_ids'], 1
+      );
+
+      if (existingLine) {
+        const missing = valueIds.filter(id => !existingLine.value_ids.includes(id));
+        if (missing.length > 0) {
+          const t = Date.now();
+          // [4, id] = "link one" — додає без видалення існуючих значень
+          await write('product.template.attribute.line', [existingLine.id], {
+            value_ids: missing.map(id => [4, id]),
+          });
+          console.log(`  [~] "${templateName}" / "${attrName}": +${missing.length} значень (${sec(t)})`);
+        }
+      } else {
+        const t = Date.now();
+        await create('product.template.attribute.line', {
+          product_tmpl_id: templateId,
+          attribute_id: attrId,
+          value_ids: valueIds.map(id => [4, id]),
+        });
+        console.log(`  [+] "${templateName}" / "${attrName}": ${valueIds.length} значень (${sec(t)})`);
+      }
+    }
+  }
+
+  console.log(`[pre-seed] Готово — варіанти сгенеровані Odoo\n`);
+}
+
+export function preSeedVariants(variants: Array<{ id: number; display_name: string; product_tmpl_id: [number, string] }>) {
+  for (const v of variants) {
+    _variantByDisplayName.set(v.display_name, {
+      variantId: v.id,
+      templateId: v.product_tmpl_id[0],
+      displayName: v.display_name,
+    });
+  }
+}
+
+async function getStorableType(): Promise<string> {
+  if (_storableType) return _storableType;
+  const fields = await fieldsGet('product.template', ['selection']);
+  const selection: [string, string][] = fields.type?.selection ?? [];
+  for (const key of ['consu', 'storable', 'product']) {
+    if (selection.some(([k]: [string, string]) => k === key)) {
+      _storableType = key;
+      return key;
+    }
+  }
+  _storableType = 'consu';
+  return _storableType;
+}
 
 /**
  * Знайти або створити шаблон товару та його варіант за набором атрибутів.
@@ -16,6 +129,22 @@ export async function ensureVariantFromAttrs(
   attributes: AttributeVal[],
   isService = false
 ): Promise<ResolvedProduct | null> {
+  // Skip attributes that still contain %placeholder% — they weren't fully resolved
+  const resolvedAttrs = attributes.filter(a => !a.value.includes('%'));
+
+  const cacheKey = `${templateName}::${resolvedAttrs.map(a => `${a.attributeName}=${a.value}`).join(',')}`;
+  if (_resolvedCache.has(cacheKey)) return _resolvedCache.get(cacheKey)!;
+
+  // Check snapshot pre-seed by expected display_name (avoids all Odoo calls for known variants)
+  const expectedDisplayName = resolvedAttrs.length === 0
+    ? templateName
+    : `${templateName} (${resolvedAttrs.map(a => a.value).join(', ')})`;
+  const fromSnapshot = _variantByDisplayName.get(expectedDisplayName);
+  if (fromSnapshot) {
+    _resolvedCache.set(cacheKey, fromSnapshot);
+    return fromSnapshot;
+  }
+
   let templateId: number;
   const existing = await findTemplate(templateName);
 
@@ -24,24 +153,24 @@ export async function ensureVariantFromAttrs(
   } else {
     templateId = await create('product.template', {
       name: templateName,
-      type: isService ? 'service' : 'product',
+      type: isService ? 'service' : await getStorableType(),
       uom_id: 1,
-      uom_po_id: 1,
     });
     console.log(`  [+] Шаблон створено: "${templateName}" (ID: ${templateId})`);
   }
 
-  if (attributes.length === 0) {
+  if (resolvedAttrs.length === 0) {
     const [v] = await searchRead<{ id: number }>(
       'product.product',
       [['product_tmpl_id', '=', templateId]],
       ['id'], 1
     );
-    if (!v) return null;
-    return { variantId: v.id, templateId, displayName: templateName };
+    const result = v ? { variantId: v.id, templateId, displayName: templateName } : null;
+    _resolvedCache.set(cacheKey, result);
+    return result;
   }
 
-  for (const attr of attributes) {
+  for (const attr of resolvedAttrs) {
     const attrId = await getOrCreateAttribute(attr.attributeName);
     const valueId = await getOrCreateAttributeValue(attrId, attr.value);
 
@@ -56,6 +185,7 @@ export async function ensureVariantFromAttrs(
         await write('product.template.attribute.line', [existingLine.id], {
           value_ids: [[4, valueId]],
         });
+        invalidateTemplateVariantCache(templateId);
         console.log(`    [~] "${attr.value}" → рядок атрибуту "${attr.attributeName}"`);
       }
     } else {
@@ -64,9 +194,12 @@ export async function ensureVariantFromAttrs(
         attribute_id: attrId,
         value_ids: [[4, valueId]],
       });
+      invalidateTemplateVariantCache(templateId);
       console.log(`    [+] Рядок "${attr.attributeName}" → "${attr.value}" на шаблоні "${templateName}"`);
     }
   }
 
-  return resolveProduct(templateName, attributes.map(a => a.value));
+  const result = await resolveProduct(templateName, resolvedAttrs.map(a => a.value));
+  _resolvedCache.set(cacheKey, result);
+  return result;
 }

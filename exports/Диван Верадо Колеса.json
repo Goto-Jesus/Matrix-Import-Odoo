@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Верадо Колеса.md",
-  "generatedAt": "2026-07-07T19:40:18.413Z",
+  "generatedAt": "2026-07-08T19:23:38.031Z",
   "boms": [
     {
       "product": {
@@ -20,7 +20,8 @@
         {
           "name": "Операція (Цех №1) 🪵[Каркас - нарізана деревина] (100 Дерево Колеса)",
           "workcenterName": "Цех №1 Дерева (Нарізка)",
-          "priceRate": 7
+          "priceRate": 7,
+          "odooWorkcenterId": 19
         }
       ],
       "components": [
@@ -64,7 +65,8 @@
         {
           "name": "Операція (Цех №2-1) 🧩[Бильце - нарізані деталі] (Б.Верадо)",
           "workcenterName": "Цех №2-1 ДСП (Нарізка Бильце)",
-          "priceRate": 10
+          "priceRate": 10,
+          "odooWorkcenterId": 20
         }
       ],
       "components": [
@@ -113,7 +115,8 @@
         {
           "name": "Операція (Цех №2-2) 🧩[Каркас - нарізані деталі] (100 Дерево Колеса)",
           "workcenterName": "Цех №2-2 ДСП (Нарізка Каркас)",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 21
         }
       ],
       "components": [
@@ -187,7 +190,8 @@
         {
           "name": "Операція (Цех №2-3) 🧩[Планка - нарізані деталі] (Планка 198)",
           "workcenterName": "Цех №2-3 ДСП (Нарізка Планка)",
-          "priceRate": 11
+          "priceRate": 11,
+          "odooWorkcenterId": 22
         }
       ],
       "components": [
@@ -236,7 +240,8 @@
         {
           "name": "Операція (Цех №3-1) 🧩[Ламінат - нарізані деталі] (100 Колеса)",
           "workcenterName": "Цех №3-1 ЛДСП (Нарізка Ламінату)",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 23
         }
       ],
       "components": [
@@ -284,7 +289,8 @@
         {
           "name": "Операція (Цех №3-2) 🪤[Накладка]",
           "workcenterName": "Цех №3-2 ЛДСП (Нарізка Накладок)",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 24
         }
       ],
       "components": []
@@ -347,7 +353,8 @@
         {
           "name": "Операція (Цех №4-2) 🪤[Каркас - напівфабрикат] (100 Дерево Колеса)",
           "workcenterName": "Цех №4-2 Сборка Каркас",
-          "priceRate": 0
+          "priceRate": 0,
+          "odooWorkcenterId": 26
         }
       ],
       "components": [
@@ -416,7 +423,8 @@
         {
           "name": "Операція (Цех №4-3) 🪤[Планка - напівфабрикат] (Планка 198)",
           "workcenterName": "Цех №4-3 Сборка Планка",
-          "priceRate": 17
+          "priceRate": 17,
+          "odooWorkcenterId": 27
         }
       ],
       "components": [
@@ -447,7 +455,8 @@
           }
         ],
         "variantDisplayName": "🧩[Поролон - нарізані компоненти] (Д.Верадо)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 216
       },
       "operations": [
         {
@@ -476,6 +485,7 @@
           "uom": "кг",
           "operationIndex": 0,
           "odooTemplateId": 19,
+          "odooVariantId": 1778,
           "odooUomId": 15
         },
         {
@@ -566,7 +576,8 @@
         ],
         "variantDisplayName": "🪤🧽[Каркас + Поролон - напівфабрикат 2] (Д.Верадо Колеса)",
         "qty": 1,
-        "odooTemplateId": 16
+        "odooTemplateId": 16,
+        "odooVariantId": 1704
       },
       "operations": [
         {
@@ -618,6 +629,7 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
+          "odooTemplateId": 216,
           "odooUomId": 1
         },
         {
@@ -647,6 +659,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 24,
+          "odooVariantId": 2885,
           "odooUomId": 1
         }
       ]
@@ -704,6 +717,7 @@
           "uom": "m",
           "operationIndex": 0,
           "odooTemplateId": 181,
+          "odooVariantId": 1731,
           "odooUomId": 8
         },
         {
@@ -809,7 +823,8 @@
           "Касія 96",
           "Сав нова браун 03",
           "Сав Нова Сильвер",
-          "Сав Нова Дк Грей 14"
+          "Сав Нова Дк Грей 14",
+          "%Тканина%"
         ]
       }
     },
@@ -945,7 +960,8 @@
           "Касія 96",
           "Сав нова браун 03",
           "Сав Нова Сильвер",
-          "Сав Нова Дк Грей 14"
+          "Сав Нова Дк Грей 14",
+          "%Тканина%"
         ]
       }
     },
@@ -1088,7 +1104,8 @@
           "Касія 96",
           "Сав нова браун 03",
           "Сав Нова Сильвер",
-          "Сав Нова Дк Грей 14"
+          "Сав Нова Дк Грей 14",
+          "%Тканина%"
         ]
       }
     },
@@ -1105,12 +1122,13 @@
             "value": "%Диван Пружинний Блок%"
           },
           {
-            "attributeName": "Диван Наповнювач Подушек",
+            "attributeName": "Диван Розмір Бильця",
             "value": "%Диван Розмір Бильця%"
           }
         ],
         "variantDisplayName": "Диван Верадо Колеса (%Тканина%, %Диван Пружинний Блок%, %Диван Розмір Бильця%)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 219
       },
       "operations": [
         {
@@ -1145,6 +1163,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 16,
+          "odooVariantId": 1704,
           "odooUomId": 1
         },
         {
@@ -1258,6 +1277,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 8,
+          "odooVariantId": 8927,
           "odooUomId": 1
         },
         {
@@ -1419,7 +1439,16 @@
           "Касія 96",
           "Сав нова браун 03",
           "Сав Нова Сильвер",
-          "Сав Нова Дк Грей 14"
+          "Сав Нова Дк Грей 14",
+          "%Тканина%"
+        ],
+        "Диван Пружинний Блок": [
+          "Посиленний",
+          "Звичайний"
+        ],
+        "Диван Розмір Бильця": [
+          "Зменшені Бильця",
+          "Звичайні Бильця"
         ]
       }
     }

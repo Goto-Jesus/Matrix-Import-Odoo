@@ -61,14 +61,17 @@ export function enrichBoms(boms: BomEntry[], snapshot: SnapshotData): void {
     return uomByName.get(UOM_ALIAS[uom] ?? uom);
   }
 
-  // Build attribute-value lookup: attrName → ordered list of values
+  // Normalize attribute names for case/space-insensitive lookup
+  const normalizeAttr = (s: string) => s.trim().toLowerCase().replace(/\s+/g, ' ');
+
+  // Build attribute-value lookup: normalized(attrName) → ordered list of values
   const attrValuesByName = new Map<string, string[]>();
   if (snapshot.productAttributeValues) {
     for (const av of snapshot.productAttributeValues) {
       if (!av.attribute_id) continue;
-      const attrName = av.attribute_id[1];
-      if (!attrValuesByName.has(attrName)) attrValuesByName.set(attrName, []);
-      attrValuesByName.get(attrName)!.push(av.name);
+      const key = normalizeAttr(av.attribute_id[1]);
+      if (!attrValuesByName.has(key)) attrValuesByName.set(key, []);
+      attrValuesByName.get(key)!.push(av.name);
     }
   }
 
@@ -129,7 +132,7 @@ export function enrichBoms(boms: BomEntry[], snapshot: SnapshotData): void {
     if (placeholders.size > 0) {
       const expand: Record<string, string[]> = {};
       for (const attrName of placeholders) {
-        const values = attrValuesByName.get(attrName);
+        const values = attrValuesByName.get(normalizeAttr(attrName));
         if (values && values.length > 0) {
           expand[attrName] = values;
         } else {

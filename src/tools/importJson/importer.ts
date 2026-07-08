@@ -1,6 +1,15 @@
-import { create, searchRead } from '../../api/odoo';
+import { create, searchRead, write, unlink } from '../../api/odoo';
+
+let _existingBomsByCode: Map<string, number> | null = null;
+
+async function preFetchBoms(): Promise<void> {
+  const boms = await searchRead<{ id: number; code: string }>('mrp.bom', [], ['id', 'code']);
+  _existingBomsByCode = new Map(boms.filter(b => b.code).map(b => [b.code, b.id]));
+  console.log(`  [cache] Завантажено ${_existingBomsByCode.size} BOM-кодів`);
+}
 import { getOrCreateWorkcenter } from '../../bom/product';
-import { ensureVariantFromAttrs } from './resolver';
+import { ensureVariantFromAttrs, preSeedAttributeLines } from './resolver';
+import { expandEntry } from './expander';
 import type { BomEntry } from '../docToJson/types';
 
 const UOM_MAP: Record<string, number> = {
@@ -13,6 +22,10 @@ const UOM_MAP: Record<string, number> = {
   'm³': 30,
 };
 
+function sec(start: number): string {
+  return `${((Date.now() - start) / 1000).toFixed(2)}s`;
+}
+
 function uomStrToId(uom: string): number {
   const id = UOM_MAP[uom];
   if (id === undefined) {
@@ -22,29 +35,39 @@ function uomStrToId(uom: string): number {
   return id;
 }
 
-export async function importBomEntry(entry: BomEntry): Promise<number | null> {
+async function deleteWrongBoms(templateCode: string): Promise<void> {
+  const existing = await searchRead<{ id: number }>(
+    'mrp.bom',
+    [['code', '=', templateCode]],
+    ['id']
+  );
+  if (existing.length) {
+    await unlink('mrp.bom', existing.map(b => b.id));
+    console.log(`  [DEL] Видалено ${existing.length} BOM(и) з кодом "${templateCode}"`);
+  }
+}
+
+export async function importBomEntry(entry: BomEntry): Promise<'created' | 'existed' | null> {
   const { product, operations, components } = entry;
   const bomCode = product.variantDisplayName;
 
   // 1. Знайти/створити вихідний варіант товару
+  let t = Date.now();
   const resolved = await ensureVariantFromAttrs(product.templateName, product.attributes);
   if (!resolved) {
-    console.warn(`  [SKIP] Не вдалося вирішити товар для: ${bomCode}`);
+    console.warn(`  [SKIP] Не вдалося вирішити товар для: ${bomCode} (${sec(t)})`);
     return null;
   }
 
-  // 2. Перевірити чи BOM вже існує (за product_id + code)
-  const [existingBom] = await searchRead<{ id: number }>(
-    'mrp.bom',
-    [['product_id', '=', resolved.variantId], ['code', '=', bomCode]],
-    ['id'], 1
-  );
-  if (existingBom) {
-    console.log(`  [EXISTS] BOM (ID: ${existingBom.id}): ${bomCode}`);
-    return existingBom.id;
+  // 2. Перевірити чи BOM вже існує (локальний кеш → без запиту до Odoo)
+  const existingId = _existingBomsByCode?.get(bomCode);
+  if (existingId !== undefined) {
+    console.log(`  [EXISTS] BOM (ID: ${existingId}): ${bomCode} (${sec(t)})`);
+    return 'existed';
   }
 
   // 3. Створити BOM
+  t = Date.now();
   const bomId = await create('mrp.bom', {
     product_id: resolved.variantId,
     product_tmpl_id: resolved.templateId,
@@ -52,12 +75,14 @@ export async function importBomEntry(entry: BomEntry): Promise<number | null> {
     product_qty: product.qty,
     type: 'normal',
   });
-  console.log(`  [+] BOM (ID: ${bomId}): ${bomCode}`);
+  _existingBomsByCode?.set(bomCode, bomId);
+  console.log(`  [+] BOM (ID: ${bomId}): ${bomCode} (${sec(t)})`);
 
   // 4. Створити операції
   const opIds: number[] = [];
   for (let i = 0; i < operations.length; i++) {
     const op = operations[i];
+    t = Date.now();
     const wcId = await getOrCreateWorkcenter(op.workcenterName);
     const opId = await create('mrp.routing.workcenter', {
       name: op.name,
@@ -67,19 +92,20 @@ export async function importBomEntry(entry: BomEntry): Promise<number | null> {
       x_studio_piece_rate_2: op.priceRate,
     });
     opIds.push(opId);
-    console.log(`    [op] "${op.name}" (${op.priceRate} грн)`);
+    console.log(`    [op] "${op.name}" (${op.priceRate} грн) (${sec(t)})`);
   }
 
   // 5. Створити рядки BOM (компоненти)
   for (let i = 0; i < components.length; i++) {
     const comp = components[i];
+    t = Date.now();
     const compResolved = await ensureVariantFromAttrs(
       comp.templateName,
       comp.attributes,
       comp.isService ?? false
     );
     if (!compResolved) {
-      console.warn(`    [SKIP] Компонент: "${comp.templateName}"`);
+      console.warn(`    [SKIP] Компонент: "${comp.templateName}" (${sec(t)})`);
       continue;
     }
 
@@ -96,31 +122,77 @@ export async function importBomEntry(entry: BomEntry): Promise<number | null> {
     const label = comp.attributes.length
       ? `${comp.templateName} (${comp.attributes.map(a => a.value).join(', ')})`
       : comp.templateName;
-    console.log(`    [+] ${label} × ${comp.qty} ${comp.uom}`);
+    console.log(`    [+] ${label} × ${comp.qty} ${comp.uom} (${sec(t)})`);
   }
 
-  return bomId;
+  return 'created';
+}
+
+async function ensureVariantLimit(minLimit = 10000): Promise<void> {
+  const [existing] = await searchRead<{ id: number; value: string }>(
+    'ir.config_parameter',
+    [['key', '=', 'product.dynamic_variant_limit']],
+    ['id', 'value'], 1
+  );
+  if (existing) {
+    const current = parseInt(existing.value, 10);
+    if (current < minLimit) {
+      await write('ir.config_parameter', [existing.id], { value: String(minLimit) });
+      console.log(`[config] product.dynamic_variant_limit: ${current} → ${minLimit}`);
+    }
+  } else {
+    await create('ir.config_parameter', { key: 'product.dynamic_variant_limit', value: String(minLimit) });
+    console.log(`[config] product.dynamic_variant_limit = ${minLimit}`);
+  }
 }
 
 export async function importAllBoms(boms: BomEntry[]): Promise<void> {
-  let created = 0, skipped = 0, errors = 0;
+  let created = 0, existed = 0, skipped = 0, errors = 0;
+
+  await ensureVariantLimit(10000);
+
+  // Pass 1: розгорнути всі записи і батчем записати атрибути в Odoo.
+  // Odoo генерує варіанти ОДИН РАЗ на шаблон, а не після кожного write.
+  const allExpanded = boms.flatMap(entry => expandEntry(entry));
+  await preSeedAttributeLines(allExpanded);
+
+  await preFetchBoms();
 
   for (const entry of boms) {
+    const expanded = expandEntry(entry);
+    const isExpanded = expanded.length > 1;
+    const entryStart = Date.now();
+
     console.log(`\n${'='.repeat(60)}`);
     console.log(entry.product.variantDisplayName);
+    if (isExpanded) console.log(`  → розширення: ${expanded.length} варіантів`);
     console.log('='.repeat(60));
 
-    try {
-      const id = await importBomEntry(entry);
-      if (id !== null) created++;
-      else skipped++;
-    } catch (err: any) {
-      console.error(`[ERROR] ${err.message}`);
-      errors++;
+    // Delete wrong placeholder BOMs before creating correct expanded ones
+    if (entry.expand) {
+      try {
+        await deleteWrongBoms(entry.product.variantDisplayName);
+      } catch (err: any) {
+        console.warn(`  [WARN] Не вдалося видалити старі BOM: ${err.message}`);
+      }
     }
+
+    for (const expandedEntry of expanded) {
+      try {
+        const result = await importBomEntry(expandedEntry);
+        if (result === 'created') created++;
+        else if (result === 'existed') existed++;
+        else skipped++;
+      } catch (err: any) {
+        console.error(`[ERROR] ${expandedEntry.product.variantDisplayName}: ${err.message}`);
+        errors++;
+      }
+    }
+
+    console.log(`  [час] Загалом: ${sec(entryStart)}`);
   }
 
   console.log(`\n${'='.repeat(60)}`);
-  console.log(`Готово. Створено: ${created} | Існує/пропущено: ${skipped} | Помилок: ${errors}`);
+  console.log(`Готово. Створено: ${created} | Існує: ${existed} | Пропущено: ${skipped} | Помилок: ${errors}`);
   console.log('='.repeat(60));
 }
