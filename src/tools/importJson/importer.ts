@@ -146,8 +146,11 @@ async function ensureVariantLimit(minLimit = 10000): Promise<void> {
   }
 }
 
+type CехStat = { name: string; elapsed: number; created: number; existed: number; skipped: number; errors: number };
+
 export async function importAllBoms(boms: BomEntry[]): Promise<void> {
   let created = 0, existed = 0, skipped = 0, errors = 0;
+  const totalStart = Date.now();
 
   await ensureVariantLimit(10000);
 
@@ -158,10 +161,13 @@ export async function importAllBoms(boms: BomEntry[]): Promise<void> {
 
   await preFetchBoms();
 
+  const cехStats: CехStat[] = [];
+
   for (const entry of boms) {
     const expanded = expandEntry(entry);
     const isExpanded = expanded.length > 1;
     const entryStart = Date.now();
+    let eCr = 0, eEx = 0, eSk = 0, eEr = 0;
 
     console.log(`\n${'='.repeat(60)}`);
     console.log(entry.product.variantDisplayName);
@@ -180,19 +186,36 @@ export async function importAllBoms(boms: BomEntry[]): Promise<void> {
     for (const expandedEntry of expanded) {
       try {
         const result = await importBomEntry(expandedEntry);
-        if (result === 'created') created++;
-        else if (result === 'existed') existed++;
-        else skipped++;
+        if (result === 'created') { created++; eCr++; }
+        else if (result === 'existed') { existed++; eEx++; }
+        else { skipped++; eSk++; }
       } catch (err: any) {
         console.error(`[ERROR] ${expandedEntry.product.variantDisplayName}: ${err.message}`);
-        errors++;
+        errors++; eEr++;
       }
     }
 
+    const elapsed = Date.now() - entryStart;
     console.log(`  [час] Загалом: ${sec(entryStart)}`);
+    cехStats.push({ name: entry.product.variantDisplayName, elapsed, created: eCr, existed: eEx, skipped: eSk, errors: eEr });
   }
 
-  console.log(`\n${'='.repeat(60)}`);
-  console.log(`Готово. Створено: ${created} | Існує: ${existed} | Пропущено: ${skipped} | Помилок: ${errors}`);
-  console.log('='.repeat(60));
+  const LINE = '='.repeat(60);
+  console.log(`\n${LINE}`);
+  console.log('СТАТИСТИКА ПО ЦЕХАХ');
+  console.log(LINE);
+  for (const s of cехStats) {
+    const t = `${(s.elapsed / 1000).toFixed(2)}s`.padStart(8);
+    const parts = [
+      s.created ? `+${s.created} створено` : '',
+      s.existed ? `=${s.existed} існує`    : '',
+      s.skipped ? `?${s.skipped} пропущено` : '',
+      s.errors  ? `!${s.errors} помилок`   : '',
+    ].filter(Boolean).join('  ');
+    console.log(`${t}  ${s.name}${parts ? `  [${parts}]` : ''}`);
+  }
+  console.log(LINE);
+  console.log(`Підсумок: +${created} створено  =${existed} існує  ?${skipped} пропущено  !${errors} помилок`);
+  console.log(`Загальний час: ${sec(totalStart)}`);
+  console.log(LINE);
 }
