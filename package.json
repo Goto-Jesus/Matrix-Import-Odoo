@@ -13,7 +13,8 @@
     "dev": "ts-node src/index.ts",
     "export-json": "ts-node src/commands/exportJson.ts",
     "import-json": "ts-node src/commands/importJson.ts",
-    "migrate-attr": "ts-node src/commands/migrateAttrValues.ts"
+    "migrate-attr": "ts-node src/commands/migrateAttrValues.ts",
+    "import-json-batch": "ts-node src/commands/importJsonBatch.ts"
   },
   "keywords": [],
   "author": "",

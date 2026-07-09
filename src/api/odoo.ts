@@ -74,6 +74,12 @@ export async function create(model: string, vals: object): Promise<number> {
   return executeKw<number>(model, 'create', [vals]);
 }
 
+/** Batch create — Odoo 16+ accepts a list and returns list of IDs in the same order */
+export async function createMany(model: string, vals: object[]): Promise<number[]> {
+  if (vals.length === 0) return [];
+  return executeKw<number[]>(model, 'create', [vals]);
+}
+
 export async function write(model: string, ids: number[], vals: object): Promise<boolean> {
   return executeKw<boolean>(model, 'write', [ids, vals]);
 }
