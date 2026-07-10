@@ -102,6 +102,11 @@ export function preSeedVariants(variants: Array<{ id: number; display_name: stri
   }
 }
 
+/** Очистити snapshot-кеш варіантів (викликати після preSeedAttributeLines щоб уникнути stale ID) */
+export function clearVariantDisplayCache(): void {
+  _variantByDisplayName.clear();
+}
+
 async function getStorableType(): Promise<string> {
   if (_storableType) return _storableType;
   const fields = await fieldsGet('product.template', ['selection']);

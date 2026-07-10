@@ -1,17 +1,11 @@
-import { searchRead, write, create, createMany, unlink } from '../../api/odoo';
+import { searchRead, write, create, createMany, unlink, executeKw } from '../../api/odoo';
 import { getOrCreateWorkcenter } from '../../bom/product';
-import { ensureVariantFromAttrs, preSeedAttributeLines } from './resolver';
+import { ensureVariantFromAttrs, preSeedAttributeLines, clearVariantDisplayCache } from './resolver';
 import { expandEntry } from './expander';
 import type { BomEntry } from '../docToJson/types';
 
 const UOM_MAP: Record<string, number> = {
-  'шт': 1,
-  'шт.': 1,
-  'm': 8,
-  'm²': 10,
-  'г': 14,
-  'кг': 15,
-  'm³': 30,
+  'шт': 1, 'шт.': 1, 'm': 8, 'm²': 10, 'г': 14, 'кг': 15, 'm³': 30,
 };
 
 function uomStrToId(uom: string): number {
@@ -53,7 +47,7 @@ async function deleteWrongBoms(code: string): Promise<void> {
   }
 }
 
-// ─── Internal prepared types ─────────────────────────────────────────────────
+// ─── Types ───────────────────────────────────────────────────────────────────
 
 type PreparedOp = {
   name: string;
@@ -79,13 +73,15 @@ type PreparedBom = {
   components: PreparedComp[];
 };
 
-// ─── Resolve one expanded entry to IDs (no creates) ──────────────────────────
+type BomLineGroup = {
+  bomId: number;
+  lines: object[];
+};
+
+// ─── Resolve one expanded entry (no Odoo writes) ──────────────────────────────
 
 async function resolveEntry(entry: BomEntry): Promise<PreparedBom | null> {
-  const resolved = await ensureVariantFromAttrs(
-    entry.product.templateName,
-    entry.product.attributes
-  );
+  const resolved = await ensureVariantFromAttrs(entry.product.templateName, entry.product.attributes);
   if (!resolved) return null;
 
   const ops: PreparedOp[] = [];
@@ -98,11 +94,7 @@ async function resolveEntry(entry: BomEntry): Promise<PreparedBom | null> {
   const comps: PreparedComp[] = [];
   for (let i = 0; i < entry.components.length; i++) {
     const comp = entry.components[i];
-    const compRes = await ensureVariantFromAttrs(
-      comp.templateName,
-      comp.attributes,
-      comp.isService ?? false
-    );
+    const compRes = await ensureVariantFromAttrs(comp.templateName, comp.attributes, comp.isService ?? false);
     if (!compRes) {
       console.warn(`    [SKIP comp] "${comp.templateName}"`);
       continue;
@@ -126,6 +118,115 @@ async function resolveEntry(entry: BomEntry): Promise<PreparedBom | null> {
   };
 }
 
+// ─── Resilient batch line creation ───────────────────────────────────────────
+// Tries mega-batch first; on failure falls back to per-BOM batches so one bad
+// record doesn't kill everything.
+
+async function createLinesBatch(groups: BomLineGroup[]): Promise<number> {
+  if (groups.length === 0) return 0;
+
+  const allLines = groups.flatMap(g => g.lines);
+  try {
+    await createMany('mrp.bom.line', allLines);
+    return allLines.length;
+  } catch (err: any) {
+    const msg = (err.message ?? '').slice(0, 120);
+    console.warn(`\n[WARN] Mega-batch рядків не вдався (${msg})`);
+    console.warn('[WARN] Перехід до per-BOM batch...\n');
+
+    let created = 0;
+    for (const group of groups) {
+      try {
+        await createMany('mrp.bom.line', group.lines);
+        created += group.lines.length;
+      } catch (e: any) {
+        console.error(`  [ERROR] Рядки BOM ${group.bomId}: ${(e.message ?? '').slice(0, 120)}`);
+      }
+    }
+    return created;
+  }
+}
+
+// ─── Build per-BOM line group ─────────────────────────────────────────────────
+
+function buildLineGroup(bomId: number, prep: PreparedBom, opIds: number[]): BomLineGroup {
+  const lines: object[] = [];
+  const opCount = prep.operations.length;
+  for (const comp of prep.components) {
+    const operationId = comp.operationIndex < opCount ? (opIds[comp.operationIndex] ?? false) : false;
+    lines.push({
+      bom_id: bomId,
+      product_id: comp.variantId,
+      product_qty: comp.qty,
+      product_uom_id: comp.uomId,
+      sequence: comp.sequence,
+      operation_id: operationId,
+    });
+  }
+  return { bomId, lines };
+}
+
+// ─── Repair: find existing BOMs without lines and fill them ──────────────────
+
+async function repairIncompleteBoms(
+  existingByCode: Map<string, number>,
+  allExpanded: BomEntry[]
+): Promise<number> {
+  const existingBomIds = [...existingByCode.values()];
+  if (existingBomIds.length === 0) return 0;
+
+  // BOMs that already have at least one line
+  const bomsWithLines = await executeKw<number[]>(
+    'mrp.bom', 'search',
+    [[['bom_line_ids', '!=', false], ['id', 'in', existingBomIds]]],
+    {}
+  );
+  const withLinesSet = new Set(bomsWithLines);
+
+  const incompleteBomIds = existingBomIds.filter(id => !withLinesSet.has(id));
+  if (incompleteBomIds.length === 0) return 0;
+
+  const incompleteBomIdSet = new Set(incompleteBomIds);
+  console.log(`\n[repair] ${incompleteBomIds.length} існуючих BOM без рядків — відновлення...`);
+
+  // Load existing operations for incomplete BOMs (sequence → id mapping per bom)
+  const existingOps = await searchRead<{ id: number; bom_id: any; sequence: number }>(
+    'mrp.routing.workcenter',
+    [['bom_id', 'in', incompleteBomIds]],
+    ['id', 'bom_id', 'sequence']
+  );
+
+  // bomId → array of opIds sorted by sequence (0-indexed = operationIndex)
+  const opsByBom = new Map<number, number[]>();
+  for (const op of existingOps) {
+    const bomId: number = Array.isArray(op.bom_id) ? op.bom_id[0] : op.bom_id;
+    if (!opsByBom.has(bomId)) opsByBom.set(bomId, []);
+    opsByBom.get(bomId)!.push({ seq: op.sequence, id: op.id } as any);
+  }
+  for (const [bomId, ops] of opsByBom) {
+    const sorted = (ops as any[]).sort((a, b) => a.seq - b.seq).map((o: any) => o.id);
+    opsByBom.set(bomId, sorted);
+  }
+
+  // Resolve entries and build line groups
+  const lineGroups: BomLineGroup[] = [];
+  for (const entry of allExpanded) {
+    const bomId = existingByCode.get(entry.product.variantDisplayName);
+    if (!bomId || !incompleteBomIdSet.has(bomId)) continue;
+
+    const prep = await resolveEntry(entry);
+    if (!prep) continue;
+
+    const opIds = opsByBom.get(bomId) ?? [];
+    const group = buildLineGroup(bomId, prep, opIds);
+    if (group.lines.length > 0) lineGroups.push(group);
+  }
+
+  const created = await createLinesBatch(lineGroups);
+  console.log(`[repair] Відновлено ${created} рядків для ${lineGroups.length} BOM`);
+  return created;
+}
+
 // ─── Main export ──────────────────────────────────────────────────────────────
 
 export async function batchImportAllBoms(boms: BomEntry[]): Promise<void> {
@@ -139,7 +240,6 @@ export async function batchImportAllBoms(boms: BomEntry[]): Promise<void> {
     console.log(`[batch] ${label}: ${(elapsed / 1000).toFixed(2)}s`);
   };
 
-  // ── Phase 0: raise variant limit ──────────────────────────────────────────
   await ensureVariantLimit(10000);
 
   // ── Phase 1: expand + pre-seed attributes ─────────────────────────────────
@@ -150,13 +250,23 @@ export async function batchImportAllBoms(boms: BomEntry[]): Promise<void> {
   await preSeedAttributeLines(allExpanded);
   phase('Pre-seed атрибутів', t);
 
+  // Clear snapshot variant cache — preSeedAttributeLines may have triggered
+  // Odoo to regenerate variants with new IDs, making snapshot IDs stale.
+  clearVariantDisplayCache();
+  console.log('[batch] Snapshot variant cache очищено (свіжа резолюція)');
+
   // ── Phase 2: load existing BOMs ───────────────────────────────────────────
   t = Date.now();
   const existingBoms = await searchRead<{ id: number; code: string }>('mrp.bom', [], ['id', 'code']);
   const existingByCode = new Map(existingBoms.filter(b => b.code).map(b => [b.code, b.id]));
   phase(`Завантаження ${existingByCode.size} існуючих BOM`, t);
 
-  // ── Phase 3: delete placeholder BOMs (for expanded entries) ───────────────
+  // ── Repair: fill incomplete BOMs from a previous failed run ──────────────
+  t = Date.now();
+  const repaired = await repairIncompleteBoms(existingByCode, allExpanded);
+  if (repaired > 0) phase(`Відновлення рядків (${repaired})`, t);
+
+  // ── Phase 3: delete placeholder BOMs for expanded entries ─────────────────
   for (const entry of boms) {
     if (entry.expand) {
       try { await deleteWrongBoms(entry.product.variantDisplayName); }
@@ -182,30 +292,29 @@ export async function batchImportAllBoms(boms: BomEntry[]): Promise<void> {
     else skippedCount++;
   }
 
-  phase(`Резолюція (${toCreate.length} нових, ${existedCount} існує, ${skippedCount} пропущено)`, t);
+  phase(`Резолюція (${toCreate.length} нових | ${existedCount} існує | ${skippedCount} пропущено)`, t);
 
   if (toCreate.length === 0) {
     console.log(`\n[batch] Нічого нового для створення.`);
-    console.log(`Загальний час: ${sec(totalStart)}`);
+    printSummary(phases, 0, existedCount, skippedCount, totalStart);
     return;
   }
 
   // ── Phase 5A: batch create BOMs ───────────────────────────────────────────
   t = Date.now();
-  const bomData = toCreate.map(p => ({
+  const bomIds = await createMany('mrp.bom', toCreate.map(p => ({
     product_id: p.variantId,
     product_tmpl_id: p.templateId,
     code: p.bomCode,
     product_qty: p.qty,
     type: 'normal',
-  }));
-  const bomIds = await createMany('mrp.bom', bomData);
+  })));
   phase(`Створення ${bomIds.length} BOM`, t);
 
   // ── Phase 5B: batch create operations ─────────────────────────────────────
   t = Date.now();
   const opRows: object[] = [];
-  const opStartIdx: number[] = [];   // opStartIdx[i] = where toCreate[i]'s ops start in opRows
+  const opStartIdx: number[] = [];
 
   for (let i = 0; i < toCreate.length; i++) {
     opStartIdx.push(opRows.length);
@@ -226,41 +335,39 @@ export async function batchImportAllBoms(boms: BomEntry[]): Promise<void> {
     phase(`Створення ${allOpIds.length} операцій`, t);
   }
 
-  // ── Phase 5C: batch create BOM lines ──────────────────────────────────────
+  // ── Phase 5C: batch create BOM lines (resilient) ──────────────────────────
   t = Date.now();
-  const lineRows: object[] = [];
+  const lineGroups: BomLineGroup[] = [];
 
   for (let i = 0; i < toCreate.length; i++) {
     const opBase = opStartIdx[i];
-    const opCount = toCreate[i].operations.length;
-    for (const comp of toCreate[i].components) {
-      const opId = comp.operationIndex < opCount
-        ? (allOpIds[opBase + comp.operationIndex] ?? false)
-        : false;
-      lineRows.push({
-        bom_id: bomIds[i],
-        product_id: comp.variantId,
-        product_qty: comp.qty,
-        product_uom_id: comp.uomId,
-        sequence: comp.sequence,
-        operation_id: opId,
-      });
-    }
+    const opSlice = allOpIds.slice(opBase, opBase + toCreate[i].operations.length);
+    const group = buildLineGroup(bomIds[i], toCreate[i], opSlice);
+    if (group.lines.length > 0) lineGroups.push(group);
   }
 
-  if (lineRows.length > 0) {
-    await createMany('mrp.bom.line', lineRows);
-    phase(`Створення ${lineRows.length} рядків BOM`, t);
-  }
+  const linesCreated = await createLinesBatch(lineGroups);
+  phase(`Створення ${linesCreated} рядків BOM`, t);
 
   // ── Summary ───────────────────────────────────────────────────────────────
+  printSummary(phases, toCreate.length, existedCount, skippedCount, totalStart);
+}
+
+function printSummary(
+  phases: Array<{ label: string; elapsed: number }>,
+  created: number,
+  existed: number,
+  skipped: number,
+  totalStart: number
+): void {
+  const LINE = '='.repeat(60);
   console.log(`\n${LINE}`);
   console.log('ФАЗИ:');
   for (const p of phases) {
     console.log(`  ${(p.elapsed / 1000).toFixed(2)}s`.padEnd(10) + p.label);
   }
   console.log(LINE);
-  console.log(`Підсумок: +${toCreate.length} створено  =${existedCount} існувало  ?${skippedCount} пропущено`);
+  console.log(`Підсумок: +${created} створено  =${existed} існувало  ?${skipped} пропущено`);
   console.log(`Загальний час: ${sec(totalStart)}`);
   console.log(LINE);
 }

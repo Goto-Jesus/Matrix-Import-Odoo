@@ -14,7 +14,8 @@
     "export-json": "ts-node src/commands/exportJson.ts",
     "import-json": "ts-node src/commands/importJson.ts",
     "migrate-attr": "ts-node src/commands/migrateAttrValues.ts",
-    "import-json-batch": "ts-node src/commands/importJsonBatch.ts"
+    "import-json-batch": "ts-node src/commands/importJsonBatch.ts",
+    "set-routes": "ts-node src/commands/setRoutes.ts"
   },
   "keywords": [],
   "author": "",
