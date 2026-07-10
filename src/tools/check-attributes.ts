@@ -365,6 +365,38 @@ function applyChanges(fileLines: string[], changes: LineChange[]): string[] {
   return result;
 }
 
+// ─── Library export ───────────────────────────────────────────────────────
+
+/**
+ * Run attribute checks on in-memory content.
+ * Returns the fixed content (original is never touched).
+ */
+export function runAttributeCheck(content: string, fileName: string): string {
+  console.log(`\nАтрибути: ${fileName}`);
+  const fileLines = content.split("\n");
+  const allAttrs = parseAttributeRules(content);
+  for (const a of allAttrs) {
+    console.log(
+      `  ${a.order}. ${a.paramName} [${a.active ? "✅" : "❌"}] → цехи: ${a.workshops.join(", ") || "—"}`
+    );
+  }
+
+  const { outputChanges, renames } = verify(fileLines, allAttrs);
+  const changedOutputIdxs = new Set(outputChanges.map((c) => c.lineIdx));
+  let workingLines = applyChanges(fileLines, outputChanges);
+  const inputChanges = cascadeInputUpdates(workingLines, renames, changedOutputIdxs);
+  workingLines = applyChanges(workingLines, inputChanges);
+
+  const totalChanges = outputChanges.length + inputChanges.length;
+  if (totalChanges === 0) {
+    console.log("  ✅ Атрибути в порядку, змін немає.");
+  } else {
+    console.log(`  Змін output: ${outputChanges.length}, input (каскад): ${inputChanges.length}`);
+  }
+
+  return workingLines.join("\n");
+}
+
 // ─── Entry point ──────────────────────────────────────────────────────────
 
 function main() {
@@ -381,49 +413,18 @@ function main() {
   }
 
   const original = fs.readFileSync(absPath, "utf-8");
-  const fileLines = original.split("\n");
+  const fileName = path.basename(absPath);
+  const fixed = runAttributeCheck(original, fileName);
 
-  console.log(`\nПеревірка атрибутів: ${path.basename(absPath)}\n`);
-
-  const allAttrs = parseAttributeRules(original);
-  console.log("Атрибути:");
-  for (const a of allAttrs) {
-    console.log(
-      `  ${a.order}. ${a.paramName} [${a.active ? "✅" : "❌"}] → цехи: ${a.workshops.join(", ") || "—"}`
-    );
-  }
-  console.log();
-
-  const { outputChanges, renames } = verify(fileLines, allAttrs);
-
-  const changedOutputIdxs = new Set(outputChanges.map((c) => c.lineIdx));
-  // Apply output changes first so cascading sees updated lines
-  let workingLines = applyChanges(fileLines, outputChanges);
-
-  const inputChanges = cascadeInputUpdates(workingLines, renames, changedOutputIdxs);
-  workingLines = applyChanges(workingLines, inputChanges);
-
-  const totalChanges = outputChanges.length + inputChanges.length;
-
-  if (totalChanges === 0) {
-    console.log("\n✅ Всі атрибути правильні. Файл не змінено.");
-    return;
-  }
-
-  console.log(
-    `\nЗмін output: ${outputChanges.length}, input (каскад): ${inputChanges.length}`
-  );
+  if (fixed === original) return;
 
   const bakPath = absPath + ".bak";
   if (!fs.existsSync(bakPath)) {
     fs.writeFileSync(bakPath, original, "utf-8");
     console.log(`Оригінал збережено: ${path.basename(bakPath)}`);
-  } else {
-    console.log(`Backup вже існує: ${path.basename(bakPath)} — не перезаписуємо`);
   }
-
-  fs.writeFileSync(absPath, workingLines.join("\n"), "utf-8");
+  fs.writeFileSync(absPath, fixed, "utf-8");
   console.log(`✅ Файл оновлено.`);
 }
 
-main();
+if (require.main === module) main();

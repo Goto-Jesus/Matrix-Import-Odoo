@@ -625,6 +625,29 @@ function applyFixes(fileLines: string[], fixes: Fix[]): string[] {
   return result;
 }
 
+// ─── Library export ──────────────────────────────────────────────────────────
+
+/**
+ * Run chain checks on in-memory content.
+ * Returns the fixed content (original is never touched).
+ */
+export function runChainCheck(content: string, fileName: string): string {
+  console.log(`\nЛанцюги: ${fileName}`);
+  const fileLines = content.split("\n");
+  const sections = parseDocument(fileLines);
+  console.log(`  Секцій знайдено: ${sections.size}`);
+
+  const fixes = verify(fileLines, sections);
+
+  if (fixes.length === 0) {
+    console.log("  ✅ Всі ланцюги цілі.");
+    return content;
+  }
+
+  console.log(`  Виправлень: ${fixes.length}`);
+  return applyFixes(fileLines, fixes).join("\n");
+}
+
 // ─── Entry point ─────────────────────────────────────────────────────────────
 
 function main() {
@@ -641,32 +664,16 @@ function main() {
   }
 
   const original = fs.readFileSync(absPath, "utf-8");
-  const fileLines = original.split("\n");
+  const fileName = path.basename(absPath);
+  const fixed = runChainCheck(original, fileName);
 
-  console.log(`\nПеревірка ланцюгів: ${path.basename(absPath)}\n`);
+  if (fixed === original) return;
 
-  const sections = parseDocument(fileLines);
-  console.log(`Знайдено секцій: ${sections.size}`);
-  for (const k of sections.keys()) console.log(`  ${k}`);
-  console.log();
-
-  const fixes = verify(fileLines, sections);
-
-  if (fixes.length === 0) {
-    console.log("\n✅ Всі ланцюги цілі. Файл не змінено.");
-    return;
-  }
-
-  console.log(`\nЗнайдено розривів: ${fixes.length}`);
-
-  // Backup
   const bakPath = absPath + ".bak";
   fs.writeFileSync(bakPath, original, "utf-8");
   console.log(`Оригінал збережено: ${path.basename(bakPath)}`);
-
-  const fixed = applyFixes(fileLines, fixes);
-  fs.writeFileSync(absPath, fixed.join("\n"), "utf-8");
+  fs.writeFileSync(absPath, fixed, "utf-8");
   console.log(`✅ Файл оновлено з коментарями про розриви.`);
 }
 
-main();
+if (require.main === module) main();
