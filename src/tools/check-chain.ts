@@ -246,8 +246,10 @@ const EMOJI_PREFIX = /^[🪵🧩🪤🧽]/u;
 // also match lines like "[Подушка] (...)" or "Диван Угол Леон-Люкс (...)"
 const BRACKET_PREFIX = /^\[.+\]\s*\(/u;
 const SOFA_PREFIX = /^Диван\s+/u;
-// matches "- 2 шт." or "- 2шт." or "-2 шт." at end of line
-const QTY_SUFFIX = /-\s*\d+\s*шт\.?\s*$/;
+// matches "- 2 шт." or "-2шт." at end of line — used for stripping qty
+const QTY_SUFFIX = /-\s*\d*\s*шт\.?\s*$/;
+// matches "- шт." anywhere in line (allows trailing garbage) — used for detection
+const QTY_RE = /-\s*\d*\s*шт/;
 // matches Цех №9-1, Цех №9, etc. — used to disambiguate sections
 const SECTION_HEADER = /^#+\s*(Цех\s*№[\d\-]+)/u;
 
@@ -262,7 +264,7 @@ function stripLineComment(line: string): string {
 }
 
 function hasQty(line: string): boolean {
-  return QTY_SUFFIX.test(stripLineComment(line));
+  return QTY_RE.test(stripLineComment(line));
 }
 
 function stripQty(line: string): string {

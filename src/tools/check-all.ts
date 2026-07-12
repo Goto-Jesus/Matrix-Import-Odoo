@@ -5,42 +5,55 @@ import { runChainCheck } from "./check-chain";
 
 const OUTPUT_FOLDER = "documents_fixed";
 
-function main() {
-  const filePath = process.argv[2];
-  if (!filePath) {
-    console.error("Usage: ts-node check-all.ts <path-to-md-file>");
-    process.exit(1);
-  }
-
-  const absInput = path.resolve(filePath);
-  if (!fs.existsSync(absInput)) {
-    console.error(`Файл не знайдено: ${absInput}`);
-    process.exit(1);
-  }
-
+function processFile(absInput: string, outputDir: string): void {
   const fileName = path.basename(absInput);
-  const outputDir = path.join(process.cwd(), OUTPUT_FOLDER);
   const outputPath = path.join(outputDir, fileName);
-
   const original = fs.readFileSync(absInput, "utf-8");
 
   console.log(`\n════════════════════════════════════════`);
   console.log(`  Перевірка: ${fileName}`);
   console.log(`════════════════════════════════════════`);
 
-  // Step 1: fix attributes
   const attrFixed = runAttributeCheck(original, fileName);
-
-  // Step 2: fix chains on already-attributed content
   const chainFixed = runChainCheck(attrFixed, fileName);
 
-  // Write result — original is never modified
-  fs.mkdirSync(outputDir, { recursive: true });
   fs.writeFileSync(outputPath, chainFixed, "utf-8");
+  console.log(`  → ${outputPath}`);
+}
 
-  console.log(`\n✅ Готово. Результат збережено:`);
-  console.log(`   ${outputPath}`);
-  console.log(`   (оригінал не змінено)\n`);
+function main() {
+  const inputArg = process.argv[2];
+  if (!inputArg) {
+    console.error("Usage: ts-node check-all.ts <file.md | folder/>");
+    process.exit(1);
+  }
+
+  const absArg = path.resolve(inputArg);
+  if (!fs.existsSync(absArg)) {
+    console.error(`Не знайдено: ${absArg}`);
+    process.exit(1);
+  }
+
+  const outputDir = path.join(process.cwd(), OUTPUT_FOLDER);
+  fs.mkdirSync(outputDir, { recursive: true });
+
+  const stat = fs.statSync(absArg);
+
+  if (stat.isDirectory()) {
+    const files = fs.readdirSync(absArg).filter((f) => f.endsWith(".md"));
+    if (files.length === 0) {
+      console.log("Жодного .md файлу не знайдено.");
+      return;
+    }
+    console.log(`\nОбробка ${files.length} файлів з ${absArg} → ${outputDir}\n`);
+    for (const file of files) {
+      processFile(path.join(absArg, file), outputDir);
+    }
+    console.log(`\n✅ Готово. Оброблено ${files.length} файлів. Оригінали не змінено.\n`);
+  } else {
+    processFile(absArg, outputDir);
+    console.log(`\n✅ Готово. Оригінал не змінено.\n`);
+  }
 }
 
 main();

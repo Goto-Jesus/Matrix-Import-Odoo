@@ -192,6 +192,12 @@ function requiredAttrsFor(
     }
   }
 
+  // Raw frame wood (нарізана деревина) doesn't vary by armrest size
+  if (outputLine.includes("[Каркас - нарізана деревина]")) {
+    const idx = required.findIndex((a) => a.paramName === "%Диван Розмір Бильця%");
+    if (idx >= 0) required.splice(idx, 1);
+  }
+
   // Sort by global order
   required.sort((a, b) => a.order - b.order);
   return required;
@@ -250,18 +256,13 @@ function verify(
     if (!currentWorkshop) continue;
     if (!isProductLine(trimmed)) continue;
 
-    // Is it an input line (has "- N шт." or "- N кг" after stripping comment)?
+    // Is it an input line (has "- N шт." or "- шт." or "- N кг" etc.)?
     const cleanLine = stripLineComment(trimmed);
-    const hasQty = /[-]\s*[\d.,]+(\s*(шт|кг|m|m²|m³)[.]?)?\s*$/u.test(cleanLine);
+    const hasQty = /[-]\s*[\d.,]*\s*(?:шт|кг|m|m²|m³)|[-]\s*[\d.,]+\s*$/u.test(cleanLine);
     if (hasQty) continue; // skip inputs — handled via cascading
 
     // It's an output line
     bomStarted = true;
-
-    // Skip products with no attributes at all — they're raw materials or
-    // non-parameterized items (e.g. "🪵[Каркас] (Д.Леон-Люкс Колеса)").
-    // Only fix products that already participate in the attribute system.
-    if (!cleanLine.includes("%")) continue;
 
     const parsed = parseParams(cleanLine);
     if (!parsed) continue;
@@ -325,7 +326,7 @@ function cascadeInputUpdates(
     }
 
     const cleanLine = stripLineComment(trimmed);
-    const hasQty = /[-]\s*[\d.,]+(\s*(шт|кг|m|m²|m³)[.]?)?\s*$/u.test(cleanLine);
+    const hasQty = /[-]\s*[\d.,]*\s*(?:шт|кг|m|m²|m³)|[-]\s*[\d.,]+\s*$/u.test(cleanLine);
     if (!hasQty) continue; // only inputs
 
     for (const rename of renames) {
