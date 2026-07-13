@@ -454,6 +454,123 @@ function buildKnownOutputs(): Set<string> {
   return known;
 }
 
+// ─── Orphan detection ────────────────────────────────────────────────────────
+
+/**
+ * Returns the model/product identifier from an output line, e.g.
+ * "🪵[Бильце] (Б.Верадо, %Attr%)" → "Б.Верадо"
+ * "🪵[Бильце]"                     → "" (no id — template leftover)
+ * "🪤[Накладка] (%Attr%)"          → "" (only attribute, no id)
+ */
+function getProductId(output: string): string {
+  const parenOpen = output.indexOf("(");
+  if (parenOpen < 0) return "";
+  const inner = output.slice(parenOpen + 1);
+  const sepIdx = inner.search(/[,%]/);
+  const content = sepIdx >= 0 ? inner.slice(0, sepIdx).trim() : inner.replace(/\).*/, "").trim();
+  if (content.startsWith("%")) return "";
+  return content;
+}
+
+/**
+ * Returns line indices of the full BOM block: output line + all content lines
+ * (materials AND input product lines), stopping before the next output or section.
+ */
+function getBomAllLineIndices(bom: BomBlock, fileLines: string[]): number[] {
+  const result: number[] = [bom.outputLineIdx];
+  for (let i = bom.outputLineIdx + 1; i < fileLines.length; i++) {
+    const t = fileLines[i].trim();
+    if (!t) continue;
+    if (t.startsWith("#")) break;
+    if (/^(або|Або|АБО)$/.test(t)) break;
+    if (isProductLine(t) && !hasQty(t)) break; // next output line
+    result.push(i);
+  }
+  return result;
+}
+
+/**
+ * Find emoji-prefixed outputs (🪤/🧩/🪵) that are never consumed as inputs
+ * in any subsequent workshop. These are "dead-end" semi-finished products.
+ *
+ * Outputs WITHOUT a model name in parentheses are template leftovers —
+ * auto-fixed by commenting out the whole BOM block ([FIX]).
+ * Outputs WITH a model name are real breaks needing human attention ([BREAK]),
+ * and a TODO comment is inserted after the output line in the document.
+ */
+function detectOrphans(
+  sections: Map<string, { header: string; boms: BomBlock[] }>,
+  fileLines: string[]
+): { issues: string[]; fixes: Fix[] } {
+  const issues: string[] = [];
+  const fixes: Fix[] = [];
+
+  const produced: Array<{ section: string; norm: string; raw: string; bom: BomBlock }> = [];
+  const consumedNorms: string[] = [];
+
+  for (const [key, sec] of sections) {
+    for (const bom of sec.boms) {
+      if (EMOJI_PREFIX.test(bom.output)) {
+        produced.push({ section: key, norm: normalizeProduct(bom.output), raw: bom.output, bom });
+      }
+      for (const inp of bom.inputs) {
+        consumedNorms.push(normalizeProduct(inp));
+      }
+    }
+  }
+
+  const seen = new Set<string>();
+  const commentedLines = new Set<number>(); // avoid double-commenting same line
+
+  for (const out of produced) {
+    const dedupeKey = `${out.section}::${out.norm}`;
+    if (seen.has(dedupeKey)) continue;
+
+    const consumed = consumedNorms.some(
+      (c) => c.includes(out.norm) || out.norm.includes(c)
+    );
+    if (!consumed) {
+      seen.add(dedupeKey);
+
+      const productId = getProductId(out.raw);
+
+      if (!productId) {
+        // No model name → template leftover, auto-comment-out entire BOM block
+        for (const lineIdx of getBomAllLineIndices(out.bom, fileLines)) {
+          if (!commentedLines.has(lineIdx)) {
+            commentedLines.add(lineIdx);
+            const orig = fileLines[lineIdx].trim();
+            // Don't double-wrap lines already commented out
+            const wrapped = orig.startsWith("<!--") ? orig : `<!-- ${orig} -->`;
+            fixes.push({ lineIdx, content: wrapped, type: "replace" });
+          }
+        }
+        const msg = `[FIX] ${out.section}: видалено шаблонний рядок без назви моделі: "${out.raw}"`;
+        console.log(`  ${msg}`);
+        issues.push(msg);
+      } else {
+        // Named orphan → human must fix, insert TODO comment in document
+        // Skip if TODO already present (idempotent re-runs)
+        const alreadyHasTodo = fileLines
+          .slice(out.bom.outputLineIdx + 1, out.bom.outputLineIdx + 5)
+          .some((l) => l.includes("<!-- TODO: [BREAK]"));
+        if (!commentedLines.has(out.bom.outputLineIdx) && !alreadyHasTodo) {
+          fixes.push({
+            lineIdx: out.bom.outputLineIdx,
+            content: `<!-- TODO: [BREAK] цей напівфабрикат виробляється але ніде не споживається -->`,
+            type: "insert-after",
+          });
+        }
+        const msg = `[BREAK] ${out.section}: напівфабрикат виробляється але ніде не споживається: "${out.raw}"`;
+        console.log(`  ${msg}`);
+        issues.push(msg);
+      }
+    }
+  }
+
+  return { issues, fixes };
+}
+
 // ─── Main verification ───────────────────────────────────────────────────────
 
 interface Fix {
@@ -644,15 +761,19 @@ export function runChainCheck(content: string, fileName: string): { content: str
   const sections = parseDocument(fileLines);
   console.log(`  Секцій знайдено: ${sections.size}`);
 
-  const { fixes, issues } = verify(fileLines, sections);
+  const { fixes: verifyFixes, issues: verifyIssues } = verify(fileLines, sections);
+  const { issues: orphanIssues, fixes: orphanFixes } = detectOrphans(sections, fileLines);
 
-  if (fixes.length === 0) {
+  const allFixes = [...verifyFixes, ...orphanFixes];
+  const allIssues = [...verifyIssues, ...orphanIssues];
+
+  if (allFixes.length === 0 && allIssues.length === 0) {
     console.log("  ✅ Всі ланцюги цілі.");
     return { content, issues: [] };
   }
 
-  console.log(`  Виправлень: ${fixes.length}`);
-  return { content: applyFixes(fileLines, fixes).join("\n"), issues };
+  if (allFixes.length > 0) console.log(`  Виправлень: ${allFixes.length}`);
+  return { content: applyFixes(fileLines, allFixes).join("\n"), issues: allIssues };
 }
 
 // ─── Entry point ─────────────────────────────────────────────────────────────
