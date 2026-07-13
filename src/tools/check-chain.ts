@@ -465,8 +465,9 @@ interface Fix {
 function verify(
   fileLines: string[],
   sections: Map<string, { header: string; boms: BomBlock[] }>
-): Fix[] {
+): { fixes: Fix[]; issues: string[] } {
   const fixes: Fix[] = [];
+  const issues: string[] = [];
   const knownOutputs = buildKnownOutputs();
   const issueSet = new Set<string>(); // deduplicate fixes
   const zeroSourceScheduled = new Set<number>(); // outputLineIdx of sources already scheduled for commenting
@@ -544,11 +545,13 @@ function verify(
             console.log(
               `  [ZERO] ${chain.name}: закоментовано BOM з нульовим списанням "${sourceBomToComment.output}"`
             );
+            issues.push(`[ZERO] ${chain.name}: закоментовано BOM з нульовим списанням "${sourceBomToComment.output}"`);
           }
           // Insert commented reference in the consumer workshop
           console.log(
             `  [ZERO] ${chain.name} @ ${step.workshop}: нульове списання "${required}" — закоментовано`
           );
+          issues.push(`[ZERO] ${chain.name} @ ${step.workshop}: нульове списання "${required}"`);
           fixes.push({
             lineIdx: insertAfter,
             content: `<!-- ${required} - 1 шт. уточнити списання -->`,
@@ -558,6 +561,7 @@ function verify(
           console.log(
             `  [BREAK] ${chain.name} @ ${step.workshop}: відсутній вхід "${required}"`
           );
+          issues.push(`[BREAK] ${chain.name} @ ${step.workshop}: відсутній вхід "${required}"`);
           fixes.push({
             lineIdx: insertAfter,
             content: `${required} - 1 шт. <!-- Тут забули перенести товар -->`,
@@ -596,6 +600,7 @@ function verify(
         console.log(
           `  [WARN] ${key}: вхід "${inp}" не зустрічався раніше в жодному ланцюгу`
         );
+        issues.push(`[WARN] ${key}: вхід "${inp}" не зустрічався раніше в жодному ланцюгу`);
         fixes.push({
           lineIdx: rawIdx - 1,
           content: `<!-- !!! Раніше ви не зазначали про цей товар -->`,
@@ -605,7 +610,7 @@ function verify(
     }
   }
 
-  return fixes;
+  return { fixes, issues };
 }
 
 // ─── Apply fixes ─────────────────────────────────────────────────────────────
@@ -631,23 +636,23 @@ function applyFixes(fileLines: string[], fixes: Fix[]): string[] {
 
 /**
  * Run chain checks on in-memory content.
- * Returns the fixed content (original is never touched).
+ * Returns the fixed content and list of issues found.
  */
-export function runChainCheck(content: string, fileName: string): string {
+export function runChainCheck(content: string, fileName: string): { content: string; issues: string[] } {
   console.log(`\nЛанцюги: ${fileName}`);
   const fileLines = content.split("\n");
   const sections = parseDocument(fileLines);
   console.log(`  Секцій знайдено: ${sections.size}`);
 
-  const fixes = verify(fileLines, sections);
+  const { fixes, issues } = verify(fileLines, sections);
 
   if (fixes.length === 0) {
     console.log("  ✅ Всі ланцюги цілі.");
-    return content;
+    return { content, issues: [] };
   }
 
   console.log(`  Виправлень: ${fixes.length}`);
-  return applyFixes(fileLines, fixes).join("\n");
+  return { content: applyFixes(fileLines, fixes).join("\n"), issues };
 }
 
 // ─── Entry point ─────────────────────────────────────────────────────────────
@@ -667,7 +672,7 @@ function main() {
 
   const original = fs.readFileSync(absPath, "utf-8");
   const fileName = path.basename(absPath);
-  const fixed = runChainCheck(original, fileName);
+  const { content: fixed } = runChainCheck(original, fileName);
 
   if (fixed === original) return;
 

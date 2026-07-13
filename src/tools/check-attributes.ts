@@ -178,7 +178,6 @@ function requiredAttrsFor(
   const required: Attribute[] = [];
 
   for (const attr of allAttrs) {
-    if (!attr.active) continue;
     if (attr.workshops.includes(workshopNum)) {
       required.push(attr);
     }
@@ -234,9 +233,10 @@ function buildBaseKey(line: string): string {
 function verify(
   fileLines: string[],
   allAttrs: Attribute[]
-): { outputChanges: LineChange[]; renames: ProductRename[] } {
+): { outputChanges: LineChange[]; renames: ProductRename[]; issues: string[] } {
   const outputChanges: LineChange[] = [];
   const renames: ProductRename[] = [];
+  const issues: string[] = [];
 
   let currentWorkshop: string | null = null;
   let bomStarted = false; // true once we've seen an output line in current section
@@ -267,14 +267,20 @@ function verify(
     const parsed = parseParams(cleanLine);
     if (!parsed) continue;
 
-    // Determine required attributes
+    // Determine required attributes (both active and inactive that affect this workshop)
     const required = requiredAttrsFor(currentWorkshop, cleanLine, allAttrs);
 
+    // Цех №9 (final assembly): only active attrs, skip inactive
+    // All other workshops (incl. 9-1): active → %Name%, inactive → ❌
+    const isWorkshop9 = currentWorkshop === "9";
+    const reqTokens = isWorkshop9
+      ? required.filter((a) => a.active).map((a) => a.paramName)
+      : required.map((a) => (a.active ? a.paramName : "❌"));
+
     // Build new params
-    const reqNames = required.map((a) => a.paramName);
     const newParamsContent = parsed.productId
-      ? [parsed.productId, ...reqNames].join(", ")
-      : reqNames.join(", ");
+      ? [parsed.productId, ...reqTokens].join(", ")
+      : reqTokens.join(", ");
 
     // Build old params content
     const bounds = findParamBounds(cleanLine);
@@ -293,6 +299,7 @@ function verify(
     console.log(
       `  [FIX] ${currentWorkshop}: "${oldParamsContent}" → "${newParamsContent}"`
     );
+    issues.push(`[FIX] Цех №${currentWorkshop}: "${oldParamsContent}" → "${newParamsContent}"`);
 
     // Build rename info for cascading inputs
     renames.push({
@@ -302,7 +309,7 @@ function verify(
     });
   }
 
-  return { outputChanges, renames };
+  return { outputChanges, renames, issues };
 }
 
 // ─── Step 6: Cascade input updates ────────────────────────────────────────
@@ -311,8 +318,9 @@ function cascadeInputUpdates(
   fileLines: string[],
   renames: ProductRename[],
   alreadyChanged: Set<number>
-): LineChange[] {
+): { changes: LineChange[]; issues: string[] } {
   const inputChanges: LineChange[] = [];
+  const issues: string[] = [];
 
   for (let i = 0; i < fileLines.length; i++) {
     if (alreadyChanged.has(i)) continue;
@@ -348,12 +356,13 @@ function cascadeInputUpdates(
       console.log(
         `  [CASCADE] рядок ${i + 1}: "${currentParams}" → "${rename.newParams}"`
       );
+      issues.push(`[CASCADE] рядок ${i + 1}: "${currentParams}" → "${rename.newParams}"`);
       inputChanges.push({ lineIdx: i, oldLine: raw, newLine });
       break;
     }
   }
 
-  return inputChanges;
+  return { changes: inputChanges, issues };
 }
 
 // ─── Apply all changes ────────────────────────────────────────────────────
@@ -370,9 +379,9 @@ function applyChanges(fileLines: string[], changes: LineChange[]): string[] {
 
 /**
  * Run attribute checks on in-memory content.
- * Returns the fixed content (original is never touched).
+ * Returns the fixed content and list of issues found.
  */
-export function runAttributeCheck(content: string, fileName: string): string {
+export function runAttributeCheck(content: string, fileName: string): { content: string; issues: string[] } {
   console.log(`\nАтрибути: ${fileName}`);
   const fileLines = content.split("\n");
   const allAttrs = parseAttributeRules(content);
@@ -382,10 +391,10 @@ export function runAttributeCheck(content: string, fileName: string): string {
     );
   }
 
-  const { outputChanges, renames } = verify(fileLines, allAttrs);
+  const { outputChanges, renames, issues: attrIssues } = verify(fileLines, allAttrs);
   const changedOutputIdxs = new Set(outputChanges.map((c) => c.lineIdx));
   let workingLines = applyChanges(fileLines, outputChanges);
-  const inputChanges = cascadeInputUpdates(workingLines, renames, changedOutputIdxs);
+  const { changes: inputChanges, issues: cascadeIssues } = cascadeInputUpdates(workingLines, renames, changedOutputIdxs);
   workingLines = applyChanges(workingLines, inputChanges);
 
   const totalChanges = outputChanges.length + inputChanges.length;
@@ -395,7 +404,7 @@ export function runAttributeCheck(content: string, fileName: string): string {
     console.log(`  Змін output: ${outputChanges.length}, input (каскад): ${inputChanges.length}`);
   }
 
-  return workingLines.join("\n");
+  return { content: workingLines.join("\n"), issues: [...attrIssues, ...cascadeIssues] };
 }
 
 // ─── Entry point ──────────────────────────────────────────────────────────
@@ -415,7 +424,7 @@ function main() {
 
   const original = fs.readFileSync(absPath, "utf-8");
   const fileName = path.basename(absPath);
-  const fixed = runAttributeCheck(original, fileName);
+  const { content: fixed } = runAttributeCheck(original, fileName);
 
   if (fixed === original) return;
 
