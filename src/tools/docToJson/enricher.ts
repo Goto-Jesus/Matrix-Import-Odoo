@@ -132,8 +132,14 @@ export function enrichBoms(boms: BomEntry[], snapshot: SnapshotData): void {
     if (placeholders.size > 0) {
       const expand: Record<string, string[]> = {};
       for (const attrName of placeholders) {
-        const values = attrValuesByName.get(normalizeAttr(attrName));
-        if (values && values.length > 0) {
+        // %Name❌% → inactive attr, always expands to a single ["❌"] value
+        if (attrName.endsWith('❌')) {
+          expand[attrName] = ['❌'];
+          continue;
+        }
+        const values = (attrValuesByName.get(normalizeAttr(attrName)) ?? [])
+          .filter(v => v !== '❌' && !v.startsWith('%'));
+        if (values.length > 0) {
           expand[attrName] = values;
         } else {
           // Fallback: collect unique values from ifAttr tags in this BOM

@@ -22,8 +22,9 @@ export async function preSeedAttributeLines(entries: BomEntry[]): Promise<void> 
     const { attrMap } = needed.get(templateName)!;
     for (const attr of attrs) {
       if (attr.value.includes('%')) continue;
-      if (!attrMap.has(attr.attributeName)) attrMap.set(attr.attributeName, new Set());
-      attrMap.get(attr.attributeName)!.add(attr.value);
+      const cleanName = attr.attributeName.replace(/❌$/, '');
+      if (!attrMap.has(cleanName)) attrMap.set(cleanName, new Set());
+      attrMap.get(cleanName)!.add(attr.value);
     }
   };
 
@@ -135,7 +136,10 @@ export async function ensureVariantFromAttrs(
   isService = false
 ): Promise<ResolvedProduct | null> {
   // Skip attributes that still contain %placeholder% — they weren't fully resolved
-  const resolvedAttrs = attributes.filter(a => !a.value.includes('%'));
+  // Strip ❌ suffix from attributeName (inactive attrs keep their clean Odoo name)
+  const resolvedAttrs = attributes
+    .filter(a => !a.value.includes('%'))
+    .map(a => ({ ...a, attributeName: a.attributeName.replace(/❌$/, '') }));
 
   const cacheKey = `${templateName}::${resolvedAttrs.map(a => `${a.attributeName}=${a.value}`).join(',')}`;
   if (_resolvedCache.has(cacheKey)) return _resolvedCache.get(cacheKey)!;

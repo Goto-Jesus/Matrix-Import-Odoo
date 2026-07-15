@@ -59,8 +59,29 @@ function matchesIfAttr(comp: ComponentEntry, combo: Combo): boolean {
   return true;
 }
 
+// Fuzzy match: normalise duplicate letters and check prefix containment.
+// Handles typos like "Посиленний" vs "Посилений" and extra words like "Звичайний Блок" vs "Звичайний".
+function matchesTagValue(comboValue: string, tagValue: string): boolean {
+  const norm = (s: string) => s.toLowerCase().replace(/(.)\1+/g, '$1').trim();
+  const cn = norm(comboValue);
+  const tn = norm(tagValue);
+  return cn === tn || tn.startsWith(cn) || cn.startsWith(tn);
+}
+
 export function expandEntry(entry: BomEntry): BomEntry[] {
   if (!entry.expand || Object.keys(entry.expand).length === 0) return [entry];
   const combos = cartesian(entry.expand);
-  return combos.map(combo => substituteEntry(entry, combo));
+
+  // Filter combos by the product's own @Attr=Value constraint (або-variant selector)
+  const filtered = entry.product.ifAttr
+    ? combos.filter(combo => {
+        for (const [attr, required] of Object.entries(entry.product.ifAttr!)) {
+          const actual = combo[attr];
+          if (actual !== undefined && !matchesTagValue(actual, required)) return false;
+        }
+        return true;
+      })
+    : combos;
+
+  return filtered.map(combo => substituteEntry(entry, combo));
 }

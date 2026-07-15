@@ -25,9 +25,9 @@ const UOM_NORMALIZE: Record<string, string> = {
   g: "г",
   м: "m",
   метр: "m",
-  "м2": "m²",
+  м2: "m²",
   m2: "m²",
-  "м3": "m³",
+  м3: "m³",
   m3: "m³",
   шт: "шт.",
 };
@@ -249,7 +249,7 @@ function fixQtyDashUom(line: string): string {
   );
 }
 
-// "Фанера 0.83 m²" → "Фанера - 0.83 m²"  (UOM normalised later by fixUom)
+// "Фанера - 0.83 m² m²" → "Фанера - 0.83 m²"  (UOM normalised later by fixUom)
 function fixMissingDashForBareMaterial(line: string): string {
   return line.replace(/^(\s*)(Фанера)\s+([\d,.]+)/, "$1$2 - $3");
 }

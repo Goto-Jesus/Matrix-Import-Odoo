@@ -31,6 +31,7 @@ export interface BomEntry {
     qty: number;
     odooTemplateId?: number;
     odooVariantId?: number;
+    ifAttr?: Record<string, string>;
   };
   operations: OperationEntry[];
   components: ComponentEntry[];

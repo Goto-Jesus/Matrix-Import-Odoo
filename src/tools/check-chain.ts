@@ -38,12 +38,14 @@ const CHAINS: Chain[] = [
       },
       {
         workshop: "Цех №2-2",
-        output: "🧩[Каркас - нарізані деталі] (Д.Леон-Люкс Колеса, %Дно Каркасу%)",
+        output:
+          "🧩[Каркас - нарізані деталі] (Д.Леон-Люкс Колеса, %Дно Каркасу%)",
         requiredInputs: [],
       },
       {
         workshop: "Цех №4-2",
-        output: "🪤[Каркас - напівфабрикат] (Д.Леон-Люкс Колеса, %Дно Каркасу%, %Колір Матеріалу%)",
+        output:
+          "🪤[Каркас - напівфабрикат] (Д.Леон-Люкс Колеса, %Дно Каркасу%, %Колір Ламінату%)",
         requiredInputs: [
           "🪵[Каркас - нарізана деревина] (Д.Леон-Люкс Колеса)",
           "🧩[Каркас - нарізані деталі] (Д.Леон-Люкс Колеса, %Дно Каркасу%)",
@@ -51,16 +53,17 @@ const CHAINS: Chain[] = [
       },
       {
         workshop: "Цех №6",
-        output: "🪤🧽[Каркас + Поролон - напівфабрикат 2] (Угол Леон-Люкс 200 Колеса, %Диван Пружинний Блок%, %Дно Каркасу%, %Диван Розмір Бильця%, %Колір Матеріалу%)",
+        output:
+          "🪤🧽[Каркас + Поролон - напівфабрикат 2] (Угол Леон-Люкс 200 Колеса, %Диван Пружинний Блок%, %Дно Каркасу%, %Диван Розмір Бильця%, %Колір Ламінату%)",
         requiredInputs: [
-          "🪤[Каркас - напівфабрикат] (Д.Леон-Люкс Колеса, %Дно Каркасу%, %Колір Матеріалу%)",
+          "🪤[Каркас - напівфабрикат] (Д.Леон-Люкс Колеса, %Дно Каркасу%, %Колір Ламінату%)",
         ],
       },
       {
         workshop: "Цех №9 ",
         output: "Диван Угол Леон-Люкс 200 Колеса",
         requiredInputs: [
-          "🪤🧽[Каркас + Поролон - напівфабрикат 2] (Угол Леон-Люкс 200 Колеса, %Диван Пружинний Блок%, %Дно Каркасу%, %Диван Розмір Бильця%, %Колір Матеріалу%)",
+          "🪤🧽[Каркас + Поролон - напівфабрикат 2] (Угол Леон-Люкс 200 Колеса, %Диван Пружинний Блок%, %Дно Каркасу%, %Диван Розмір Бильця%, %Колір Ламінату%)",
         ],
       },
     ],
@@ -80,7 +83,8 @@ const CHAINS: Chain[] = [
       },
       {
         workshop: "Цех №4-2",
-        output: "🪤[Каркас - напівфабрикат] (143П, %Дно Каркасу%, %Колір Матеріалу%)",
+        output:
+          "🪤[Каркас - напівфабрикат] (143П, %Дно Каркасу%, %Колір Ламінату%)",
         requiredInputs: [
           "🪵[Каркас - нарізана деревина] (143П)",
           "🧩[Каркас - нарізані деталі] (143П, %Дно Каркасу%)",
@@ -88,9 +92,10 @@ const CHAINS: Chain[] = [
       },
       {
         workshop: "Цех №6",
-        output: "🪤🧽[Каркас + Поролон - напівфабрикат 2] (Угол Леон-Люкс 200 Колеса, %Диван Пружинний Блок%, %Дно Каркасу%, %Диван Розмір Бильця%, %Колір Матеріалу%)",
+        output:
+          "🪤🧽[Каркас + Поролон - напівфабрикат 2] (Угол Леон-Люкс 200 Колеса, %Диван Пружинний Блок%, %Дно Каркасу%, %Диван Розмір Бильця%, %Колір Ламінату%)",
         requiredInputs: [
-          "🪤[Каркас - напівфабрикат] (143П, %Дно Каркасу%, %Колір Матеріалу%)",
+          "🪤[Каркас - напівфабрикат] (143П, %Дно Каркасу%, %Колір Ламінату%)",
         ],
       },
     ],
@@ -100,17 +105,20 @@ const CHAINS: Chain[] = [
     steps: [
       {
         workshop: "Цех №1",
-        output: "🪵[Бильце - нарізана деревина] (Модель, %Диван Розмір Бильця%)",
+        output:
+          "🪵[Бильце - нарізана деревина] (Модель, %Диван Розмір Бильця%)",
         requiredInputs: [],
       },
       {
         workshop: "Цех №2-1",
-        output: "🧩[Бильце - нарізані деталі] (Б.Флізелін 101, %Диван Розмір Бильця%)",
+        output:
+          "🧩[Бильце - нарізані деталі] (Б.Флізелін 101, %Диван Розмір Бильця%)",
         requiredInputs: [],
       },
       {
         workshop: "Цех №4-1",
-        output: "🪤[Бильце - напівфабрикат] (Б.Флізелін 101, %Диван Розмір Бильця%)",
+        output:
+          "🪤[Бильце - напівфабрикат] (Б.Флізелін 101, %Диван Розмір Бильця%)",
         requiredInputs: [
           "🪵[Бильце - нарізана деревина] (Модель, %Диван Розмір Бильця%)",
           "🧩[Бильце - нарізані деталі] (Б.Флізелін 101, %Диван Розмір Бильця%)",
@@ -118,7 +126,8 @@ const CHAINS: Chain[] = [
       },
       {
         workshop: "Цех №6",
-        output: "🪤🧽[Каркас + Поролон - напівфабрикат 2] (Угол Леон-Люкс 200 Колеса, %Диван Пружинний Блок%, %Дно Каркасу%, %Диван Розмір Бильця%, %Колір Матеріалу%)",
+        output:
+          "🪤🧽[Каркас + Поролон - напівфабрикат 2] (Угол Леон-Люкс 200 Колеса, %Диван Пружинний Блок%, %Дно Каркасу%, %Диван Розмір Бильця%, %Колір Ламінату%)",
         requiredInputs: [
           "🪤[Бильце - напівфабрикат] (Б.Флізелін 101, %Диван Розмір Бильця%)",
         ],
@@ -150,14 +159,16 @@ const CHAINS: Chain[] = [
     steps: [
       {
         workshop: "Цех №3-1",
-        output: "🧩[Ламінат - нарізані деталі] (Д.Леон-Люкс Колеса, %Колір Матеріалу%)",
+        output:
+          "🧩[Ламінат - нарізані деталі] (Д.Леон-Люкс Колеса, %Колір Ламінату%)",
         requiredInputs: [],
       },
       {
         workshop: "Цех №4-2",
-        output: "🪤[Каркас - напівфабрикат] (Д.Леон-Люкс Колеса, %Дно Каркасу%, %Колір Матеріалу%)",
+        output:
+          "🪤[Каркас - напівфабрикат] (Д.Леон-Люкс Колеса, %Дно Каркасу%, %Колір Ламінату%)",
         requiredInputs: [
-          "🧩[Ламінат - нарізані деталі] (Д.Леон-Люкс Колеса, %Колір Матеріалу%)",
+          "🧩[Ламінат - нарізані деталі] (Д.Леон-Люкс Колеса, %Колір Ламінату%)",
         ],
       },
     ],
@@ -167,14 +178,15 @@ const CHAINS: Chain[] = [
     steps: [
       {
         workshop: "Цех №3-1",
-        output: "🧩[Ламінат - нарізані деталі] (143П, %Колір Матеріалу%)",
+        output: "🧩[Ламінат - нарізані деталі] (143П, %Колір Ламінату%)",
         requiredInputs: [],
       },
       {
         workshop: "Цех №4-2",
-        output: "🪤[Каркас - напівфабрикат] (143П, %Дно Каркасу%, %Колір Матеріалу%)",
+        output:
+          "🪤[Каркас - напівфабрикат] (143П, %Дно Каркасу%, %Колір Ламінату%)",
         requiredInputs: [
-          "🧩[Ламінат - нарізані деталі] (143П, %Колір Матеріалу%)",
+          "🧩[Ламінат - нарізані деталі] (143П, %Колір Ламінату%)",
         ],
       },
     ],
@@ -184,13 +196,13 @@ const CHAINS: Chain[] = [
     steps: [
       {
         workshop: "Цех №3-2",
-        output: "🪤[Накладка] (Д.Леон-Люкс, %Колір Матеріалу%)",
+        output: "🪤[Накладка] (Д.Леон-Люкс, %Колір Ламінату%)",
         requiredInputs: [],
       },
       {
         workshop: "Цех №9 ",
         output: "Диван Угол Леон-Люкс 200 Колеса",
-        requiredInputs: ["🪤[Накладка] (Д.Леон-Люкс, %Колір Матеріалу%)"],
+        requiredInputs: ["🪤[Накладка] (Д.Леон-Люкс, %Колір Ламінату%)"],
       },
     ],
   },
@@ -199,12 +211,14 @@ const CHAINS: Chain[] = [
     steps: [
       {
         workshop: "Цех №7",
-        output: "🧩[Чохол - нарізані матеріали] (Угол Леон-Люкс 200 Колеса, %Тканина%, %Диван Розмір Бильця%)",
+        output:
+          "🧩[Чохол - нарізані матеріали] (Угол Леон-Люкс 200 Колеса, %Тканина%, %Диван Розмір Бильця%)",
         requiredInputs: [],
       },
       {
         workshop: "Цех №8",
-        output: "🪤[Чохол - напівфабрикат] (Угол Леон-Люкс 200 Колеса, %Тканина%, %Диван Розмір Бильця%)",
+        output:
+          "🪤[Чохол - напівфабрикат] (Угол Леон-Люкс 200 Колеса, %Тканина%, %Диван Розмір Бильця%)",
         requiredInputs: [
           "🧩[Чохол - нарізані матеріали] (Угол Леон-Люкс 200 Колеса, %Тканина%, %Диван Розмір Бильця%)",
         ],
@@ -283,7 +297,7 @@ function isProductLine(line: string): boolean {
 // ─── Parser ─────────────────────────────────────────────────────────────────
 
 function parseDocument(
-  fileLines: string[]
+  fileLines: string[],
 ): Map<string, { header: string; boms: BomBlock[] }> {
   const sections = new Map<string, { header: string; boms: BomBlock[] }>();
 
@@ -370,7 +384,9 @@ function normalizeProduct(s: string): string {
   const inner = s.slice(parenOpen + 1);
   const sepIdx = inner.search(/[,%]/);
   const productId =
-    sepIdx >= 0 ? inner.slice(0, sepIdx).trim() : inner.replace(/\).*/, "").trim();
+    sepIdx >= 0
+      ? inner.slice(0, sepIdx).trim()
+      : inner.replace(/\).*/, "").trim();
   return s.slice(0, parenOpen + 1) + productId;
 }
 
@@ -379,7 +395,7 @@ function normalizeProduct(s: string): string {
 function findBom(
   sections: Map<string, { header: string; boms: BomBlock[] }>,
   workshopKeyword: string,
-  outputContains: string
+  outputContains: string,
 ): BomBlock | null {
   // workshopKeyword like "Цех №4-1" or "Цех №9 "
   const key = workshopKeyword.trim();
@@ -400,17 +416,14 @@ function findBom(
  * (e.g. "Дерево - 0 m³") and NO positive-quantity material lines.
  * This means the product exists in the document but has no actual consumption.
  */
-function hasZeroConsumption(
-  bom: BomBlock,
-  fileLines: string[]
-): boolean {
+function hasZeroConsumption(bom: BomBlock, fileLines: string[]): boolean {
   let foundZero = false;
   // Scan lines after the output, before the next product/section
   for (let i = bom.outputLineIdx + 1; i < fileLines.length; i++) {
     const t = fileLines[i].trim();
     if (!t) continue;
-    if (t.startsWith("#")) break;  // new section
-    if (isProductLine(t)) break;   // next BOM block
+    if (t.startsWith("#")) break; // new section
+    if (isProductLine(t)) break; // next BOM block
 
     // Positive quantity: "- 1.5 m³" etc. (non-zero digit)
     if (/[-]\s*[1-9][\d.,]*\s*(m³|m²|m|кг|шт)[.]?\b/u.test(t)) return false;
@@ -434,7 +447,10 @@ function getBomContentLines(bom: BomBlock, fileLines: string[]): number[] {
 }
 
 // Returns true if a product (by normalized string) appears as a commented-out line anywhere in the file
-function isCommentedOutInFile(fileLines: string[], normProduct: string): boolean {
+function isCommentedOutInFile(
+  fileLines: string[],
+  normProduct: string,
+): boolean {
   return fileLines.some((line) => {
     if (!line.includes("<!--")) return false;
     const content = line.replace(/<!--/g, "").replace(/-->/g, "");
@@ -467,7 +483,10 @@ function getProductId(output: string): string {
   if (parenOpen < 0) return "";
   const inner = output.slice(parenOpen + 1);
   const sepIdx = inner.search(/[,%]/);
-  const content = sepIdx >= 0 ? inner.slice(0, sepIdx).trim() : inner.replace(/\).*/, "").trim();
+  const content =
+    sepIdx >= 0
+      ? inner.slice(0, sepIdx).trim()
+      : inner.replace(/\).*/, "").trim();
   if (content.startsWith("%")) return "";
   return content;
 }
@@ -500,18 +519,28 @@ function getBomAllLineIndices(bom: BomBlock, fileLines: string[]): number[] {
  */
 function detectOrphans(
   sections: Map<string, { header: string; boms: BomBlock[] }>,
-  fileLines: string[]
+  fileLines: string[],
 ): { issues: string[]; fixes: Fix[] } {
   const issues: string[] = [];
   const fixes: Fix[] = [];
 
-  const produced: Array<{ section: string; norm: string; raw: string; bom: BomBlock }> = [];
+  const produced: Array<{
+    section: string;
+    norm: string;
+    raw: string;
+    bom: BomBlock;
+  }> = [];
   const consumedNorms: string[] = [];
 
   for (const [key, sec] of sections) {
     for (const bom of sec.boms) {
       if (EMOJI_PREFIX.test(bom.output)) {
-        produced.push({ section: key, norm: normalizeProduct(bom.output), raw: bom.output, bom });
+        produced.push({
+          section: key,
+          norm: normalizeProduct(bom.output),
+          raw: bom.output,
+          bom,
+        });
       }
       for (const inp of bom.inputs) {
         consumedNorms.push(normalizeProduct(inp));
@@ -527,7 +556,7 @@ function detectOrphans(
     if (seen.has(dedupeKey)) continue;
 
     const consumed = consumedNorms.some(
-      (c) => c.includes(out.norm) || out.norm.includes(c)
+      (c) => c.includes(out.norm) || out.norm.includes(c),
     );
     if (!consumed) {
       seen.add(dedupeKey);
@@ -581,7 +610,7 @@ interface Fix {
 
 function verify(
   fileLines: string[],
-  sections: Map<string, { header: string; boms: BomBlock[] }>
+  sections: Map<string, { header: string; boms: BomBlock[] }>,
 ): { fixes: Fix[]; issues: string[] } {
   const fixes: Fix[] = [];
   const issues: string[] = [];
@@ -597,7 +626,7 @@ function verify(
       const bom = findBom(sections, step.workshop, step.output);
       if (!bom) {
         console.warn(
-          `  [WARN] BOM not found: ${step.workshop} → "${step.output}"`
+          `  [WARN] BOM not found: ${step.workshop} → "${step.output}"`,
         );
         continue;
       }
@@ -607,7 +636,7 @@ function verify(
 
         // Check active inputs (normalize to ignore attribute changes)
         const activePresent = bom.inputs.some((inp) =>
-          normalizeProduct(inp).includes(normRequired)
+          normalizeProduct(inp).includes(normRequired),
         );
         if (activePresent) continue;
 
@@ -638,11 +667,18 @@ function verify(
           const normPrevOut = normalizeProduct(prevStep.output);
           if (!normPrevOut.includes(normalizeProduct(required))) continue;
 
-          const sourceBom = findBom(sections, prevStep.workshop, prevStep.output);
+          const sourceBom = findBom(
+            sections,
+            prevStep.workshop,
+            prevStep.output,
+          );
           if (sourceBom && hasZeroConsumption(sourceBom, fileLines)) {
             sourceHasZero = true;
             sourceBomToComment = sourceBom;
-          } else if (!sourceBom && isCommentedOutInFile(fileLines, normPrevOut)) {
+          } else if (
+            !sourceBom &&
+            isCommentedOutInFile(fileLines, normPrevOut)
+          ) {
             // Source was already commented out by a previous run
             sourceHasZero = true;
           }
@@ -651,24 +687,41 @@ function verify(
 
         if (sourceHasZero) {
           // Comment out the source BOM lines (output + materials) if not already done
-          if (sourceBomToComment && !zeroSourceScheduled.has(sourceBomToComment.outputLineIdx)) {
+          if (
+            sourceBomToComment &&
+            !zeroSourceScheduled.has(sourceBomToComment.outputLineIdx)
+          ) {
             zeroSourceScheduled.add(sourceBomToComment.outputLineIdx);
-            const contentLines = getBomContentLines(sourceBomToComment, fileLines);
+            const contentLines = getBomContentLines(
+              sourceBomToComment,
+              fileLines,
+            );
             for (const lineIdx of contentLines) {
               const orig = fileLines[lineIdx].trim();
-              const suffix = lineIdx === sourceBomToComment.outputLineIdx ? " - уточнити списання" : "";
-              fixes.push({ lineIdx, content: `<!-- ${orig}${suffix} -->`, type: "replace" });
+              const suffix =
+                lineIdx === sourceBomToComment.outputLineIdx
+                  ? " - уточнити списання"
+                  : "";
+              fixes.push({
+                lineIdx,
+                content: `<!-- ${orig}${suffix} -->`,
+                type: "replace",
+              });
             }
             console.log(
-              `  [ZERO] ${chain.name}: закоментовано BOM з нульовим списанням "${sourceBomToComment.output}"`
+              `  [ZERO] ${chain.name}: закоментовано BOM з нульовим списанням "${sourceBomToComment.output}"`,
             );
-            issues.push(`[ZERO] ${chain.name}: закоментовано BOM з нульовим списанням "${sourceBomToComment.output}"`);
+            issues.push(
+              `[ZERO] ${chain.name}: закоментовано BOM з нульовим списанням "${sourceBomToComment.output}"`,
+            );
           }
           // Insert commented reference in the consumer workshop
           console.log(
-            `  [ZERO] ${chain.name} @ ${step.workshop}: нульове списання "${required}" — закоментовано`
+            `  [ZERO] ${chain.name} @ ${step.workshop}: нульове списання "${required}" — закоментовано`,
           );
-          issues.push(`[ZERO] ${chain.name} @ ${step.workshop}: нульове списання "${required}"`);
+          issues.push(
+            `[ZERO] ${chain.name} @ ${step.workshop}: нульове списання "${required}"`,
+          );
           fixes.push({
             lineIdx: insertAfter,
             content: `<!-- ${required} - 1 шт. уточнити списання -->`,
@@ -676,9 +729,11 @@ function verify(
           });
         } else {
           console.log(
-            `  [BREAK] ${chain.name} @ ${step.workshop}: відсутній вхід "${required}"`
+            `  [BREAK] ${chain.name} @ ${step.workshop}: відсутній вхід "${required}"`,
           );
-          issues.push(`[BREAK] ${chain.name} @ ${step.workshop}: відсутній вхід "${required}"`);
+          issues.push(
+            `[BREAK] ${chain.name} @ ${step.workshop}: відсутній вхід "${required}"`,
+          );
           fixes.push({
             lineIdx: insertAfter,
             content: `${required} - 1 шт. <!-- Тут забули перенести товар -->`,
@@ -696,13 +751,13 @@ function verify(
         const inp = bom.inputs[ii];
         const normInp = normalizeProduct(inp);
         const inChain = [...knownOutputs].some((out) =>
-          normInp.includes(normalizeProduct(out))
+          normInp.includes(normalizeProduct(out)),
         );
         if (!inChain) continue; // not related to any chain → skip
 
         // It's referenced in chains but does the output actually exist?
         const producedSomewhere = [...knownOutputs].some((out) =>
-          normInp.includes(normalizeProduct(out))
+          normInp.includes(normalizeProduct(out)),
         );
         if (producedSomewhere) continue;
 
@@ -715,9 +770,11 @@ function verify(
         issueSet.add(warnKey);
 
         console.log(
-          `  [WARN] ${key}: вхід "${inp}" не зустрічався раніше в жодному ланцюгу`
+          `  [WARN] ${key}: вхід "${inp}" не зустрічався раніше в жодному ланцюгу`,
         );
-        issues.push(`[WARN] ${key}: вхід "${inp}" не зустрічався раніше в жодному ланцюгу`);
+        issues.push(
+          `[WARN] ${key}: вхід "${inp}" не зустрічався раніше в жодному ланцюгу`,
+        );
         fixes.push({
           lineIdx: rawIdx - 1,
           content: `<!-- !!! Раніше ви не зазначали про цей товар -->`,
@@ -755,14 +812,23 @@ function applyFixes(fileLines: string[], fixes: Fix[]): string[] {
  * Run chain checks on in-memory content.
  * Returns the fixed content and list of issues found.
  */
-export function runChainCheck(content: string, fileName: string): { content: string; issues: string[] } {
+export function runChainCheck(
+  content: string,
+  fileName: string,
+): { content: string; issues: string[] } {
   console.log(`\nЛанцюги: ${fileName}`);
   const fileLines = content.split("\n");
   const sections = parseDocument(fileLines);
   console.log(`  Секцій знайдено: ${sections.size}`);
 
-  const { fixes: verifyFixes, issues: verifyIssues } = verify(fileLines, sections);
-  const { issues: orphanIssues, fixes: orphanFixes } = detectOrphans(sections, fileLines);
+  const { fixes: verifyFixes, issues: verifyIssues } = verify(
+    fileLines,
+    sections,
+  );
+  const { issues: orphanIssues, fixes: orphanFixes } = detectOrphans(
+    sections,
+    fileLines,
+  );
 
   const allFixes = [...verifyFixes, ...orphanFixes];
   const allIssues = [...verifyIssues, ...orphanIssues];
@@ -773,7 +839,10 @@ export function runChainCheck(content: string, fileName: string): { content: str
   }
 
   if (allFixes.length > 0) console.log(`  Виправлень: ${allFixes.length}`);
-  return { content: applyFixes(fileLines, allFixes).join("\n"), issues: allIssues };
+  return {
+    content: applyFixes(fileLines, allFixes).join("\n"),
+    issues: allIssues,
+  };
 }
 
 // ─── Entry point ─────────────────────────────────────────────────────────────

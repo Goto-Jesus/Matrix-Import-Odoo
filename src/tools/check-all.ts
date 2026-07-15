@@ -2,15 +2,23 @@ import * as fs from "fs";
 import * as path from "path";
 import { runAttributeCheck } from "./check-attributes";
 import { runChainCheck } from "./check-chain";
+import { runBomCheck } from "./check-bom";
 
 const BASE_FOLDER = "docs_fixed";
 const GOOD_FOLDER = path.join(BASE_FOLDER, "good");
 const BAD_FOLDER = path.join(BASE_FOLDER, "bad");
 
+// Issues starting with these prefixes require human attention → file goes to bad/
+const BLOCKING_PREFIXES = ["[BREAK]", "[ZERO]", "[EMPTY]", "[NOUNIT]"];
+
+function isBlocking(issue: string): boolean {
+  return BLOCKING_PREFIXES.some((p) => issue.startsWith(p));
+}
+
 interface FileResult {
   fileName: string;
-  hasIssues: boolean;
-  issues: string[];
+  autoFixed: string[];   // [FIX], [CASCADE] — corrected automatically
+  blocking: string[];    // [BREAK], [ZERO] — need human attention
 }
 
 function processFile(absInput: string, goodDir: string, badDir: string): FileResult {
@@ -23,24 +31,27 @@ function processFile(absInput: string, goodDir: string, badDir: string): FileRes
 
   const attrResult = runAttributeCheck(original, fileName);
   const chainResult = runChainCheck(attrResult.content, fileName);
+  const bomResult = runBomCheck(chainResult.content, fileName);
 
-  const allIssues = [...attrResult.issues, ...chainResult.issues];
-  const hasIssues = allIssues.length > 0;
+  const allIssues = [...attrResult.issues, ...chainResult.issues, ...bomResult.issues];
+  const autoFixed = allIssues.filter((i) => !isBlocking(i));
+  const blocking = allIssues.filter(isBlocking);
 
-  const destDir = hasIssues ? badDir : goodDir;
+  const destDir = blocking.length > 0 ? badDir : goodDir;
   const outputPath = path.join(destDir, fileName);
-  fs.writeFileSync(outputPath, chainResult.content, "utf-8");
+  fs.writeFileSync(outputPath, bomResult.content, "utf-8");
 
-  const label = hasIssues ? "❌ bad" : "✅ good";
+  const label = blocking.length > 0 ? "❌ bad" : autoFixed.length > 0 ? "🔧 fixed→good" : "✅ good";
   console.log(`  → [${label}] ${outputPath}`);
 
-  return { fileName, hasIssues, issues: allIssues };
+  return { fileName, autoFixed, blocking };
 }
 
 function writeReport(results: FileResult[], reportPath: string): void {
   const now = new Date().toISOString().slice(0, 10);
-  const good = results.filter((r) => !r.hasIssues);
-  const bad = results.filter((r) => r.hasIssues);
+  const clean = results.filter((r) => r.blocking.length === 0 && r.autoFixed.length === 0);
+  const fixed = results.filter((r) => r.blocking.length === 0 && r.autoFixed.length > 0);
+  const bad = results.filter((r) => r.blocking.length > 0);
 
   const lines: string[] = [
     `# Звіт перевірки документів`,
@@ -50,22 +61,34 @@ function writeReport(results: FileResult[], reportPath: string): void {
     ``,
   ];
 
-  lines.push(`## ✅ Без помилок (${good.length} файлів)`);
-  if (good.length === 0) {
+  lines.push(`## ✅ Чисті (${clean.length} файлів)`);
+  if (clean.length === 0) {
     lines.push(`_—_`);
   } else {
-    for (const r of good) lines.push(`- ${r.fileName}`);
+    for (const r of clean) lines.push(`- ${r.fileName}`);
   }
   lines.push(``);
 
-  lines.push(`## ❌ З помилками (${bad.length} файлів)`);
+  lines.push(`## 🔧 Авто-виправлені → good (${fixed.length} файлів)`);
+  if (fixed.length === 0) {
+    lines.push(`_—_`);
+  } else {
+    for (const r of fixed) {
+      lines.push(``, `### ${r.fileName}`);
+      for (const issue of r.autoFixed) lines.push(`- ${issue}`);
+    }
+  }
+  lines.push(``);
+
+  lines.push(`## ❌ Потребують уваги → bad (${bad.length} файлів)`);
   if (bad.length === 0) {
     lines.push(`_—_`);
   } else {
     for (const r of bad) {
       lines.push(``, `### ${r.fileName}`);
-      for (const issue of r.issues) {
-        lines.push(`- ${issue}`);
+      for (const issue of r.blocking) lines.push(`- ${issue}`);
+      if (r.autoFixed.length > 0) {
+        lines.push(`  *(також авто-виправлено ${r.autoFixed.length} рядків)*`);
       }
     }
   }
@@ -113,9 +136,10 @@ function main() {
 
   writeReport(results, reportPath);
 
-  const goodCount = results.filter((r) => !r.hasIssues).length;
-  const badCount = results.filter((r) => r.hasIssues).length;
-  console.log(`\n✅ Готово. Без помилок: ${goodCount}, з помилками: ${badCount}. Оригінали не змінено.\n`);
+  const goodCount = results.filter((r) => r.blocking.length === 0).length;
+  const badCount = results.filter((r) => r.blocking.length > 0).length;
+  const fixedCount = results.filter((r) => r.blocking.length === 0 && r.autoFixed.length > 0).length;
+  console.log(`\n✅ Готово. good: ${goodCount} (з них авто-виправлено: ${fixedCount}), bad: ${badCount}. Оригінали не змінено.\n`);
 }
 
 main();

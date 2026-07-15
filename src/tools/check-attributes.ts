@@ -3,13 +3,13 @@ import * as path from "path";
 
 interface Attribute {
   paramName: string; // e.g. "%Тканина%"
-  order: number;     // 1-based position in global list
+  order: number; // 1-based position in global list
   active: boolean;
   workshops: string[]; // e.g. ["7", "8", "9-1", "9"]
 }
 
 interface ParsedParams {
-  productId: string;    // first token before any comma or %
+  productId: string; // first token before any comma or %
   attributes: string[]; // list of "%Attr%" tokens
 }
 
@@ -23,7 +23,7 @@ function parseAttributeRules(content: string): Attribute[] {
 
   // 1a. Parse СПИСОК АТРИБУТІВ section for order and active status
   const listMatch = content.match(
-    /# СПИСОК АТРИБУТІВ[^\n]*\n([\s\S]*?)(?=\n##|\n#[^#])/
+    /# СПИСОК АТРИБУТІВ[^\n]*\n([\s\S]*?)(?=\n##|\n#[^#])/,
   );
   if (!listMatch) throw new Error('Не знайдено "# СПИСОК АТРИБУТІВ" у файлі');
 
@@ -43,7 +43,7 @@ function parseAttributeRules(content: string): Attribute[] {
 
   // 1b. Parse "Інструкції" section for workshop effects
   const instrMatch = content.match(
-    /## Інструкції[^\n]*\n([\s\S]*?)(?=\n# |\n## |$)/
+    /## Інструкції[^\n]*\n([\s\S]*?)(?=\n# |\n## |$)/,
   );
   if (!instrMatch) throw new Error('Не знайдено "## Інструкції" у файлі');
 
@@ -60,9 +60,7 @@ function parseAttributeRules(content: string): Attribute[] {
     const paramName = `%${nameMatch[1]}%`;
 
     const wMatch = workshopRe.exec(entry);
-    const workshops = wMatch
-      ? wMatch[1].split(",").map((w) => w.trim())
-      : [];
+    const workshops = wMatch ? wMatch[1].split(",").map((w) => w.trim()) : [];
 
     const attr = attrs.find((a) => a.paramName === paramName);
     if (attr) attr.workshops = workshops;
@@ -95,9 +93,7 @@ function stripLineComment(line: string): string {
  * Find the first `(` after the `]`, then find its matching `)`.
  * Returns [start, end] indices of the paren content (exclusive).
  */
-function findParamBounds(
-  line: string
-): { open: number; close: number } | null {
+function findParamBounds(line: string): { open: number; close: number } | null {
   const nameEnd = line.lastIndexOf("]");
   if (nameEnd < 0) {
     // Sofa final product: "Диван Угол Леон-Люкс 200 Колеса (%Тканина%, ...)"
@@ -147,8 +143,11 @@ function parseParams(line: string): ParsedParams | null {
 function rebuildLine(originalLine: string, newParamsContent: string): string {
   const commentIdx = originalLine.indexOf("//");
   const lineBeforeComment =
-    commentIdx >= 0 ? originalLine.slice(0, commentIdx).trim() : originalLine.trim();
-  const comment = commentIdx >= 0 ? " " + originalLine.slice(commentIdx).trim() : "";
+    commentIdx >= 0
+      ? originalLine.slice(0, commentIdx).trim()
+      : originalLine.trim();
+  const comment =
+    commentIdx >= 0 ? " " + originalLine.slice(commentIdx).trim() : "";
 
   const bounds = findParamBounds(lineBeforeComment);
   if (!bounds) return originalLine;
@@ -173,7 +172,7 @@ function extractWorkshopNum(header: string): string | null {
 function requiredAttrsFor(
   workshopNum: string,
   outputLine: string,
-  allAttrs: Attribute[]
+  allAttrs: Attribute[],
 ): Attribute[] {
   const required: Attribute[] = [];
 
@@ -183,17 +182,19 @@ function requiredAttrsFor(
     }
   }
 
-  // Special: Ламінат in Цех №3-1 always has %Накладка% regardless of global active status
+  // Special: Ламінат in Цех №3-1 always has %Колір Ламінату% regardless of global active status
   if (workshopNum === "3-1" && outputLine.includes("[Ламінат")) {
-    const nakl = allAttrs.find((a) => a.paramName === "%Накладка%");
-    if (nakl && !required.some((r) => r.paramName === "%Накладка%")) {
+    const nakl = allAttrs.find((a) => a.paramName === "%Колір Ламінату%");
+    if (nakl && !required.some((r) => r.paramName === "%Колір Ламінату%")) {
       required.push(nakl);
     }
   }
 
   // Raw frame wood (нарізана деревина) doesn't vary by armrest size
   if (outputLine.includes("[Каркас - нарізана деревина]")) {
-    const idx = required.findIndex((a) => a.paramName === "%Диван Розмір Бильця%");
+    const idx = required.findIndex(
+      (a) => a.paramName === "%Диван Розмір Бильця%",
+    );
     if (idx >= 0) required.splice(idx, 1);
   }
 
@@ -212,9 +213,9 @@ interface LineChange {
 
 interface ProductRename {
   // Used for cascading input updates
-  baseKey: string;  // e.g. "🪤[Каркас - напівфабрикат] (Д.Леон-Люкс Колеса"
-  oldParams: string; // e.g. "Д.Леон-Люкс Колеса, %Дно Каркасу%, %Накладка%"
-  newParams: string; // e.g. "Д.Леон-Люкс Колеса, %Накладка%, %Дно Каркасу%"
+  baseKey: string; // e.g. "🪤[Каркас - напівфабрикат] (Д.Леон-Люкс Колеса"
+  oldParams: string; // e.g. "Д.Леон-Люкс Колеса, %Дно Каркасу%, %Колір Ламінату%"
+  newParams: string; // e.g. "Д.Леон-Люкс Колеса, %Колір Ламінату%, %Дно Каркасу%"
 }
 
 function buildBaseKey(line: string): string {
@@ -224,7 +225,8 @@ function buildBaseKey(line: string): string {
   const inner = clean.slice(bounds.open + 1, bounds.close);
   // Base key = everything up to first ',' or '%' in the inner params
   const firstSep = inner.search(/[,%]/);
-  const productId = firstSep >= 0 ? inner.slice(0, firstSep).trim() : inner.trim();
+  const productId =
+    firstSep >= 0 ? inner.slice(0, firstSep).trim() : inner.trim();
   // prefix = everything before the opening '('
   const prefix = clean.slice(0, bounds.open);
   return `${prefix}(${productId}`;
@@ -232,7 +234,7 @@ function buildBaseKey(line: string): string {
 
 function verify(
   fileLines: string[],
-  allAttrs: Attribute[]
+  allAttrs: Attribute[],
 ): { outputChanges: LineChange[]; renames: ProductRename[]; issues: string[] } {
   const outputChanges: LineChange[] = [];
   const renames: ProductRename[] = [];
@@ -258,7 +260,9 @@ function verify(
 
     // Is it an input line (has "- N шт." or "- шт." or "- N кг" etc.)?
     const cleanLine = stripLineComment(trimmed);
-    const hasQty = /[-]\s*[\d.,]*\s*(?:шт|кг|m|m²|m³)|[-]\s*[\d.,]+\s*$/u.test(cleanLine);
+    const hasQty = /[-]\s*[\d.,]*\s*(?:шт|кг|m|m²|m³)|[-]\s*[\d.,]+\s*$/u.test(
+      cleanLine,
+    );
     if (hasQty) continue; // skip inputs — handled via cascading
 
     // It's an output line
@@ -275,7 +279,9 @@ function verify(
     const isWorkshop9 = currentWorkshop === "9";
     const reqTokens = isWorkshop9
       ? required.filter((a) => a.active).map((a) => a.paramName)
-      : required.map((a) => (a.active ? a.paramName : "❌"));
+      : required.map((a) =>
+          a.active ? a.paramName : a.paramName.replace(/%$/, "❌%"),
+        );
 
     // Build new params
     const newParamsContent = parsed.productId
@@ -297,9 +303,11 @@ function verify(
     const newLine = rebuildLine(raw, newParamsContent);
     outputChanges.push({ lineIdx: i, oldLine: raw, newLine });
     console.log(
-      `  [FIX] ${currentWorkshop}: "${oldParamsContent}" → "${newParamsContent}"`
+      `  [FIX] ${currentWorkshop}: "${oldParamsContent}" → "${newParamsContent}"`,
     );
-    issues.push(`[FIX] Цех №${currentWorkshop}: "${oldParamsContent}" → "${newParamsContent}"`);
+    issues.push(
+      `[FIX] Цех №${currentWorkshop}: "${oldParamsContent}" → "${newParamsContent}"`,
+    );
 
     // Build rename info for cascading inputs
     renames.push({
@@ -317,7 +325,7 @@ function verify(
 function cascadeInputUpdates(
   fileLines: string[],
   renames: ProductRename[],
-  alreadyChanged: Set<number>
+  alreadyChanged: Set<number>,
 ): { changes: LineChange[]; issues: string[] } {
   const inputChanges: LineChange[] = [];
   const issues: string[] = [];
@@ -334,7 +342,9 @@ function cascadeInputUpdates(
     }
 
     const cleanLine = stripLineComment(trimmed);
-    const hasQty = /[-]\s*[\d.,]*\s*(?:шт|кг|m|m²|m³)|[-]\s*[\d.,]+\s*$/u.test(cleanLine);
+    const hasQty = /[-]\s*[\d.,]*\s*(?:шт|кг|m|m²|m³)|[-]\s*[\d.,]+\s*$/u.test(
+      cleanLine,
+    );
     if (!hasQty) continue; // only inputs
 
     for (const rename of renames) {
@@ -354,9 +364,11 @@ function cascadeInputUpdates(
       if (newLine === raw) continue;
 
       console.log(
-        `  [CASCADE] рядок ${i + 1}: "${currentParams}" → "${rename.newParams}"`
+        `  [CASCADE] рядок ${i + 1}: "${currentParams}" → "${rename.newParams}"`,
       );
-      issues.push(`[CASCADE] рядок ${i + 1}: "${currentParams}" → "${rename.newParams}"`);
+      issues.push(
+        `[CASCADE] рядок ${i + 1}: "${currentParams}" → "${rename.newParams}"`,
+      );
       inputChanges.push({ lineIdx: i, oldLine: raw, newLine });
       break;
     }
@@ -381,30 +393,46 @@ function applyChanges(fileLines: string[], changes: LineChange[]): string[] {
  * Run attribute checks on in-memory content.
  * Returns the fixed content and list of issues found.
  */
-export function runAttributeCheck(content: string, fileName: string): { content: string; issues: string[] } {
+export function runAttributeCheck(
+  content: string,
+  fileName: string,
+): { content: string; issues: string[] } {
   console.log(`\nАтрибути: ${fileName}`);
   const fileLines = content.split("\n");
   const allAttrs = parseAttributeRules(content);
   for (const a of allAttrs) {
     console.log(
-      `  ${a.order}. ${a.paramName} [${a.active ? "✅" : "❌"}] → цехи: ${a.workshops.join(", ") || "—"}`
+      `  ${a.order}. ${a.paramName} [${a.active ? "✅" : "❌"}] → цехи: ${a.workshops.join(", ") || "—"}`,
     );
   }
 
-  const { outputChanges, renames, issues: attrIssues } = verify(fileLines, allAttrs);
+  const {
+    outputChanges,
+    renames,
+    issues: attrIssues,
+  } = verify(fileLines, allAttrs);
   const changedOutputIdxs = new Set(outputChanges.map((c) => c.lineIdx));
   let workingLines = applyChanges(fileLines, outputChanges);
-  const { changes: inputChanges, issues: cascadeIssues } = cascadeInputUpdates(workingLines, renames, changedOutputIdxs);
+  const { changes: inputChanges, issues: cascadeIssues } = cascadeInputUpdates(
+    workingLines,
+    renames,
+    changedOutputIdxs,
+  );
   workingLines = applyChanges(workingLines, inputChanges);
 
   const totalChanges = outputChanges.length + inputChanges.length;
   if (totalChanges === 0) {
     console.log("  ✅ Атрибути в порядку, змін немає.");
   } else {
-    console.log(`  Змін output: ${outputChanges.length}, input (каскад): ${inputChanges.length}`);
+    console.log(
+      `  Змін output: ${outputChanges.length}, input (каскад): ${inputChanges.length}`,
+    );
   }
 
-  return { content: workingLines.join("\n"), issues: [...attrIssues, ...cascadeIssues] };
+  return {
+    content: workingLines.join("\n"),
+    issues: [...attrIssues, ...cascadeIssues],
+  };
 }
 
 // ─── Entry point ──────────────────────────────────────────────────────────

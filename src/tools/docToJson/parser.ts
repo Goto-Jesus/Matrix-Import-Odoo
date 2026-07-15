@@ -53,6 +53,7 @@ interface ParsedProduct {
   attributes: AttributeVal[];
   variantDisplayName: string;
   qty: number;
+  ifAttr?: Record<string, string>;
 }
 
 interface ParsedComponent {
@@ -202,7 +203,7 @@ function tryParseProduct(
   line: string,
   isFirstInSection: boolean,
 ): ParsedProduct | null {
-  const trimmed = line.trim();
+  const { clean: trimmed, ifAttr } = stripIfAttrTag(line.trim());
   if (!trimmed || isSkipLine(trimmed)) return null;
 
   const parts = splitLineParts(trimmed);
@@ -237,6 +238,7 @@ function tryParseProduct(
       attributes,
       variantDisplayName,
       qty: qty ?? 1,
+      ifAttr,
     };
   }
 
@@ -253,6 +255,7 @@ function tryParseProduct(
         attributes,
         variantDisplayName,
         qty: qty ?? 1,
+        ifAttr,
       };
     }
   }
@@ -450,6 +453,7 @@ export function parseDoc(content: string): BomEntry[] {
         attributes: currentProduct.attributes,
         variantDisplayName: currentProduct.variantDisplayName,
         qty: currentProduct.qty,
+        ifAttr: currentProduct.ifAttr,
       },
       operations: [...currentOperations],
       components,
@@ -592,6 +596,7 @@ export function parseDoc(content: string): BomEntry[] {
         attributes: currentProduct.attributes,
         variantDisplayName: currentProduct.variantDisplayName,
         qty: currentProduct.qty,
+        ifAttr: currentProduct.ifAttr,
       },
       operations: currentOperations,
       components,
