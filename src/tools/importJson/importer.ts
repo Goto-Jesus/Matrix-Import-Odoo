@@ -102,7 +102,8 @@ export async function importBomEntry(entry: BomEntry): Promise<'created' | 'exis
     const compResolved = await ensureVariantFromAttrs(
       comp.templateName,
       comp.attributes,
-      comp.isService ?? false
+      comp.isService ?? false,
+      true
     );
     if (!compResolved) {
       console.warn(`    [SKIP] Компонент: "${comp.templateName}" (${sec(t)})`);

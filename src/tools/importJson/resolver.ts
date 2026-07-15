@@ -13,12 +13,12 @@ const _variantByDisplayName = new Map<string, ResolvedProduct>();
  * Odoo генерує всі варіанти ОДИН РАЗ після запису, а не N разів.
  */
 export async function preSeedAttributeLines(entries: BomEntry[]): Promise<void> {
-  type TemplateInfo = { attrMap: Map<string, Set<string>>; isService: boolean };
+  type TemplateInfo = { attrMap: Map<string, Set<string>>; isService: boolean; isComponent: boolean };
   const needed = new Map<string, TemplateInfo>();
 
-  const collect = (templateName: string, attrs: AttributeVal[], isService = false) => {
+  const collect = (templateName: string, attrs: AttributeVal[], isService = false, isComponent = false) => {
     if (attrs.length === 0) return;
-    if (!needed.has(templateName)) needed.set(templateName, { attrMap: new Map(), isService });
+    if (!needed.has(templateName)) needed.set(templateName, { attrMap: new Map(), isService, isComponent });
     const { attrMap } = needed.get(templateName)!;
     for (const attr of attrs) {
       if (attr.value.includes('%')) continue;
@@ -29,9 +29,9 @@ export async function preSeedAttributeLines(entries: BomEntry[]): Promise<void> 
   };
 
   for (const entry of entries) {
-    collect(entry.product.templateName, entry.product.attributes, false);
+    collect(entry.product.templateName, entry.product.attributes, false, false);
     for (const comp of entry.components) {
-      collect(comp.templateName, comp.attributes, comp.isService ?? false);
+      collect(comp.templateName, comp.attributes, comp.isService ?? false, true);
     }
   }
 
@@ -39,7 +39,7 @@ export async function preSeedAttributeLines(entries: BomEntry[]): Promise<void> 
 
   console.log(`\n[pre-seed] Шаблонів з атрибутами: ${needed.size}`);
 
-  for (const [templateName, { attrMap, isService }] of needed) {
+  for (const [templateName, { attrMap, isService, isComponent }] of needed) {
     let templateId: number;
     const existing = await findTemplate(templateName);
     if (existing) {
@@ -50,6 +50,7 @@ export async function preSeedAttributeLines(entries: BomEntry[]): Promise<void> 
         name: templateName,
         type: isService ? 'service' : await getStorableType(),
         uom_id: 1,
+        ...(isComponent ? { sale_ok: false } : {}),
       });
       cacheTemplate(templateName, templateId);
       console.log(`  [+] Шаблон: "${templateName}" (ID: ${templateId}) (${sec(t)})`);
@@ -133,7 +134,8 @@ async function getStorableType(): Promise<string> {
 export async function ensureVariantFromAttrs(
   templateName: string,
   attributes: AttributeVal[],
-  isService = false
+  isService = false,
+  isComponent = false
 ): Promise<ResolvedProduct | null> {
   // Skip attributes that still contain %placeholder% — they weren't fully resolved
   // Strip ❌ suffix from attributeName (inactive attrs keep their clean Odoo name)
@@ -164,6 +166,7 @@ export async function ensureVariantFromAttrs(
       name: templateName,
       type: isService ? 'service' : await getStorableType(),
       uom_id: 1,
+      ...(isComponent ? { sale_ok: false } : {}),
     });
     console.log(`  [+] Шаблон створено: "${templateName}" (ID: ${templateId})`);
   }
