@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Моллі.md",
-  "generatedAt": "2026-07-09T11:47:07.466Z",
+  "generatedAt": "2026-07-15T15:25:02.514Z",
   "boms": [
     {
       "product": {
@@ -53,16 +53,19 @@
           {
             "attributeName": "Модель",
             "value": "Б.Моллі"
+          },
+          {
+            "attributeName": "Диван Розмір Бильця❌",
+            "value": "%Диван Розмір Бильця❌%"
           }
         ],
-        "variantDisplayName": "🧩[Бильце - нарізані деталі] (Б.Моллі)",
+        "variantDisplayName": "🧩[Бильце - нарізані деталі] (Б.Моллі, %Диван Розмір Бильця❌%)",
         "qty": 1,
-        "odooTemplateId": 36,
-        "odooVariantId": 471
+        "odooTemplateId": 36
       },
       "operations": [
         {
-          "name": "Операція (Цех №2-1) 🧩[Бильце - нарізані деталі] (Б.Моллі)",
+          "name": "Операція (Цех №2-1) 🧩[Бильце - нарізані деталі] (Б.Моллі, %Диван Розмір Бильця❌%)",
           "workcenterName": "Цех №2-1 ДСП (Нарізка Бильце)",
           "priceRate": 25,
           "odooWorkcenterId": 20
@@ -94,7 +97,12 @@
           "odooVariantId": 324,
           "odooUomId": 10
         }
-      ]
+      ],
+      "expand": {
+        "Диван Розмір Бильця❌": [
+          "❌"
+        ]
+      }
     },
     {
       "product": {
@@ -274,38 +282,24 @@
     },
     {
       "product": {
-        "templateName": "🧩[Планка - нарізані деталі]",
-        "attributes": [],
-        "variantDisplayName": "🧩[Планка - нарізані деталі]",
-        "qty": 1,
-        "odooTemplateId": 39
-      },
-      "operations": [
-        {
-          "name": "Операція (Цех №2-3) 🧩[Планка - нарізані деталі]",
-          "workcenterName": "Цех №2-3 ДСП (Нарізка Планка)",
-          "priceRate": 0,
-          "odooWorkcenterId": 22
-        }
-      ],
-      "components": []
-    },
-    {
-      "product": {
         "templateName": "🧩[Ламінат - нарізані деталі]",
         "attributes": [
           {
             "attributeName": "Модель",
             "value": "Д.Моллі"
+          },
+          {
+            "attributeName": "Колір Ламінату❌",
+            "value": "%Колір Ламінату❌%"
           }
         ],
-        "variantDisplayName": "🧩[Ламінат - нарізані деталі] (Д.Моллі)",
+        "variantDisplayName": "🧩[Ламінат - нарізані деталі] (Д.Моллі, %Колір Ламінату❌%)",
         "qty": 1,
         "odooTemplateId": 66
       },
       "operations": [
         {
-          "name": "Операція (Цех №3-1) 🧩[Ламінат - нарізані деталі] (Д.Моллі)",
+          "name": "Операція (Цех №3-1) 🧩[Ламінат - нарізані деталі] (Д.Моллі, %Колір Ламінату❌%)",
           "workcenterName": "Цех №3-1 ЛДСП (Нарізка Ламінату)",
           "priceRate": 0,
           "odooWorkcenterId": 23
@@ -341,34 +335,13 @@
           "odooTemplateId": 18,
           "odooVariantId": 309,
           "odooUomId": 1
-        },
-        {
-          "templateName": "Кромка",
-          "attributes": [],
-          "qty": 5.9,
-          "uom": "m",
-          "operationIndex": 0,
-          "odooUomId": 8
-        }
-      ]
-    },
-    {
-      "product": {
-        "templateName": "🪤[Накладка]",
-        "attributes": [],
-        "variantDisplayName": "🪤[Накладка]",
-        "qty": 1,
-        "odooTemplateId": 11
-      },
-      "operations": [
-        {
-          "name": "Операція (Цех №3-2) 🪤[Накладка]",
-          "workcenterName": "Цех №3-2 ЛДСП (Нарізка Накладок)",
-          "priceRate": 0,
-          "odooWorkcenterId": 24
         }
       ],
-      "components": []
+      "expand": {
+        "Колір Ламінату❌": [
+          "❌"
+        ]
+      }
     },
     {
       "product": {
@@ -377,16 +350,19 @@
           {
             "attributeName": "Модель",
             "value": "Б.Моллі"
+          },
+          {
+            "attributeName": "Диван Розмір Бильця❌",
+            "value": "%Диван Розмір Бильця❌%"
           }
         ],
-        "variantDisplayName": "🪤[Бильце - напівфабрикат] (Б.Моллі)",
+        "variantDisplayName": "🪤[Бильце - напівфабрикат] (Б.Моллі, %Диван Розмір Бильця❌%)",
         "qty": 1,
-        "odooTemplateId": 12,
-        "odooVariantId": 484
+        "odooTemplateId": 12
       },
       "operations": [
         {
-          "name": "Операція (Цех №4-1) 🪤[Бильце - напівфабрикат] (Б.Моллі)",
+          "name": "Операція (Цех №4-1) 🪤[Бильце - напівфабрикат] (Б.Моллі, %Диван Розмір Бильця❌%)",
           "workcenterName": "Цех №4-1 Сборка Бильце",
           "priceRate": 0,
           "odooWorkcenterId": 5
@@ -394,21 +370,47 @@
       ],
       "components": [
         {
+          "templateName": "🪵[Бильце - нарізана деревина]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Б.Моллі"
+            },
+            {
+              "attributeName": "Диван Розмір Бильця❌",
+              "value": "%Диван Розмір Бильця❌%"
+            }
+          ],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 0,
+          "odooTemplateId": 179,
+          "odooUomId": 1
+        },
+        {
           "templateName": "🧩[Бильце - нарізані деталі]",
           "attributes": [
             {
               "attributeName": "Модель",
               "value": "Б.Моллі"
+            },
+            {
+              "attributeName": "Диван Розмір Бильця❌",
+              "value": "%Диван Розмір Бильця❌%"
             }
           ],
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 36,
-          "odooVariantId": 471,
           "odooUomId": 1
         }
-      ]
+      ],
+      "expand": {
+        "Диван Розмір Бильця❌": [
+          "❌"
+        ]
+      }
     },
     {
       "product": {
@@ -417,15 +419,23 @@
           {
             "attributeName": "Модель",
             "value": "Д.Моллі"
+          },
+          {
+            "attributeName": "Колір Ламінату❌",
+            "value": "%Колір Ламінату❌%"
+          },
+          {
+            "attributeName": "Дно Каркасу",
+            "value": "%Дно Каркасу%"
           }
         ],
-        "variantDisplayName": "🪤[Каркас - напівфабрикат] (Д.Моллі)",
+        "variantDisplayName": "🪤[Каркас - напівфабрикат] (Д.Моллі, %Колір Ламінату❌%, %Дно Каркасу%)",
         "qty": 1,
         "odooTemplateId": 33
       },
       "operations": [
         {
-          "name": "Операція (Цех №4-2) 🪤[Каркас - напівфабрикат] (Д.Моллі)",
+          "name": "Операція (Цех №4-2) 🪤[Каркас - напівфабрикат] (Д.Моллі, %Колір Ламінату❌%, %Дно Каркасу%)",
           "workcenterName": "Цех №4-2 Сборка Каркас",
           "priceRate": 170,
           "odooWorkcenterId": 26
@@ -466,6 +476,10 @@
             {
               "attributeName": "Модель",
               "value": "Д.Моллі"
+            },
+            {
+              "attributeName": "Колір Ламінату❌",
+              "value": "%Колір Ламінату❌%"
             }
           ],
           "qty": 1,
@@ -474,25 +488,17 @@
           "odooTemplateId": 66,
           "odooUomId": 1
         }
-      ]
-    },
-    {
-      "product": {
-        "templateName": "🪤[Планка - напівфабрикат]",
-        "attributes": [],
-        "variantDisplayName": "🪤[Планка - напівфабрикат]",
-        "qty": 1,
-        "odooTemplateId": 17
-      },
-      "operations": [
-        {
-          "name": "Операція (Цех №4-3) 🪤[Планка - напівфабрикат]",
-          "workcenterName": "Цех №4-3 Сборка Планка",
-          "priceRate": 0,
-          "odooWorkcenterId": 27
-        }
       ],
-      "components": []
+      "expand": {
+        "Колір Ламінату❌": [
+          "❌"
+        ],
+        "Дно Каркасу": [
+          "ДВП Черновое",
+          "ДВП Білий",
+          "- без дна"
+        ]
+      }
     },
     {
       "product": {
@@ -501,15 +507,26 @@
           {
             "attributeName": "Модель",
             "value": "Д.Моллі"
+          },
+          {
+            "attributeName": "Диван Пружинний Блок",
+            "value": "%Диван Пружинний Блок%"
+          },
+          {
+            "attributeName": "Диван Розмір Бильця❌",
+            "value": "%Диван Розмір Бильця❌%"
           }
         ],
-        "variantDisplayName": "🧩[Поролон - нарізані компоненти] (Д.Моллі)",
+        "variantDisplayName": "🧩[Поролон - нарізані компоненти] (Д.Моллі, %Диван Пружинний Блок%, %Диван Розмір Бильця❌%)",
         "qty": 1,
+        "ifAttr": {
+          "Диван Пружинний Блок": "Звичайний Блок"
+        },
         "odooTemplateId": 216
       },
       "operations": [
         {
-          "name": "Операція (Цех №5) 🧩[Поролон - нарізані компоненти] (Д.Моллі)",
+          "name": "Операція (Цех №5) 🧩[Поролон - нарізані компоненти] (Д.Моллі, %Диван Пружинний Блок%, %Диван Розмір Бильця❌%)",
           "workcenterName": "Цех №5 Порезка Поролон",
           "priceRate": 50,
           "odooWorkcenterId": 6
@@ -551,6 +568,36 @@
           "attributes": [
             {
               "attributeName": "Поролон",
+              "value": "ST-2233 (2000x1600x10)"
+            }
+          ],
+          "qty": 0.704,
+          "uom": "кг",
+          "operationIndex": 0,
+          "odooTemplateId": 19,
+          "odooVariantId": 517,
+          "odooUomId": 15
+        },
+        {
+          "templateName": "[Поролон]",
+          "attributes": [
+            {
+              "attributeName": "Поролон",
+              "value": "ST-2233 (2000x1400x10)"
+            }
+          ],
+          "qty": 0.616,
+          "uom": "кг",
+          "operationIndex": 0,
+          "odooTemplateId": 19,
+          "odooVariantId": 518,
+          "odooUomId": 15
+        },
+        {
+          "templateName": "[Поролон]",
+          "attributes": [
+            {
+              "attributeName": "Поролон",
               "value": "ST-2233 (2000x1600x40x70)"
             }
           ],
@@ -559,6 +606,95 @@
           "operationIndex": 0,
           "odooTemplateId": 19,
           "odooVariantId": 516,
+          "odooUomId": 15
+        },
+        {
+          "templateName": "[Войлок]",
+          "attributes": [
+            {
+              "attributeName": "Войлок",
+              "value": "1.60"
+            }
+          ],
+          "qty": 2,
+          "uom": "m",
+          "operationIndex": 0,
+          "odooTemplateId": 20,
+          "odooVariantId": 330,
+          "odooUomId": 8
+        }
+      ],
+      "expand": {
+        "Диван Пружинний Блок": [
+          "Посиленний",
+          "Звичайний"
+        ],
+        "Диван Розмір Бильця❌": [
+          "❌"
+        ]
+      }
+    },
+    {
+      "product": {
+        "templateName": "🧩[Поролон - нарізані компоненти]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Д.Моллі"
+          },
+          {
+            "attributeName": "Диван Пружинний Блок",
+            "value": "%Диван Пружинний Блок%"
+          },
+          {
+            "attributeName": "Диван Розмір Бильця❌",
+            "value": "%Диван Розмір Бильця❌%"
+          }
+        ],
+        "variantDisplayName": "🧩[Поролон - нарізані компоненти] (Д.Моллі, %Диван Пружинний Блок%, %Диван Розмір Бильця❌%)",
+        "qty": 1,
+        "ifAttr": {
+          "Диван Пружинний Блок": "Посилений Блок"
+        },
+        "odooTemplateId": 216
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №5) 🧩[Поролон - нарізані компоненти] (Д.Моллі, %Диван Пружинний Блок%, %Диван Розмір Бильця❌%)",
+          "workcenterName": "Цех №5 Порезка Поролон",
+          "priceRate": 50,
+          "odooWorkcenterId": 6
+        }
+      ],
+      "components": [
+        {
+          "templateName": "[Поролон]",
+          "attributes": [
+            {
+              "attributeName": "Поролон",
+              "value": "ST-2535 (2000x1600x20)"
+            }
+          ],
+          "qty": 1.6,
+          "uom": "кг",
+          "operationIndex": 0,
+          "odooTemplateId": 19,
+          "odooVariantId": 1778,
+          "odooUomId": 15
+        },
+        {
+          "templateName": "[Поролон]",
+          "attributes": [
+            {
+              "attributeName": "Поролон",
+              "value": "ST-2233 (2000x1600x40x105)"
+            }
+          ],
+          "qty": 0.93,
+          "uom": "кг",
+          "operationIndex": 0,
+          "odooTemplateId": 19,
+          "odooVariantId": 515,
           "odooUomId": 15
         },
         {
@@ -592,6 +728,21 @@
           "odooUomId": 15
         },
         {
+          "templateName": "[Поролон]",
+          "attributes": [
+            {
+              "attributeName": "Поролон",
+              "value": "ST-2233 (2000x1600x40x70)"
+            }
+          ],
+          "qty": 2.096,
+          "uom": "кг",
+          "operationIndex": 0,
+          "odooTemplateId": 19,
+          "odooVariantId": 516,
+          "odooUomId": 15
+        },
+        {
           "templateName": "[Войлок]",
           "attributes": [
             {
@@ -599,14 +750,23 @@
               "value": "1.60"
             }
           ],
-          "qty": 2,
+          "qty": 4,
           "uom": "m",
           "operationIndex": 0,
           "odooTemplateId": 20,
           "odooVariantId": 330,
           "odooUomId": 8
         }
-      ]
+      ],
+      "expand": {
+        "Диван Пружинний Блок": [
+          "Посиленний",
+          "Звичайний"
+        ],
+        "Диван Розмір Бильця❌": [
+          "❌"
+        ]
+      }
     },
     {
       "product": {
@@ -655,15 +815,31 @@
           {
             "attributeName": "Модель",
             "value": "Д.Моллі"
+          },
+          {
+            "attributeName": "Диван Пружинний Блок",
+            "value": "%Диван Пружинний Блок%"
+          },
+          {
+            "attributeName": "Диван Розмір Бильця❌",
+            "value": "%Диван Розмір Бильця❌%"
+          },
+          {
+            "attributeName": "Колір Ламінату❌",
+            "value": "%Колір Ламінату❌%"
+          },
+          {
+            "attributeName": "Дно Каркасу",
+            "value": "%Дно Каркасу%"
           }
         ],
-        "variantDisplayName": "🪤🧽[Каркас + Поролон - напівфабрикат 2] (Д.Моллі)",
+        "variantDisplayName": "🪤🧽[Каркас + Поролон - напівфабрикат 2] (Д.Моллі, %Диван Пружинний Блок%, %Диван Розмір Бильця❌%, %Колір Ламінату❌%, %Дно Каркасу%)",
         "qty": 1,
         "odooTemplateId": 16
       },
       "operations": [
         {
-          "name": "Операція (Цех №6) 🪤🧽[Каркас + Поролон - напівфабрикат 2] (Д.Моллі)",
+          "name": "Операція (Цех №6) 🪤🧽[Каркас + Поролон - напівфабрикат 2] (Д.Моллі, %Диван Пружинний Блок%, %Диван Розмір Бильця❌%, %Колір Ламінату❌%, %Дно Каркасу%)",
           "workcenterName": "Цех №6 Поклейки Поролона + Сбивка",
           "priceRate": 220,
           "odooWorkcenterId": 9
@@ -676,6 +852,14 @@
             {
               "attributeName": "Модель",
               "value": "Д.Моллі"
+            },
+            {
+              "attributeName": "Колір Ламінату❌",
+              "value": "%Колір Ламінату❌%"
+            },
+            {
+              "attributeName": "Дно Каркасу",
+              "value": "%Дно Каркасу%"
             }
           ],
           "qty": 1,
@@ -685,18 +869,21 @@
           "odooUomId": 1
         },
         {
-          "templateName": "🧩[Бильце - нарізані деталі]",
+          "templateName": "🪤[Бильце - напівфабрикат]",
           "attributes": [
             {
               "attributeName": "Модель",
               "value": "Б.Моллі"
+            },
+            {
+              "attributeName": "Диван Розмір Бильця❌",
+              "value": "%Диван Розмір Бильця❌%"
             }
           ],
           "qty": 2,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 36,
-          "odooVariantId": 471,
+          "odooTemplateId": 12,
           "odooUomId": 1
         },
         {
@@ -705,6 +892,14 @@
             {
               "attributeName": "Модель",
               "value": "Д.Моллі"
+            },
+            {
+              "attributeName": "Диван Пружинний Блок",
+              "value": "%Диван Пружинний Блок%"
+            },
+            {
+              "attributeName": "Диван Розмір Бильця❌",
+              "value": "%Диван Розмір Бильця❌%"
             }
           ],
           "qty": 1,
@@ -743,7 +938,24 @@
           "odooVariantId": 313,
           "odooUomId": 1
         }
-      ]
+      ],
+      "expand": {
+        "Диван Пружинний Блок": [
+          "Посиленний",
+          "Звичайний"
+        ],
+        "Диван Розмір Бильця❌": [
+          "❌"
+        ],
+        "Колір Ламінату❌": [
+          "❌"
+        ],
+        "Дно Каркасу": [
+          "ДВП Черновое",
+          "ДВП Білий",
+          "- без дна"
+        ]
+      }
     },
     {
       "product": {
@@ -756,15 +968,19 @@
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
+          },
+          {
+            "attributeName": "Диван Розмір Бильця❌",
+            "value": "%Диван Розмір Бильця❌%"
           }
         ],
-        "variantDisplayName": "🧩[Чохол - нарізані матеріали] (Д.Моллі, %Тканина%)",
+        "variantDisplayName": "🧩[Чохол - нарізані матеріали] (Д.Моллі, %Тканина%, %Диван Розмір Бильця❌%)",
         "qty": 1,
         "odooTemplateId": 43
       },
       "operations": [
         {
-          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали] (Д.Моллі, %Тканина%)",
+          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали] (Д.Моллі, %Тканина%, %Диван Розмір Бильця❌%)",
           "workcenterName": "Цех №7 Закройка Тканини",
           "priceRate": 380,
           "odooWorkcenterId": 7
@@ -904,8 +1120,10 @@
           "Касія 96",
           "Сав нова браун 03",
           "Сав Нова Сильвер",
-          "Сав Нова Дк Грей 14",
-          "%Тканина%"
+          "Сав Нова Дк Грей 14"
+        ],
+        "Диван Розмір Бильця❌": [
+          "❌"
         ]
       }
     },
@@ -920,15 +1138,19 @@
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
+          },
+          {
+            "attributeName": "Диван Розмір Бильця❌",
+            "value": "%Диван Розмір Бильця❌%"
           }
         ],
-        "variantDisplayName": "🪤[Чохол - напівфабрикат] (Д.Моллі, %Тканина%)",
+        "variantDisplayName": "🪤[Чохол - напівфабрикат] (Д.Моллі, %Тканина%, %Диван Розмір Бильця❌%)",
         "qty": 1,
         "odooTemplateId": 34
       },
       "operations": [
         {
-          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат] (Д.Моллі, %Тканина%)",
+          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат] (Д.Моллі, %Тканина%, %Диван Розмір Бильця❌%)",
           "workcenterName": "Цех №8 Швейка",
           "priceRate": 720,
           "odooWorkcenterId": 8
@@ -945,6 +1167,10 @@
             {
               "attributeName": "Тканина",
               "value": "%Тканина%"
+            },
+            {
+              "attributeName": "Диван Розмір Бильця❌",
+              "value": "%Диван Розмір Бильця❌%"
             }
           ],
           "qty": 1,
@@ -1041,8 +1267,10 @@
           "Касія 96",
           "Сав нова браун 03",
           "Сав Нова Сильвер",
-          "Сав Нова Дк Грей 14",
-          "%Тканина%"
+          "Сав Нова Дк Грей 14"
+        ],
+        "Диван Розмір Бильця❌": [
+          "❌"
         ]
       }
     },
@@ -1065,6 +1293,9 @@
         ],
         "variantDisplayName": "[Подушка] (Д.Нео, %Тканина%, %Диван Наповнювач Подушек%)",
         "qty": 1,
+        "ifAttr": {
+          "Диван Наповнювач Подушек": "ППУ Крихта"
+        },
         "odooTemplateId": 67
       },
       "operations": [
@@ -1097,9 +1328,6 @@
           "qty": 2.7,
           "uom": "кг",
           "operationIndex": 0,
-          "ifAttr": {
-            "Диван Наповнювач Подушек": "ППУ Крихта"
-          },
           "odooTemplateId": 145,
           "odooVariantId": 261,
           "odooUomId": 15
@@ -1192,8 +1420,7 @@
           "Касія 96",
           "Сав нова браун 03",
           "Сав Нова Сильвер",
-          "Сав Нова Дк Грей 14",
-          "%Тканина%"
+          "Сав Нова Дк Грей 14"
         ],
         "Диван Наповнювач Подушек": [
           "Холофайдер",
@@ -1220,6 +1447,9 @@
         ],
         "variantDisplayName": "[Подушка] (Д.Нео, %Тканина%, %Диван Наповнювач Подушек%)",
         "qty": 1,
+        "ifAttr": {
+          "Диван Наповнювач Подушек": "Холофайдер"
+        },
         "odooTemplateId": 67
       },
       "operations": [
@@ -1252,9 +1482,6 @@
           "qty": 2.7,
           "uom": "кг",
           "operationIndex": 0,
-          "ifAttr": {
-            "Диван Наповнювач Подушек": "Холофайдер"
-          },
           "odooTemplateId": 204,
           "odooVariantId": 704,
           "odooUomId": 15
@@ -1347,8 +1574,7 @@
           "Касія 96",
           "Сав нова браун 03",
           "Сав Нова Сильвер",
-          "Сав Нова Дк Грей 14",
-          "%Тканина%"
+          "Сав Нова Дк Грей 14"
         ],
         "Диван Наповнювач Подушек": [
           "Холофайдер",
@@ -1407,12 +1633,72 @@
             {
               "attributeName": "Модель",
               "value": "Д.Моллі"
+            },
+            {
+              "attributeName": "Диван Пружинний Блок",
+              "value": "%Диван Пружинний Блок%"
+            },
+            {
+              "attributeName": "Диван Розмір Бильця❌",
+              "value": "%Диван Розмір Бильця❌%"
+            },
+            {
+              "attributeName": "Колір Ламінату❌",
+              "value": "%Колір Ламінату❌%"
+            },
+            {
+              "attributeName": "Дно Каркасу",
+              "value": "%Дно Каркасу%"
             }
           ],
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 16,
+          "odooUomId": 1
+        },
+        {
+          "templateName": "🪤[Чохол - напівфабрикат]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Д.Моллі"
+            },
+            {
+              "attributeName": "Тканина",
+              "value": "%Тканина%"
+            },
+            {
+              "attributeName": "Диван Розмір Бильця❌",
+              "value": "%Диван Розмір Бильця❌%"
+            }
+          ],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 0,
+          "odooTemplateId": 34,
+          "odooUomId": 1
+        },
+        {
+          "templateName": "[Подушка]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Д.Нео"
+            },
+            {
+              "attributeName": "Тканина",
+              "value": "%Тканина%"
+            },
+            {
+              "attributeName": "Диван Наповнювач Подушек",
+              "value": "%Диван Наповнювач Подушек%"
+            }
+          ],
+          "qty": 2,
+          "uom": "шт",
+          "operationIndex": 0,
+          "odooTemplateId": 67,
           "odooUomId": 1
         },
         {
@@ -1482,46 +1768,6 @@
           "operationIndex": 0,
           "odooTemplateId": 10,
           "odooVariantId": 332,
-          "odooUomId": 1
-        },
-        {
-          "templateName": "🪤[Чохол - напівфабрикат]",
-          "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Д.Моллі"
-            },
-            {
-              "attributeName": "Тканина",
-              "value": "%Тканина%"
-            }
-          ],
-          "qty": 1,
-          "uom": "шт",
-          "operationIndex": 0,
-          "odooTemplateId": 34,
-          "odooUomId": 1
-        },
-        {
-          "templateName": "[Подушка]",
-          "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Д.Нео"
-            },
-            {
-              "attributeName": "Тканина",
-              "value": "%Тканина%"
-            },
-            {
-              "attributeName": "Диван Наповнювач Подушек",
-              "value": "%Диван Наповнювач Подушек%"
-            }
-          ],
-          "qty": 2,
-          "uom": "шт",
-          "operationIndex": 0,
-          "odooTemplateId": 67,
           "odooUomId": 1
         },
         {
@@ -1653,8 +1899,7 @@
           "Касія 96",
           "Сав нова браун 03",
           "Сав Нова Сильвер",
-          "Сав Нова Дк Грей 14",
-          "%Тканина%"
+          "Сав Нова Дк Грей 14"
         ],
         "Диван Пружинний Блок": [
           "Посиленний",
@@ -1668,6 +1913,12 @@
           "ДВП Черновое",
           "ДВП Білий",
           "- без дна"
+        ],
+        "Диван Розмір Бильця❌": [
+          "❌"
+        ],
+        "Колір Ламінату❌": [
+          "❌"
         ]
       }
     }
