@@ -189,6 +189,30 @@ function buildTemplateName(
   return bracketName;
 }
 
+// Only these two templates embed the model identifier into the bracket name to avoid
+// variant explosion (Тканина × model × size = thousands of variants in one template).
+const EMBED_MODEL_TEMPLATES = new Set([
+  'Чохол - нарізані матеріали',
+  'Чохол - напівфабрикат',
+]);
+
+function embedLiteralFirstAttr(
+  bracketName: string,
+  attrValues: string[],
+): { effectiveName: string; effectiveValues: string[] } {
+  if (
+    EMBED_MODEL_TEMPLATES.has(bracketName) &&
+    attrValues.length > 0 &&
+    !attrValues[0].includes('%')
+  ) {
+    return {
+      effectiveName: `${bracketName} ${attrValues[0]}`,
+      effectiveValues: attrValues.slice(1),
+    };
+  }
+  return { effectiveName: bracketName, effectiveValues: attrValues };
+}
+
 function buildVariantDisplayName(
   templateName: string,
   attrValues: string[],
@@ -222,12 +246,10 @@ function tryParseProduct(
     const emoji = bracketMatch[1].trim();
     const bracketName = bracketMatch[2].trim();
     const attrValues = attrStr ? parseAttrString(attrStr) : [];
-    const templateName = buildTemplateName(emoji, bracketName, true);
-    const attributes = valuesToAttributes(attrValues, bracketName);
-    const variantDisplayName = buildVariantDisplayName(
-      templateName,
-      attrValues,
-    );
+    const { effectiveName, effectiveValues } = embedLiteralFirstAttr(bracketName, attrValues);
+    const templateName = buildTemplateName(emoji, effectiveName, true);
+    const attributes = valuesToAttributes(effectiveValues, bracketName);
+    const variantDisplayName = buildVariantDisplayName(templateName, effectiveValues);
 
     // If it has qty but we already have a product, treat as component (caller checks)
     if (qty !== null && !isFirstInSection) return null;
@@ -299,10 +321,11 @@ function tryParseComponent(line: string): ParsedComponent | null {
     const emoji = bracketMatch[1].trim();
     const bracketName = bracketMatch[2].trim();
     const attrValues = attrStr ? parseAttrString(attrStr) : [];
-    const templateName = buildTemplateName(emoji, bracketName, true);
+    const { effectiveName, effectiveValues } = embedLiteralFirstAttr(bracketName, attrValues);
+    const templateName = buildTemplateName(emoji, effectiveName, true);
     return {
       templateName,
-      attributes: valuesToAttributes(attrValues, bracketName),
+      attributes: valuesToAttributes(effectiveValues, bracketName),
       qty,
       uom,
       isService: false,
@@ -576,6 +599,25 @@ export function parseDoc(content: string): BomEntry[] {
       (comp as any)._opIndex = currentOpIndex;
       currentComponents.push(comp);
       continue;
+    }
+
+    // A second (or later) bracketed product within the same цех section with no qty
+    // and no explicit separator (або/---). Flush the current BOM and start a new one
+    // under the same workshop. workshopBomStart is NOT reset so Ціна applies to all.
+    if (currentProduct !== null && currentWorkshop !== null) {
+      const asProd = tryParseProduct(trimmed, false);
+      if (asProd && asProd.isBracketed) {
+        flushBom();
+        currentProduct = asProd;
+        currentOpIndex = 0;
+        isFirstInSection = false;
+        currentOperations.push({
+          name: `${currentWorkshop.operationPrefix} ${asProd.variantDisplayName}`,
+          workcenterName: currentWorkshop.fullName,
+          priceRate: 0,
+        });
+        continue;
+      }
     }
   }
 

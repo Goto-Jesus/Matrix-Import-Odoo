@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Доррі Механізм.md",
-  "generatedAt": "2026-07-15T15:24:15.915Z",
+  "generatedAt": "2026-07-15T21:16:55.389Z",
   "boms": [
     {
       "product": {
@@ -34,7 +34,35 @@
           "odooTemplateId": 35,
           "odooVariantId": 59,
           "odooUomId": 30
-        },
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪵[Бильце - нарізана деревина]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Б.Доррі"
+          },
+          {
+            "attributeName": "Диван Розмір Бильця❌",
+            "value": "%Диван Розмір Бильця❌%"
+          }
+        ],
+        "variantDisplayName": "🪵[Бильце - нарізана деревина] (Б.Доррі, %Диван Розмір Бильця❌%)",
+        "qty": 1,
+        "odooTemplateId": 179
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №1) 🪵[Бильце - нарізана деревина] (Б.Доррі, %Диван Розмір Бильця❌%)",
+          "workcenterName": "Цех №1 Дерева (Нарізка)",
+          "priceRate": 0,
+          "odooWorkcenterId": 19
+        }
+      ],
+      "components": [
         {
           "templateName": "Дерево",
           "attributes": [],
@@ -45,7 +73,12 @@
           "odooVariantId": 59,
           "odooUomId": 30
         }
-      ]
+      ],
+      "expand": {
+        "Диван Розмір Бильця❌": [
+          "❌"
+        ]
+      }
     },
     {
       "product": {
@@ -130,6 +163,30 @@
           "odooWorkcenterId": 21
         }
       ],
+      "components": [],
+      "expand": {
+        "Дно Каркасу❌": [
+          "❌"
+        ]
+      }
+    },
+    {
+      "product": {
+        "templateName": "[ДСП]",
+        "attributes": [],
+        "variantDisplayName": "[ДСП]",
+        "qty": 1,
+        "odooTemplateId": 13,
+        "odooVariantId": 31
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №2-2) [ДСП]",
+          "workcenterName": "Цех №2-2 ДСП (Нарізка Каркас)",
+          "priceRate": 0,
+          "odooWorkcenterId": 21
+        }
+      ],
       "components": [
         {
           "templateName": "[ДВП]",
@@ -146,12 +203,7 @@
           "odooVariantId": 325,
           "odooUomId": 10
         }
-      ],
-      "expand": {
-        "Дно Каркасу❌": [
-          "❌"
-        ]
-      }
+      ]
     },
     {
       "product": {
@@ -527,7 +579,41 @@
           "odooTemplateId": 19,
           "odooVariantId": 1778,
           "odooUomId": 15
-        },
+        }
+      ],
+      "expand": {
+        "Диван Пружинний Блок": [
+          "Посиленний",
+          "Звичайний"
+        ],
+        "Диван Розмір Бильця❌": [
+          "❌"
+        ]
+      }
+    },
+    {
+      "product": {
+        "templateName": "[Поролон]",
+        "attributes": [
+          {
+            "attributeName": "Поролон",
+            "value": "ST-2218 (2000x1600x20)"
+          }
+        ],
+        "variantDisplayName": "[Поролон] (ST-2218 (2000x1600x20))",
+        "qty": 1,
+        "odooTemplateId": 19,
+        "odooVariantId": 547
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №5) [Поролон] (ST-2218 (2000x1600x20))",
+          "workcenterName": "Цех №5 Порезка Поролон",
+          "priceRate": 60,
+          "odooWorkcenterId": 6
+        }
+      ],
+      "components": [
         {
           "templateName": "[Поролон]",
           "attributes": [
@@ -618,16 +704,7 @@
           "odooVariantId": 330,
           "odooUomId": 8
         }
-      ],
-      "expand": {
-        "Диван Пружинний Блок": [
-          "Посиленний",
-          "Звичайний"
-        ],
-        "Диван Розмір Бильця❌": [
-          "❌"
-        ]
-      }
+      ]
     },
     {
       "product": {
@@ -676,7 +753,41 @@
           "odooTemplateId": 19,
           "odooVariantId": 1778,
           "odooUomId": 15
-        },
+        }
+      ],
+      "expand": {
+        "Диван Пружинний Блок": [
+          "Посиленний",
+          "Звичайний"
+        ],
+        "Диван Розмір Бильця❌": [
+          "❌"
+        ]
+      }
+    },
+    {
+      "product": {
+        "templateName": "[Поролон]",
+        "attributes": [
+          {
+            "attributeName": "Поролон",
+            "value": "ST-2218 (2000x1600x20)"
+          }
+        ],
+        "variantDisplayName": "[Поролон] (ST-2218 (2000x1600x20))",
+        "qty": 1,
+        "odooTemplateId": 19,
+        "odooVariantId": 547
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №5) [Поролон] (ST-2218 (2000x1600x20))",
+          "workcenterName": "Цех №5 Порезка Поролон",
+          "priceRate": 60,
+          "odooWorkcenterId": 6
+        }
+      ],
+      "components": [
         {
           "templateName": "[Поролон]",
           "attributes": [
@@ -767,16 +878,7 @@
           "odooVariantId": 330,
           "odooUomId": 8
         }
-      ],
-      "expand": {
-        "Диван Пружинний Блок": [
-          "Посиленний",
-          "Звичайний"
-        ],
-        "Диван Розмір Бильця❌": [
-          "❌"
-        ]
-      }
+      ]
     },
     {
       "product": {
@@ -937,7 +1039,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 24,
-          "odooVariantId": 2885,
+          "odooVariantId": 522,
           "odooUomId": 1
         }
       ],
@@ -959,12 +1061,8 @@
     },
     {
       "product": {
-        "templateName": "🧩[Чохол - нарізані матеріали]",
+        "templateName": "🧩[Чохол - нарізані матеріали Д.Доррі Механізм]",
         "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Д.Доррі Механізм"
-          },
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
@@ -974,13 +1072,12 @@
             "value": "%Диван Розмір Бильця❌%"
           }
         ],
-        "variantDisplayName": "🧩[Чохол - нарізані матеріали] (Д.Доррі Механізм, %Тканина%, %Диван Розмір Бильця❌%)",
-        "qty": 1,
-        "odooTemplateId": 43
+        "variantDisplayName": "🧩[Чохол - нарізані матеріали Д.Доррі Механізм] (%Тканина%, %Диван Розмір Бильця❌%)",
+        "qty": 1
       },
       "operations": [
         {
-          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали] (Д.Доррі Механізм, %Тканина%, %Диван Розмір Бильця❌%)",
+          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали Д.Доррі Механізм] (%Тканина%, %Диван Розмір Бильця❌%)",
           "workcenterName": "Цех №7 Закройка Тканини",
           "priceRate": 360,
           "odooWorkcenterId": 7
@@ -1129,12 +1226,8 @@
     },
     {
       "product": {
-        "templateName": "🪤[Чохол - напівфабрикат]",
+        "templateName": "🪤[Чохол - напівфабрикат Д.Доррі Механізм]",
         "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Д.Доррі Механізм"
-          },
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
@@ -1144,13 +1237,12 @@
             "value": "%Диван Розмір Бильця❌%"
           }
         ],
-        "variantDisplayName": "🪤[Чохол - напівфабрикат] (Д.Доррі Механізм, %Тканина%, %Диван Розмір Бильця❌%)",
-        "qty": 1,
-        "odooTemplateId": 34
+        "variantDisplayName": "🪤[Чохол - напівфабрикат Д.Доррі Механізм] (%Тканина%, %Диван Розмір Бильця❌%)",
+        "qty": 1
       },
       "operations": [
         {
-          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат] (Д.Доррі Механізм, %Тканина%, %Диван Розмір Бильця❌%)",
+          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат Д.Доррі Механізм] (%Тканина%, %Диван Розмір Бильця❌%)",
           "workcenterName": "Цех №8 Швейка",
           "priceRate": 700,
           "odooWorkcenterId": 8
@@ -1158,12 +1250,8 @@
       ],
       "components": [
         {
-          "templateName": "🧩[Чохол - нарізані матеріали]",
+          "templateName": "🧩[Чохол - нарізані матеріали Д.Доррі Механізм]",
           "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Д.Доррі Механізм"
-            },
             {
               "attributeName": "Тканина",
               "value": "%Тканина%"
@@ -1176,7 +1264,6 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 43,
           "odooUomId": 1
         }
       ],
@@ -1669,12 +1756,8 @@
           "odooUomId": 1
         },
         {
-          "templateName": "🪤[Чохол - напівфабрикат]",
+          "templateName": "🪤[Чохол - напівфабрикат Д.Доррі Механізм]",
           "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Д.Доррі Механізм"
-            },
             {
               "attributeName": "Тканина",
               "value": "%Тканина%"
@@ -1687,7 +1770,6 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 34,
           "odooUomId": 1
         },
         {

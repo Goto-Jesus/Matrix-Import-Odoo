@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Угол Лофт-3 Колеса.md",
-  "generatedAt": "2026-07-15T15:25:50.528Z",
+  "generatedAt": "2026-07-15T21:21:24.232Z",
   "boms": [
     {
       "product": {
@@ -34,7 +34,31 @@
           "odooTemplateId": 35,
           "odooVariantId": 59,
           "odooUomId": 30
-        },
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪵[Каркас - нарізана деревина]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "М.Ч.Лофт"
+          }
+        ],
+        "variantDisplayName": "🪵[Каркас - нарізана деревина] (М.Ч.Лофт)",
+        "qty": 1,
+        "odooTemplateId": 49
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №1) 🪵[Каркас - нарізана деревина] (М.Ч.Лофт)",
+          "workcenterName": "Цех №1 Дерева (Нарізка)",
+          "priceRate": 0,
+          "odooWorkcenterId": 19
+        }
+      ],
+      "components": [
         {
           "templateName": "Дерево",
           "attributes": [],
@@ -44,7 +68,35 @@
           "odooTemplateId": 35,
           "odooVariantId": 59,
           "odooUomId": 30
-        },
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪵[Бильце - нарізана деревина]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Б.Лофт"
+          },
+          {
+            "attributeName": "Диван Розмір Бильця",
+            "value": "%Диван Розмір Бильця%"
+          }
+        ],
+        "variantDisplayName": "🪵[Бильце - нарізана деревина] (Б.Лофт, %Диван Розмір Бильця%)",
+        "qty": 1,
+        "odooTemplateId": 179
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №1) 🪵[Бильце - нарізана деревина] (Б.Лофт, %Диван Розмір Бильця%)",
+          "workcenterName": "Цех №1 Дерева (Нарізка)",
+          "priceRate": 0,
+          "odooWorkcenterId": 19
+        }
+      ],
+      "components": [
         {
           "templateName": "Дерево",
           "attributes": [],
@@ -55,7 +107,13 @@
           "odooVariantId": 59,
           "odooUomId": 30
         }
-      ]
+      ],
+      "expand": {
+        "Диван Розмір Бильця": [
+          "Зменшені Бильця",
+          "Звичайні Бильця"
+        ]
+      }
     },
     {
       "product": {
@@ -224,6 +282,30 @@
           "odooWorkcenterId": 21
         }
       ],
+      "components": [],
+      "expand": {
+        "Дно Каркасу❌": [
+          "❌"
+        ]
+      }
+    },
+    {
+      "product": {
+        "templateName": "[ДСП]",
+        "attributes": [],
+        "variantDisplayName": "[ДСП]",
+        "qty": 1,
+        "odooTemplateId": 13,
+        "odooVariantId": 31
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №2-2) [ДСП]",
+          "workcenterName": "Цех №2-2 ДСП (Нарізка Каркас)",
+          "priceRate": 0,
+          "odooWorkcenterId": 21
+        }
+      ],
       "components": [
         {
           "templateName": "[ДВП]",
@@ -265,12 +347,7 @@
           "odooVariantId": 325,
           "odooUomId": 10
         }
-      ],
-      "expand": {
-        "Дно Каркасу❌": [
-          "❌"
-        ]
-      }
+      ]
     },
     {
       "product": {
@@ -797,6 +874,7 @@
           "uom": "кг",
           "operationIndex": 0,
           "odooTemplateId": 19,
+          "odooVariantId": 16249,
           "odooUomId": 15
         },
         {
@@ -946,6 +1024,7 @@
           "uom": "кг",
           "operationIndex": 0,
           "odooTemplateId": 19,
+          "odooVariantId": 16249,
           "odooUomId": 15
         },
         {
@@ -1224,7 +1303,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 24,
-          "odooVariantId": 2885,
+          "odooVariantId": 522,
           "odooUomId": 1
         },
         {
@@ -1261,12 +1340,8 @@
     },
     {
       "product": {
-        "templateName": "🧩[Чохол - нарізані матеріали]",
+        "templateName": "🧩[Чохол - нарізані матеріали Угол Лофт-3 Колеса]",
         "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Угол Лофт-3 Колеса"
-          },
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
@@ -1276,13 +1351,12 @@
             "value": "%Диван Розмір Бильця%"
           }
         ],
-        "variantDisplayName": "🧩[Чохол - нарізані матеріали] (Угол Лофт-3 Колеса, %Тканина%, %Диван Розмір Бильця%)",
-        "qty": 1,
-        "odooTemplateId": 43
+        "variantDisplayName": "🧩[Чохол - нарізані матеріали Угол Лофт-3 Колеса] (%Тканина%, %Диван Розмір Бильця%)",
+        "qty": 1
       },
       "operations": [
         {
-          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали] (Угол Лофт-3 Колеса, %Тканина%, %Диван Розмір Бильця%)",
+          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали Угол Лофт-3 Колеса] (%Тканина%, %Диван Розмір Бильця%)",
           "workcenterName": "Цех №7 Закройка Тканини",
           "priceRate": 240,
           "odooWorkcenterId": 7
@@ -1417,12 +1491,8 @@
     },
     {
       "product": {
-        "templateName": "🪤[Чохол - напівфабрикат]",
+        "templateName": "🪤[Чохол - напівфабрикат Угол Лофт-3 Колеса]",
         "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Угол Лофт-3 Колеса"
-          },
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
@@ -1432,13 +1502,12 @@
             "value": "%Диван Розмір Бильця%"
           }
         ],
-        "variantDisplayName": "🪤[Чохол - напівфабрикат] (Угол Лофт-3 Колеса, %Тканина%, %Диван Розмір Бильця%)",
-        "qty": 1,
-        "odooTemplateId": 34
+        "variantDisplayName": "🪤[Чохол - напівфабрикат Угол Лофт-3 Колеса] (%Тканина%, %Диван Розмір Бильця%)",
+        "qty": 1
       },
       "operations": [
         {
-          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат] (Угол Лофт-3 Колеса, %Тканина%, %Диван Розмір Бильця%)",
+          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат Угол Лофт-3 Колеса] (%Тканина%, %Диван Розмір Бильця%)",
           "workcenterName": "Цех №8 Швейка",
           "priceRate": 500,
           "odooWorkcenterId": 8
@@ -1446,12 +1515,8 @@
       ],
       "components": [
         {
-          "templateName": "🧩[Чохол - нарізані матеріали]",
+          "templateName": "🧩[Чохол - нарізані матеріали Угол Лофт-3 Колеса]",
           "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Угол Лофт-3 Колеса"
-            },
             {
               "attributeName": "Тканина",
               "value": "%Тканина%"
@@ -1464,7 +1529,6 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 43,
           "odooUomId": 1
         }
       ],
@@ -1784,12 +1848,8 @@
           "odooUomId": 1
         },
         {
-          "templateName": "🪤[Чохол - напівфабрикат]",
+          "templateName": "🪤[Чохол - напівфабрикат Угол Лофт-3 Колеса]",
           "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Угол Лофт-3 Колеса"
-            },
             {
               "attributeName": "Тканина",
               "value": "%Тканина%"
@@ -1802,7 +1862,6 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 34,
           "odooUomId": 1
         },
         {

@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Нео-3 Колеса.md",
-  "generatedAt": "2026-07-15T15:25:19.168Z",
+  "generatedAt": "2026-07-15T21:20:04.143Z",
   "boms": [
     {
       "product": {
@@ -34,7 +34,35 @@
           "odooTemplateId": 35,
           "odooVariantId": 59,
           "odooUomId": 30
-        },
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪵[Бильце - нарізана деревина]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Б.Нео"
+          },
+          {
+            "attributeName": "Диван Розмір Бильця",
+            "value": "%Диван Розмір Бильця%"
+          }
+        ],
+        "variantDisplayName": "🪵[Бильце - нарізана деревина] (Б.Нео, %Диван Розмір Бильця%)",
+        "qty": 1,
+        "odooTemplateId": 179
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №1) 🪵[Бильце - нарізана деревина] (Б.Нео, %Диван Розмір Бильця%)",
+          "workcenterName": "Цех №1 Дерева (Нарізка)",
+          "priceRate": 5,
+          "odooWorkcenterId": 19
+        }
+      ],
+      "components": [
         {
           "templateName": "Дерево",
           "attributes": [],
@@ -45,7 +73,13 @@
           "odooVariantId": 59,
           "odooUomId": 30
         }
-      ]
+      ],
+      "expand": {
+        "Диван Розмір Бильця": [
+          "Зменшені Бильця",
+          "Звичайні Бильця"
+        ]
+      }
     },
     {
       "product": {
@@ -817,7 +851,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 24,
-          "odooVariantId": 2885,
+          "odooVariantId": 522,
           "odooUomId": 1
         }
       ],
@@ -840,12 +874,8 @@
     },
     {
       "product": {
-        "templateName": "🧩[Чохол - нарізані матеріали]",
+        "templateName": "🧩[Чохол - нарізані матеріали Д.Нео-3 Колеса]",
         "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Д.Нео-3 Колеса"
-          },
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
@@ -855,13 +885,12 @@
             "value": "%Диван Розмір Бильця%"
           }
         ],
-        "variantDisplayName": "🧩[Чохол - нарізані матеріали] (Д.Нео-3 Колеса, %Тканина%, %Диван Розмір Бильця%)",
-        "qty": 1,
-        "odooTemplateId": 43
+        "variantDisplayName": "🧩[Чохол - нарізані матеріали Д.Нео-3 Колеса] (%Тканина%, %Диван Розмір Бильця%)",
+        "qty": 1
       },
       "operations": [
         {
-          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали] (Д.Нео-3 Колеса, %Тканина%, %Диван Розмір Бильця%)",
+          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали Д.Нео-3 Колеса] (%Тканина%, %Диван Розмір Бильця%)",
           "workcenterName": "Цех №7 Закройка Тканини",
           "priceRate": 500,
           "odooWorkcenterId": 7
@@ -1011,12 +1040,8 @@
     },
     {
       "product": {
-        "templateName": "🪤[Чохол - напівфабрикат]",
+        "templateName": "🪤[Чохол - напівфабрикат Д.Нео-3 Колеса]",
         "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Д.Нео-3 Колеса"
-          },
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
@@ -1026,13 +1051,12 @@
             "value": "%Диван Розмір Бильця%"
           }
         ],
-        "variantDisplayName": "🪤[Чохол - напівфабрикат] (Д.Нео-3 Колеса, %Тканина%, %Диван Розмір Бильця%)",
-        "qty": 1,
-        "odooTemplateId": 34
+        "variantDisplayName": "🪤[Чохол - напівфабрикат Д.Нео-3 Колеса] (%Тканина%, %Диван Розмір Бильця%)",
+        "qty": 1
       },
       "operations": [
         {
-          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат] (Д.Нео-3 Колеса, %Тканина%, %Диван Розмір Бильця%)",
+          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат Д.Нео-3 Колеса] (%Тканина%, %Диван Розмір Бильця%)",
           "workcenterName": "Цех №8 Швейка",
           "priceRate": 0,
           "odooWorkcenterId": 8
@@ -1040,12 +1064,8 @@
       ],
       "components": [
         {
-          "templateName": "🧩[Чохол - нарізані матеріали]",
+          "templateName": "🧩[Чохол - нарізані матеріали Д.Нео-3 Колеса]",
           "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Д.Нео-3 Колеса"
-            },
             {
               "attributeName": "Тканина",
               "value": "%Тканина%"
@@ -1058,7 +1078,6 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 43,
           "odooUomId": 1
         }
       ],
@@ -1541,12 +1560,8 @@
           "odooUomId": 1
         },
         {
-          "templateName": "🪤[Чохол - напівфабрикат]",
+          "templateName": "🪤[Чохол - напівфабрикат Д.Нео-3 Колеса]",
           "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Д.Нео-3 Колеса"
-            },
             {
               "attributeName": "Тканина",
               "value": "%Тканина%"
@@ -1559,7 +1574,6 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 34,
           "odooUomId": 1
         },
         {

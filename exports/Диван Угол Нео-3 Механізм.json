@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Угол Нео-3 Механізм.md",
-  "generatedAt": "2026-07-15T15:26:07.259Z",
+  "generatedAt": "2026-07-15T21:22:27.161Z",
   "boms": [
     {
       "product": {
@@ -34,7 +34,32 @@
           "odooTemplateId": 35,
           "odooVariantId": 59,
           "odooUomId": 30
-        },
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪵[Каркас - нарізана деревина]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "М Ч Нео"
+          }
+        ],
+        "variantDisplayName": "🪵[Каркас - нарізана деревина] (М Ч Нео)",
+        "qty": 1,
+        "odooTemplateId": 49,
+        "odooVariantId": 502
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №1) 🪵[Каркас - нарізана деревина] (М Ч Нео)",
+          "workcenterName": "Цех №1 Дерева (Нарізка)",
+          "priceRate": 0,
+          "odooWorkcenterId": 19
+        }
+      ],
+      "components": [
         {
           "templateName": "Дерево",
           "attributes": [],
@@ -44,7 +69,35 @@
           "odooTemplateId": 35,
           "odooVariantId": 59,
           "odooUomId": 30
-        },
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪵[Бильце - нарізана деревина]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Б.Нео"
+          },
+          {
+            "attributeName": "Диван Розмір Бильця",
+            "value": "%Диван Розмір Бильця%"
+          }
+        ],
+        "variantDisplayName": "🪵[Бильце - нарізана деревина] (Б.Нео, %Диван Розмір Бильця%)",
+        "qty": 1,
+        "odooTemplateId": 179
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №1) 🪵[Бильце - нарізана деревина] (Б.Нео, %Диван Розмір Бильця%)",
+          "workcenterName": "Цех №1 Дерева (Нарізка)",
+          "priceRate": 0,
+          "odooWorkcenterId": 19
+        }
+      ],
+      "components": [
         {
           "templateName": "Дерево",
           "attributes": [],
@@ -55,7 +108,13 @@
           "odooVariantId": 59,
           "odooUomId": 30
         }
-      ]
+      ],
+      "expand": {
+        "Диван Розмір Бильця": [
+          "Зменшені Бильця",
+          "Звичайні Бильця"
+        ]
+      }
     },
     {
       "product": {
@@ -542,7 +601,6 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 177,
-          "odooVariantId": 510,
           "odooUomId": 1
         },
         {
@@ -1047,7 +1105,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 24,
-          "odooVariantId": 2885,
+          "odooVariantId": 522,
           "odooUomId": 1
         },
         {
@@ -1085,12 +1143,8 @@
     },
     {
       "product": {
-        "templateName": "🧩[Чохол - нарізані матеріали]",
+        "templateName": "🧩[Чохол - нарізані матеріали Угол Нео-3 Механізм]",
         "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Угол Нео-3 Механізм"
-          },
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
@@ -1100,13 +1154,12 @@
             "value": "%Диван Розмір Бильця%"
           }
         ],
-        "variantDisplayName": "🧩[Чохол - нарізані матеріали] (Угол Нео-3 Механізм, %Тканина%, %Диван Розмір Бильця%)",
-        "qty": 1,
-        "odooTemplateId": 43
+        "variantDisplayName": "🧩[Чохол - нарізані матеріали Угол Нео-3 Механізм] (%Тканина%, %Диван Розмір Бильця%)",
+        "qty": 1
       },
       "operations": [
         {
-          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали] (Угол Нео-3 Механізм, %Тканина%, %Диван Розмір Бильця%)",
+          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали Угол Нео-3 Механізм] (%Тканина%, %Диван Розмір Бильця%)",
           "workcenterName": "Цех №7 Закройка Тканини",
           "priceRate": 500,
           "odooWorkcenterId": 7
@@ -1256,12 +1309,8 @@
     },
     {
       "product": {
-        "templateName": "🪤[Чохол - напівфабрикат]",
+        "templateName": "🪤[Чохол - напівфабрикат Угол Нео-3 Механізм]",
         "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Угол Нео-3 Механізм"
-          },
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
@@ -1271,13 +1320,12 @@
             "value": "%Диван Розмір Бильця%"
           }
         ],
-        "variantDisplayName": "🪤[Чохол - напівфабрикат] (Угол Нео-3 Механізм, %Тканина%, %Диван Розмір Бильця%)",
-        "qty": 1,
-        "odooTemplateId": 34
+        "variantDisplayName": "🪤[Чохол - напівфабрикат Угол Нео-3 Механізм] (%Тканина%, %Диван Розмір Бильця%)",
+        "qty": 1
       },
       "operations": [
         {
-          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат] (Угол Нео-3 Механізм, %Тканина%, %Диван Розмір Бильця%)",
+          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат Угол Нео-3 Механізм] (%Тканина%, %Диван Розмір Бильця%)",
           "workcenterName": "Цех №8 Швейка",
           "priceRate": 960,
           "odooWorkcenterId": 8
@@ -1285,12 +1333,8 @@
       ],
       "components": [
         {
-          "templateName": "🧩[Чохол - нарізані матеріали]",
+          "templateName": "🧩[Чохол - нарізані матеріали Угол Нео-3 Механізм]",
           "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Угол Нео-3 Механізм"
-            },
             {
               "attributeName": "Тканина",
               "value": "%Тканина%"
@@ -1303,7 +1347,6 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 43,
           "odooUomId": 1
         }
       ],
@@ -1786,12 +1829,8 @@
           "odooUomId": 1
         },
         {
-          "templateName": "🪤[Чохол - напівфабрикат]",
+          "templateName": "🪤[Чохол - напівфабрикат Угол Нео-3 Механізм]",
           "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Угол Нео-3 Механізм"
-            },
             {
               "attributeName": "Тканина",
               "value": "%Тканина%"
@@ -1804,7 +1843,6 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 34,
           "odooUomId": 1
         },
         {

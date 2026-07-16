@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Угол Блісс.md",
-  "generatedAt": "2026-07-15T15:25:33.191Z",
+  "generatedAt": "2026-07-15T21:20:40.141Z",
   "boms": [
     {
       "product": {
@@ -34,7 +34,35 @@
           "odooTemplateId": 35,
           "odooVariantId": 59,
           "odooUomId": 30
-        },
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪵[Бильце - нарізана деревина]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Б.Лофт"
+          },
+          {
+            "attributeName": "Диван Розмір Бильця",
+            "value": "%Диван Розмір Бильця%"
+          }
+        ],
+        "variantDisplayName": "🪵[Бильце - нарізана деревина] (Б.Лофт, %Диван Розмір Бильця%)",
+        "qty": 1,
+        "odooTemplateId": 179
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №1) 🪵[Бильце - нарізана деревина] (Б.Лофт, %Диван Розмір Бильця%)",
+          "workcenterName": "Цех №1 Дерева (Нарізка)",
+          "priceRate": 5,
+          "odooWorkcenterId": 19
+        }
+      ],
+      "components": [
         {
           "templateName": "Дерево",
           "attributes": [],
@@ -45,7 +73,13 @@
           "odooVariantId": 59,
           "odooUomId": 30
         }
-      ]
+      ],
+      "expand": {
+        "Диван Розмір Бильця": [
+          "Зменшені Бильця",
+          "Звичайні Бильця"
+        ]
+      }
     },
     {
       "product": {
@@ -959,12 +993,8 @@
     },
     {
       "product": {
-        "templateName": "🧩[Чохол - нарізані матеріали]",
+        "templateName": "🧩[Чохол - нарізані матеріали Угол Блісс]",
         "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Угол Блісс"
-          },
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
@@ -974,13 +1004,12 @@
             "value": "%Диван Розмір Бильця%"
           }
         ],
-        "variantDisplayName": "🧩[Чохол - нарізані матеріали] (Угол Блісс, %Тканина%, %Диван Розмір Бильця%)",
-        "qty": 1,
-        "odooTemplateId": 43
+        "variantDisplayName": "🧩[Чохол - нарізані матеріали Угол Блісс] (%Тканина%, %Диван Розмір Бильця%)",
+        "qty": 1
       },
       "operations": [
         {
-          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали] (Угол Блісс, %Тканина%, %Диван Розмір Бильця%)",
+          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали Угол Блісс] (%Тканина%, %Диван Розмір Бильця%)",
           "workcenterName": "Цех №7 Закройка Тканини",
           "priceRate": 245,
           "odooWorkcenterId": 7
@@ -1115,12 +1144,8 @@
     },
     {
       "product": {
-        "templateName": "🪤[Чохол - напівфабрикат]",
+        "templateName": "🪤[Чохол - напівфабрикат Угол Блісс]",
         "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Угол Блісс"
-          },
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
@@ -1130,13 +1155,12 @@
             "value": "%Диван Розмір Бильця%"
           }
         ],
-        "variantDisplayName": "🪤[Чохол - напівфабрикат] (Угол Блісс, %Тканина%, %Диван Розмір Бильця%)",
-        "qty": 1,
-        "odooTemplateId": 34
+        "variantDisplayName": "🪤[Чохол - напівфабрикат Угол Блісс] (%Тканина%, %Диван Розмір Бильця%)",
+        "qty": 1
       },
       "operations": [
         {
-          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат] (Угол Блісс, %Тканина%, %Диван Розмір Бильця%)",
+          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат Угол Блісс] (%Тканина%, %Диван Розмір Бильця%)",
           "workcenterName": "Цех №8 Швейка",
           "priceRate": 450,
           "odooWorkcenterId": 8
@@ -1144,12 +1168,8 @@
       ],
       "components": [
         {
-          "templateName": "🧩[Чохол - нарізані матеріали]",
+          "templateName": "🧩[Чохол - нарізані матеріали Угол Блісс]",
           "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Угол Блісс"
-            },
             {
               "attributeName": "Тканина",
               "value": "%Тканина%"
@@ -1162,7 +1182,6 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 43,
           "odooUomId": 1
         }
       ],
@@ -1647,12 +1666,8 @@
           "odooUomId": 1
         },
         {
-          "templateName": "🪤[Чохол - напівфабрикат]",
+          "templateName": "🪤[Чохол - напівфабрикат Угол Блісс]",
           "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Угол Блісс"
-            },
             {
               "attributeName": "Тканина",
               "value": "%Тканина%"
@@ -1665,7 +1680,6 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 34,
           "odooUomId": 1
         },
         {

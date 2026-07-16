@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Угол Нео-2 Механізм.md",
-  "generatedAt": "2026-07-15T15:26:00.443Z",
+  "generatedAt": "2026-07-15T21:21:47.642Z",
   "boms": [
     {
       "product": {
@@ -34,7 +34,32 @@
           "odooTemplateId": 35,
           "odooVariantId": 59,
           "odooUomId": 30
-        },
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪵[Каркас - нарізана деревина]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "М Ч Нео"
+          }
+        ],
+        "variantDisplayName": "🪵[Каркас - нарізана деревина] (М Ч Нео)",
+        "qty": 1,
+        "odooTemplateId": 49,
+        "odooVariantId": 502
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №1) 🪵[Каркас - нарізана деревина] (М Ч Нео)",
+          "workcenterName": "Цех №1 Дерева (Нарізка)",
+          "priceRate": 120,
+          "odooWorkcenterId": 19
+        }
+      ],
+      "components": [
         {
           "templateName": "Дерево",
           "attributes": [],
@@ -44,7 +69,35 @@
           "odooTemplateId": 35,
           "odooVariantId": 59,
           "odooUomId": 30
-        },
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪵[Бильце - нарізана деревина]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Б.Нео"
+          },
+          {
+            "attributeName": "Диван Розмір Бильця",
+            "value": "%Диван Розмір Бильця%"
+          }
+        ],
+        "variantDisplayName": "🪵[Бильце - нарізана деревина] (Б.Нео, %Диван Розмір Бильця%)",
+        "qty": 1,
+        "odooTemplateId": 179
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №1) 🪵[Бильце - нарізана деревина] (Б.Нео, %Диван Розмір Бильця%)",
+          "workcenterName": "Цех №1 Дерева (Нарізка)",
+          "priceRate": 0,
+          "odooWorkcenterId": 19
+        }
+      ],
+      "components": [
         {
           "templateName": "Дерево",
           "attributes": [],
@@ -55,7 +108,13 @@
           "odooVariantId": 59,
           "odooUomId": 30
         }
-      ]
+      ],
+      "expand": {
+        "Диван Розмір Бильця": [
+          "Зменшені Бильця",
+          "Звичайні Бильця"
+        ]
+      }
     },
     {
       "product": {
@@ -492,7 +551,47 @@
           "operationIndex": 0,
           "odooTemplateId": 66,
           "odooUomId": 1
-        },
+        }
+      ],
+      "expand": {
+        "Колір Ламінату❌": [
+          "❌"
+        ],
+        "Дно Каркасу❌": [
+          "❌"
+        ]
+      }
+    },
+    {
+      "product": {
+        "templateName": "🪤[Каркас - напівфабрикат]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "М Ч Нео"
+          },
+          {
+            "attributeName": "Колір Ламінату❌",
+            "value": "%Колір Ламінату❌%"
+          },
+          {
+            "attributeName": "Дно Каркасу❌",
+            "value": "%Дно Каркасу❌%"
+          }
+        ],
+        "variantDisplayName": "🪤[Каркас - напівфабрикат] (М Ч Нео, %Колір Ламінату❌%, %Дно Каркасу❌%)",
+        "qty": 1,
+        "odooTemplateId": 33
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №4-2) 🪤[Каркас - напівфабрикат] (М Ч Нео, %Колір Ламінату❌%, %Дно Каркасу❌%)",
+          "workcenterName": "Цех №4-2 Сборка Каркас",
+          "priceRate": 69,
+          "odooWorkcenterId": 26
+        }
+      ],
+      "components": [
         {
           "templateName": "🧩[Каркас - нарізані деталі]",
           "attributes": [
@@ -505,7 +604,6 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 177,
-          "odooVariantId": 510,
           "odooUomId": 1
         },
         {
@@ -1010,7 +1108,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 24,
-          "odooVariantId": 2885,
+          "odooVariantId": 522,
           "odooUomId": 1
         },
         {
@@ -1048,12 +1146,8 @@
     },
     {
       "product": {
-        "templateName": "🧩[Чохол - нарізані матеріали]",
+        "templateName": "🧩[Чохол - нарізані матеріали Угол Нео-2 Механізм]",
         "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Угол Нео-2 Механізм"
-          },
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
@@ -1063,13 +1157,12 @@
             "value": "%Диван Розмір Бильця%"
           }
         ],
-        "variantDisplayName": "🧩[Чохол - нарізані матеріали] (Угол Нео-2 Механізм, %Тканина%, %Диван Розмір Бильця%)",
-        "qty": 1,
-        "odooTemplateId": 43
+        "variantDisplayName": "🧩[Чохол - нарізані матеріали Угол Нео-2 Механізм] (%Тканина%, %Диван Розмір Бильця%)",
+        "qty": 1
       },
       "operations": [
         {
-          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали] (Угол Нео-2 Механізм, %Тканина%, %Диван Розмір Бильця%)",
+          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали Угол Нео-2 Механізм] (%Тканина%, %Диван Розмір Бильця%)",
           "workcenterName": "Цех №7 Закройка Тканини",
           "priceRate": 410,
           "odooWorkcenterId": 7
@@ -1219,12 +1312,8 @@
     },
     {
       "product": {
-        "templateName": "🪤[Чохол - напівфабрикат]",
+        "templateName": "🪤[Чохол - напівфабрикат Угол Нео-2 Механізм]",
         "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Угол Нео-2 Механізм"
-          },
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
@@ -1234,13 +1323,12 @@
             "value": "%Диван Розмір Бильця%"
           }
         ],
-        "variantDisplayName": "🪤[Чохол - напівфабрикат] (Угол Нео-2 Механізм, %Тканина%, %Диван Розмір Бильця%)",
-        "qty": 1,
-        "odooTemplateId": 34
+        "variantDisplayName": "🪤[Чохол - напівфабрикат Угол Нео-2 Механізм] (%Тканина%, %Диван Розмір Бильця%)",
+        "qty": 1
       },
       "operations": [
         {
-          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат] (Угол Нео-2 Механізм, %Тканина%, %Диван Розмір Бильця%)",
+          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат Угол Нео-2 Механізм] (%Тканина%, %Диван Розмір Бильця%)",
           "workcenterName": "Цех №8 Швейка",
           "priceRate": 700,
           "odooWorkcenterId": 8
@@ -1248,12 +1336,8 @@
       ],
       "components": [
         {
-          "templateName": "🧩[Чохол - нарізані матеріали]",
+          "templateName": "🧩[Чохол - нарізані матеріали Угол Нео-2 Механізм]",
           "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Угол Нео-2 Механізм"
-            },
             {
               "attributeName": "Тканина",
               "value": "%Тканина%"
@@ -1266,7 +1350,6 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 43,
           "odooUomId": 1
         }
       ],
@@ -1701,20 +1784,8 @@
         {
           "name": "Операція (Цех №9) Диван Угол Нео-2 Механізм (%Тканина%, %Диван Пружинний Блок%, %Диван Наповнювач Подушек%, %Диван Розмір Бильця%)",
           "workcenterName": "Цех №9 Оббивки",
-          "priceRate": 380,
-          "odooWorkcenterId": 10
-        },
-        {
-          "name": "Операція (Цех №10) Диван Угол Нео-2 Механізм (%Тканина%, %Диван Пружинний Блок%, %Диван Наповнювач Подушек%, %Диван Розмір Бильця%)",
-          "workcenterName": "Цех №10 Упаковки",
-          "priceRate": 160,
-          "odooWorkcenterId": 11
-        },
-        {
-          "name": "ВТК Диван Угол Нео-2 Механізм (%Тканина%, %Диван Пружинний Блок%, %Диван Наповнювач Подушек%, %Диван Розмір Бильця%)",
-          "workcenterName": "ВТК",
           "priceRate": 100,
-          "odooWorkcenterId": 14
+          "odooWorkcenterId": 10
         }
       ],
       "components": [
@@ -1749,12 +1820,8 @@
           "odooUomId": 1
         },
         {
-          "templateName": "🪤[Чохол - напівфабрикат]",
+          "templateName": "🪤[Чохол - напівфабрикат Угол Нео-2 Механізм]",
           "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Угол Нео-2 Механізм"
-            },
             {
               "attributeName": "Тканина",
               "value": "%Тканина%"
@@ -1767,7 +1834,6 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 34,
           "odooUomId": 1
         },
         {
@@ -1790,102 +1856,6 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 67,
-          "odooUomId": 1
-        },
-        {
-          "templateName": "[Колесо]",
-          "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "h32"
-            }
-          ],
-          "qty": 8,
-          "uom": "шт",
-          "operationIndex": 0,
-          "odooTemplateId": 6,
-          "odooVariantId": 21,
-          "odooUomId": 1
-        },
-        {
-          "templateName": "Стопор",
-          "attributes": [],
-          "qty": 4,
-          "uom": "шт",
-          "operationIndex": 0,
-          "odooTemplateId": 7,
-          "odooVariantId": 22,
-          "odooUomId": 1
-        },
-        {
-          "templateName": "[Петля]",
-          "attributes": [
-            {
-              "attributeName": "Петля",
-              "value": "К113.01"
-            }
-          ],
-          "qty": 4,
-          "uom": "шт",
-          "operationIndex": 0,
-          "odooTemplateId": 8,
-          "odooVariantId": 8927,
-          "odooUomId": 1
-        },
-        {
-          "templateName": "[Ніжка]",
-          "attributes": [
-            {
-              "attributeName": "Ніжка",
-              "value": "h30"
-            }
-          ],
-          "qty": 16,
-          "uom": "шт",
-          "operationIndex": 0,
-          "odooTemplateId": 10,
-          "odooVariantId": 332,
-          "odooUomId": 1
-        },
-        {
-          "templateName": "Скотч",
-          "attributes": [],
-          "qty": 60,
-          "uom": "m",
-          "operationIndex": 1,
-          "odooTemplateId": 72,
-          "odooVariantId": 188,
-          "odooUomId": 8
-        },
-        {
-          "templateName": "Плівка",
-          "attributes": [],
-          "qty": 2.5,
-          "uom": "кг",
-          "operationIndex": 1,
-          "odooTemplateId": 28,
-          "odooVariantId": 46,
-          "odooUomId": 15
-        },
-        {
-          "templateName": "Картон",
-          "attributes": [],
-          "qty": 4.5,
-          "uom": "m",
-          "operationIndex": 1,
-          "odooTemplateId": 29,
-          "odooVariantId": 47,
-          "odooUomId": 8
-        },
-        {
-          "templateName": "Перевірка Якості",
-          "attributes": [],
-          "qty": 1,
-          "uom": "шт",
-          "operationIndex": 2,
-          "isService": true,
-          "odooTemplateId": 71,
-          "odooVariantId": 187,
           "odooUomId": 1
         }
       ],
@@ -1997,6 +1967,139 @@
           "❌"
         ]
       }
+    },
+    {
+      "product": {
+        "templateName": "[Соединитель]",
+        "attributes": [
+          {
+            "attributeName": "Соединитель",
+            "value": "83 эконом"
+          }
+        ],
+        "variantDisplayName": "[Соединитель] (83 эконом)",
+        "qty": 1,
+        "odooTemplateId": 193,
+        "odooVariantId": 539
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №9) [Соединитель] (83 эконом)",
+          "workcenterName": "Цех №9 Оббивки",
+          "priceRate": 380,
+          "odooWorkcenterId": 10
+        },
+        {
+          "name": "Операція (Цех №10) [Соединитель] (83 эконом)",
+          "workcenterName": "Цех №10 Упаковки",
+          "priceRate": 160,
+          "odooWorkcenterId": 11
+        },
+        {
+          "name": "ВТК [Соединитель] (83 эконом)",
+          "workcenterName": "ВТК",
+          "priceRate": 100,
+          "odooWorkcenterId": 14
+        }
+      ],
+      "components": [
+        {
+          "templateName": "[Колесо]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "h32"
+            }
+          ],
+          "qty": 8,
+          "uom": "шт",
+          "operationIndex": 0,
+          "odooTemplateId": 6,
+          "odooVariantId": 21,
+          "odooUomId": 1
+        },
+        {
+          "templateName": "Стопор",
+          "attributes": [],
+          "qty": 4,
+          "uom": "шт",
+          "operationIndex": 0,
+          "odooTemplateId": 7,
+          "odooVariantId": 22,
+          "odooUomId": 1
+        },
+        {
+          "templateName": "[Петля]",
+          "attributes": [
+            {
+              "attributeName": "Петля",
+              "value": "К113.01"
+            }
+          ],
+          "qty": 4,
+          "uom": "шт",
+          "operationIndex": 0,
+          "odooTemplateId": 8,
+          "odooVariantId": 8927,
+          "odooUomId": 1
+        },
+        {
+          "templateName": "[Ніжка]",
+          "attributes": [
+            {
+              "attributeName": "Ніжка",
+              "value": "h30"
+            }
+          ],
+          "qty": 16,
+          "uom": "шт",
+          "operationIndex": 0,
+          "odooTemplateId": 10,
+          "odooVariantId": 332,
+          "odooUomId": 1
+        },
+        {
+          "templateName": "Скотч",
+          "attributes": [],
+          "qty": 60,
+          "uom": "m",
+          "operationIndex": 1,
+          "odooTemplateId": 72,
+          "odooVariantId": 188,
+          "odooUomId": 8
+        },
+        {
+          "templateName": "Плівка",
+          "attributes": [],
+          "qty": 2.5,
+          "uom": "кг",
+          "operationIndex": 1,
+          "odooTemplateId": 28,
+          "odooVariantId": 46,
+          "odooUomId": 15
+        },
+        {
+          "templateName": "Картон",
+          "attributes": [],
+          "qty": 4.5,
+          "uom": "m",
+          "operationIndex": 1,
+          "odooTemplateId": 29,
+          "odooVariantId": 47,
+          "odooUomId": 8
+        },
+        {
+          "templateName": "Перевірка Якості",
+          "attributes": [],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 2,
+          "isService": true,
+          "odooTemplateId": 71,
+          "odooVariantId": 187,
+          "odooUomId": 1
+        }
+      ]
     }
   ]
 }

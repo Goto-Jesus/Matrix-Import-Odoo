@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Моллі.md",
-  "generatedAt": "2026-07-15T15:25:02.514Z",
+  "generatedAt": "2026-07-15T21:19:14.927Z",
   "boms": [
     {
       "product": {
@@ -13,7 +13,8 @@
         ],
         "variantDisplayName": "🪵[Каркас - нарізана деревина] (Д.Моллі)",
         "qty": 1,
-        "odooTemplateId": 49
+        "odooTemplateId": 49,
+        "odooVariantId": 14398
       },
       "operations": [
         {
@@ -33,7 +34,35 @@
           "odooTemplateId": 35,
           "odooVariantId": 59,
           "odooUomId": 30
-        },
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪵[Бильце - нарізана деревина]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "Б.Моллі"
+          },
+          {
+            "attributeName": "Диван Розмір Бильця❌",
+            "value": "%Диван Розмір Бильця❌%"
+          }
+        ],
+        "variantDisplayName": "🪵[Бильце - нарізана деревина] (Б.Моллі, %Диван Розмір Бильця❌%)",
+        "qty": 1,
+        "odooTemplateId": 179
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №1) 🪵[Бильце - нарізана деревина] (Б.Моллі, %Диван Розмір Бильця❌%)",
+          "workcenterName": "Цех №1 Дерева (Нарізка)",
+          "priceRate": 8,
+          "odooWorkcenterId": 19
+        }
+      ],
+      "components": [
         {
           "templateName": "Дерево",
           "attributes": [],
@@ -44,7 +73,12 @@
           "odooVariantId": 59,
           "odooUomId": 30
         }
-      ]
+      ],
+      "expand": {
+        "Диван Розмір Бильця❌": [
+          "❌"
+        ]
+      }
     },
     {
       "product": {
@@ -180,7 +214,6 @@
             "Дно Каркасу": "ДВП Білий"
           },
           "odooTemplateId": 213,
-          "odooVariantId": 1483,
           "odooUomId": 10
         }
       ],
@@ -268,7 +301,6 @@
             "Дно Каркасу": "ДВП Черновое"
           },
           "odooTemplateId": 213,
-          "odooVariantId": 1482,
           "odooUomId": 10
         }
       ],
@@ -468,6 +500,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 49,
+          "odooVariantId": 14398,
           "odooUomId": 1
         },
         {
@@ -959,12 +992,8 @@
     },
     {
       "product": {
-        "templateName": "🧩[Чохол - нарізані матеріали]",
+        "templateName": "🧩[Чохол - нарізані матеріали Д.Моллі]",
         "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Д.Моллі"
-          },
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
@@ -974,13 +1003,12 @@
             "value": "%Диван Розмір Бильця❌%"
           }
         ],
-        "variantDisplayName": "🧩[Чохол - нарізані матеріали] (Д.Моллі, %Тканина%, %Диван Розмір Бильця❌%)",
-        "qty": 1,
-        "odooTemplateId": 43
+        "variantDisplayName": "🧩[Чохол - нарізані матеріали Д.Моллі] (%Тканина%, %Диван Розмір Бильця❌%)",
+        "qty": 1
       },
       "operations": [
         {
-          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали] (Д.Моллі, %Тканина%, %Диван Розмір Бильця❌%)",
+          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали Д.Моллі] (%Тканина%, %Диван Розмір Бильця❌%)",
           "workcenterName": "Цех №7 Закройка Тканини",
           "priceRate": 380,
           "odooWorkcenterId": 7
@@ -1129,12 +1157,8 @@
     },
     {
       "product": {
-        "templateName": "🪤[Чохол - напівфабрикат]",
+        "templateName": "🪤[Чохол - напівфабрикат Д.Моллі]",
         "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Д.Моллі"
-          },
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
@@ -1144,13 +1168,12 @@
             "value": "%Диван Розмір Бильця❌%"
           }
         ],
-        "variantDisplayName": "🪤[Чохол - напівфабрикат] (Д.Моллі, %Тканина%, %Диван Розмір Бильця❌%)",
-        "qty": 1,
-        "odooTemplateId": 34
+        "variantDisplayName": "🪤[Чохол - напівфабрикат Д.Моллі] (%Тканина%, %Диван Розмір Бильця❌%)",
+        "qty": 1
       },
       "operations": [
         {
-          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат] (Д.Моллі, %Тканина%, %Диван Розмір Бильця❌%)",
+          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат Д.Моллі] (%Тканина%, %Диван Розмір Бильця❌%)",
           "workcenterName": "Цех №8 Швейка",
           "priceRate": 720,
           "odooWorkcenterId": 8
@@ -1158,12 +1181,8 @@
       ],
       "components": [
         {
-          "templateName": "🧩[Чохол - нарізані матеріали]",
+          "templateName": "🧩[Чохол - нарізані матеріали Д.Моллі]",
           "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Д.Моллі"
-            },
             {
               "attributeName": "Тканина",
               "value": "%Тканина%"
@@ -1176,7 +1195,6 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 43,
           "odooUomId": 1
         }
       ],
@@ -1604,7 +1622,8 @@
           }
         ],
         "variantDisplayName": "Диван Моллі (%Тканина%, %Диван Пружинний Блок%, %Диван Наповнювач Подушек%, %Дно Каркасу%)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 224
       },
       "operations": [
         {
@@ -1658,12 +1677,8 @@
           "odooUomId": 1
         },
         {
-          "templateName": "🪤[Чохол - напівфабрикат]",
+          "templateName": "🪤[Чохол - напівфабрикат Д.Моллі]",
           "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Д.Моллі"
-            },
             {
               "attributeName": "Тканина",
               "value": "%Тканина%"
@@ -1676,7 +1691,6 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 34,
           "odooUomId": 1
         },
         {
@@ -1738,6 +1752,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 8,
+          "odooVariantId": 16242,
           "odooUomId": 1
         },
         {

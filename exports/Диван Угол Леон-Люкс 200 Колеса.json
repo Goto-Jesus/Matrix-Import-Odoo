@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Угол Леон-Люкс 200 Колеса.md",
-  "generatedAt": "2026-07-15T15:25:40.297Z",
+  "generatedAt": "2026-07-15T21:21:00.170Z",
   "boms": [
     {
       "product": {
@@ -33,7 +33,31 @@
           "odooTemplateId": 35,
           "odooVariantId": 59,
           "odooUomId": 30
-        },
+        }
+      ]
+    },
+    {
+      "product": {
+        "templateName": "🪵[Каркас - нарізана деревина]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "143П"
+          }
+        ],
+        "variantDisplayName": "🪵[Каркас - нарізана деревина] (143П)",
+        "qty": 1,
+        "odooTemplateId": 49
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №1) 🪵[Каркас - нарізана деревина] (143П)",
+          "workcenterName": "Цех №1 Дерева (Нарізка)",
+          "priceRate": 78,
+          "odooWorkcenterId": 19
+        }
+      ],
+      "components": [
         {
           "templateName": "Дерево",
           "attributes": [],
@@ -381,7 +405,15 @@
           "odooVariantId": 308,
           "odooUomId": 1
         }
-      ]
+      ],
+      "expand": {
+        "Колір Ламінату": [
+          "Венге",
+          "Білий",
+          "Трифе",
+          "Дуб крарт"
+        ]
+      }
     },
     {
       "product": {
@@ -452,7 +484,15 @@
           "odooTemplateId": 18,
           "odooUomId": 1
         }
-      ]
+      ],
+      "expand": {
+        "Колір Ламінату": [
+          "Венге",
+          "Білий",
+          "Трифе",
+          "Дуб крарт"
+        ]
+      }
     },
     {
       "product": {
@@ -498,7 +538,15 @@
           "odooTemplateId": 214,
           "odooUomId": 1
         }
-      ]
+      ],
+      "expand": {
+        "Колір Ламінату": [
+          "Венге",
+          "Білий",
+          "Трифе",
+          "Дуб крарт"
+        ]
+      }
     },
     {
       "product": {
@@ -631,7 +679,52 @@
           "operationIndex": 0,
           "odooTemplateId": 66,
           "odooUomId": 1
-        },
+        }
+      ],
+      "expand": {
+        "Колір Ламінату": [
+          "Венге",
+          "Білий",
+          "Трифе",
+          "Дуб крарт"
+        ],
+        "Дно Каркасу": [
+          "ДВП Черновое",
+          "ДВП Білий",
+          "- без дна"
+        ]
+      }
+    },
+    {
+      "product": {
+        "templateName": "🪤[Каркас - напівфабрикат]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "143П"
+          },
+          {
+            "attributeName": "Колір Ламінату",
+            "value": "%Колір Ламінату%"
+          },
+          {
+            "attributeName": "Дно Каркасу",
+            "value": "%Дно Каркасу%"
+          }
+        ],
+        "variantDisplayName": "🪤[Каркас - напівфабрикат] (143П, %Колір Ламінату%, %Дно Каркасу%)",
+        "qty": 1,
+        "odooTemplateId": 33
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №4-2) 🪤[Каркас - напівфабрикат] (143П, %Колір Ламінату%, %Дно Каркасу%)",
+          "workcenterName": "Цех №4-2 Сборка Каркас",
+          "priceRate": 69,
+          "odooWorkcenterId": 26
+        }
+      ],
+      "components": [
         {
           "templateName": "🧩[Каркас - нарізані деталі]",
           "attributes": [
@@ -684,6 +777,12 @@
         }
       ],
       "expand": {
+        "Колір Ламінату": [
+          "Венге",
+          "Білий",
+          "Трифе",
+          "Дуб крарт"
+        ],
         "Дно Каркасу": [
           "ДВП Черновое",
           "ДВП Білий",
@@ -1151,6 +1250,12 @@
           "Зменшені Бильця",
           "Звичайні Бильця"
         ],
+        "Колір Ламінату": [
+          "Венге",
+          "Білий",
+          "Трифе",
+          "Дуб крарт"
+        ],
         "Дно Каркасу": [
           "ДВП Черновое",
           "ДВП Білий",
@@ -1160,12 +1265,8 @@
     },
     {
       "product": {
-        "templateName": "🧩[Чохол - нарізані матеріали]",
+        "templateName": "🧩[Чохол - нарізані матеріали Угол Леон-Люкс 200 Колеса]",
         "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Угол Леон-Люкс 200 Колеса"
-          },
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
@@ -1175,13 +1276,12 @@
             "value": "%Диван Розмір Бильця%"
           }
         ],
-        "variantDisplayName": "🧩[Чохол - нарізані матеріали] (Угол Леон-Люкс 200 Колеса, %Тканина%, %Диван Розмір Бильця%)",
-        "qty": 1,
-        "odooTemplateId": 43
+        "variantDisplayName": "🧩[Чохол - нарізані матеріали Угол Леон-Люкс 200 Колеса] (%Тканина%, %Диван Розмір Бильця%)",
+        "qty": 1
       },
       "operations": [
         {
-          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали] (Угол Леон-Люкс 200 Колеса, %Тканина%, %Диван Розмір Бильця%)",
+          "name": "Операція (Цех №7) 🧩[Чохол - нарізані матеріали Угол Леон-Люкс 200 Колеса] (%Тканина%, %Диван Розмір Бильця%)",
           "workcenterName": "Цех №7 Закройка Тканини",
           "priceRate": 200,
           "odooWorkcenterId": 7
@@ -1331,12 +1431,8 @@
     },
     {
       "product": {
-        "templateName": "🪤[Чохол - напівфабрикат]",
+        "templateName": "🪤[Чохол - напівфабрикат Угол Леон-Люкс 200 Колеса]",
         "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Угол Леон-Люкс 200 Колеса"
-          },
           {
             "attributeName": "Тканина",
             "value": "%Тканина%"
@@ -1346,13 +1442,12 @@
             "value": "%Диван Розмір Бильця%"
           }
         ],
-        "variantDisplayName": "🪤[Чохол - напівфабрикат] (Угол Леон-Люкс 200 Колеса, %Тканина%, %Диван Розмір Бильця%)",
-        "qty": 1,
-        "odooTemplateId": 34
+        "variantDisplayName": "🪤[Чохол - напівфабрикат Угол Леон-Люкс 200 Колеса] (%Тканина%, %Диван Розмір Бильця%)",
+        "qty": 1
       },
       "operations": [
         {
-          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат] (Угол Леон-Люкс 200 Колеса, %Тканина%, %Диван Розмір Бильця%)",
+          "name": "Операція (Цех №8) 🪤[Чохол - напівфабрикат Угол Леон-Люкс 200 Колеса] (%Тканина%, %Диван Розмір Бильця%)",
           "workcenterName": "Цех №8 Швейка",
           "priceRate": 260,
           "odooWorkcenterId": 8
@@ -1360,12 +1455,8 @@
       ],
       "components": [
         {
-          "templateName": "🧩[Чохол - нарізані матеріали]",
+          "templateName": "🧩[Чохол - нарізані матеріали Угол Леон-Люкс 200 Колеса]",
           "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Угол Леон-Люкс 200 Колеса"
-            },
             {
               "attributeName": "Тканина",
               "value": "%Тканина%"
@@ -1378,7 +1469,6 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 43,
           "odooUomId": 1
         }
       ],
@@ -1821,20 +1911,8 @@
         {
           "name": "Операція (Цех №9) Диван Угол Леон-Люкс 200 Колеса (%Тканина%, %Диван Пружинний Блок%, %Диван Наповнювач Подушек%, %Диван Розмір Бильця%, %Колір Ламінату%, %Дно Каркасу%)",
           "workcenterName": "Цех №9 Оббивки",
-          "priceRate": 480,
-          "odooWorkcenterId": 10
-        },
-        {
-          "name": "Операція (Цех №10) Диван Угол Леон-Люкс 200 Колеса (%Тканина%, %Диван Пружинний Блок%, %Диван Наповнювач Подушек%, %Диван Розмір Бильця%, %Колір Ламінату%, %Дно Каркасу%)",
-          "workcenterName": "Цех №10 Упаковки",
-          "priceRate": 160,
-          "odooWorkcenterId": 11
-        },
-        {
-          "name": "ВТК Диван Угол Леон-Люкс 200 Колеса (%Тканина%, %Диван Пружинний Блок%, %Диван Наповнювач Подушек%, %Диван Розмір Бильця%, %Колір Ламінату%, %Дно Каркасу%)",
-          "workcenterName": "ВТК",
           "priceRate": 100,
-          "odooWorkcenterId": 14
+          "odooWorkcenterId": 10
         }
       ],
       "components": [
@@ -1869,12 +1947,8 @@
           "odooUomId": 1
         },
         {
-          "templateName": "🪤[Чохол - напівфабрикат]",
+          "templateName": "🪤[Чохол - напівфабрикат Угол Леон-Люкс 200 Колеса]",
           "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Угол Леон-Люкс 200 Колеса"
-            },
             {
               "attributeName": "Тканина",
               "value": "%Тканина%"
@@ -1887,7 +1961,6 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 34,
           "odooUomId": 1
         },
         {
@@ -1965,91 +2038,6 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooUomId": 1
-        },
-        {
-          "templateName": "[Петля]",
-          "attributes": [
-            {
-              "attributeName": "Петля",
-              "value": "Большая"
-            }
-          ],
-          "qty": 2,
-          "uom": "шт",
-          "operationIndex": 0,
-          "odooTemplateId": 8,
-          "odooUomId": 1
-        },
-        {
-          "templateName": "[Ніжка]",
-          "attributes": [
-            {
-              "attributeName": "Ніжка",
-              "value": "h30"
-            }
-          ],
-          "qty": 8,
-          "uom": "шт",
-          "operationIndex": 0,
-          "odooTemplateId": 10,
-          "odooVariantId": 332,
-          "odooUomId": 1
-        },
-        {
-          "templateName": "[Ніжка]",
-          "attributes": [
-            {
-              "attributeName": "Ніжка",
-              "value": "Трикутна🔺"
-            }
-          ],
-          "qty": 8,
-          "uom": "шт",
-          "operationIndex": 0,
-          "odooTemplateId": 10,
-          "odooVariantId": 333,
-          "odooUomId": 1
-        },
-        {
-          "templateName": "Скотч",
-          "attributes": [],
-          "qty": 50,
-          "uom": "m",
-          "operationIndex": 1,
-          "odooTemplateId": 72,
-          "odooVariantId": 188,
-          "odooUomId": 8
-        },
-        {
-          "templateName": "Плівка",
-          "attributes": [],
-          "qty": 2.5,
-          "uom": "кг",
-          "operationIndex": 1,
-          "odooTemplateId": 28,
-          "odooVariantId": 46,
-          "odooUomId": 15
-        },
-        {
-          "templateName": "Картон",
-          "attributes": [],
-          "qty": 4.4,
-          "uom": "m",
-          "operationIndex": 1,
-          "odooTemplateId": 29,
-          "odooVariantId": 47,
-          "odooUomId": 8
-        },
-        {
-          "templateName": "Перевірка Якості",
-          "attributes": [],
-          "qty": 1,
-          "uom": "шт",
-          "operationIndex": 2,
-          "isService": true,
-          "odooTemplateId": 71,
-          "odooVariantId": 187,
           "odooUomId": 1
         }
       ],
@@ -2154,12 +2142,164 @@
           "Зменшені Бильця",
           "Звичайні Бильця"
         ],
+        "Колір Ламінату": [
+          "Венге",
+          "Білий",
+          "Трифе",
+          "Дуб крарт"
+        ],
         "Дно Каркасу": [
           "ДВП Черновое",
           "ДВП Білий",
           "- без дна"
         ]
       }
+    },
+    {
+      "product": {
+        "templateName": "[Колесо]",
+        "attributes": [
+          {
+            "attributeName": "Модель",
+            "value": "h32"
+          }
+        ],
+        "variantDisplayName": "[Колесо] (h32)",
+        "qty": 1,
+        "odooTemplateId": 6,
+        "odooVariantId": 21
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №9) [Колесо] (h32)",
+          "workcenterName": "Цех №9 Оббивки",
+          "priceRate": 100,
+          "odooWorkcenterId": 10
+        }
+      ],
+      "components": []
+    },
+    {
+      "product": {
+        "templateName": "[Петля]",
+        "attributes": [
+          {
+            "attributeName": "Петля",
+            "value": "Накладная"
+          }
+        ],
+        "variantDisplayName": "[Петля] (Накладная)",
+        "qty": 1,
+        "odooTemplateId": 8
+      },
+      "operations": [
+        {
+          "name": "Операція (Цех №9) [Петля] (Накладная)",
+          "workcenterName": "Цех №9 Оббивки",
+          "priceRate": 480,
+          "odooWorkcenterId": 10
+        },
+        {
+          "name": "Операція (Цех №10) [Петля] (Накладная)",
+          "workcenterName": "Цех №10 Упаковки",
+          "priceRate": 160,
+          "odooWorkcenterId": 11
+        },
+        {
+          "name": "ВТК [Петля] (Накладная)",
+          "workcenterName": "ВТК",
+          "priceRate": 100,
+          "odooWorkcenterId": 14
+        }
+      ],
+      "components": [
+        {
+          "templateName": "[Петля]",
+          "attributes": [
+            {
+              "attributeName": "Петля",
+              "value": "Большая"
+            }
+          ],
+          "qty": 2,
+          "uom": "шт",
+          "operationIndex": 0,
+          "odooTemplateId": 8,
+          "odooVariantId": 16242,
+          "odooUomId": 1
+        },
+        {
+          "templateName": "[Ніжка]",
+          "attributes": [
+            {
+              "attributeName": "Ніжка",
+              "value": "h30"
+            }
+          ],
+          "qty": 8,
+          "uom": "шт",
+          "operationIndex": 0,
+          "odooTemplateId": 10,
+          "odooVariantId": 332,
+          "odooUomId": 1
+        },
+        {
+          "templateName": "[Ніжка]",
+          "attributes": [
+            {
+              "attributeName": "Ніжка",
+              "value": "Трикутна🔺"
+            }
+          ],
+          "qty": 8,
+          "uom": "шт",
+          "operationIndex": 0,
+          "odooTemplateId": 10,
+          "odooVariantId": 333,
+          "odooUomId": 1
+        },
+        {
+          "templateName": "Скотч",
+          "attributes": [],
+          "qty": 50,
+          "uom": "m",
+          "operationIndex": 1,
+          "odooTemplateId": 72,
+          "odooVariantId": 188,
+          "odooUomId": 8
+        },
+        {
+          "templateName": "Плівка",
+          "attributes": [],
+          "qty": 2.5,
+          "uom": "кг",
+          "operationIndex": 1,
+          "odooTemplateId": 28,
+          "odooVariantId": 46,
+          "odooUomId": 15
+        },
+        {
+          "templateName": "Картон",
+          "attributes": [],
+          "qty": 4.4,
+          "uom": "m",
+          "operationIndex": 1,
+          "odooTemplateId": 29,
+          "odooVariantId": 47,
+          "odooUomId": 8
+        },
+        {
+          "templateName": "Перевірка Якості",
+          "attributes": [],
+          "qty": 1,
+          "uom": "шт",
+          "operationIndex": 2,
+          "isService": true,
+          "odooTemplateId": 71,
+          "odooVariantId": 187,
+          "odooUomId": 1
+        }
+      ]
     }
   ]
 }
