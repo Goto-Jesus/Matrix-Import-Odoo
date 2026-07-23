@@ -1,4 +1,5 @@
 import { create, searchRead, write, unlink } from '../../api/odoo';
+import { track, resetSession, saveSession } from '../../state/tracker';
 
 let _existingBomsByCode: Map<string, number> | null = null;
 
@@ -75,6 +76,7 @@ export async function importBomEntry(entry: BomEntry): Promise<'created' | 'exis
     product_qty: product.qty,
     type: 'normal',
   });
+  track.bom(bomId);
   _existingBomsByCode?.set(bomCode, bomId);
   console.log(`  [+] BOM (ID: ${bomId}): ${bomCode} (${sec(t)})`);
 
@@ -91,6 +93,7 @@ export async function importBomEntry(entry: BomEntry): Promise<'created' | 'exis
       sequence: i + 1,
       x_studio_piece_rate_2: op.priceRate,
     });
+    track.operation(opId);
     opIds.push(opId);
     console.log(`    [op] "${op.name}" (${op.priceRate} грн) (${sec(t)})`);
   }
@@ -111,7 +114,7 @@ export async function importBomEntry(entry: BomEntry): Promise<'created' | 'exis
     }
 
     const operationId = opIds[comp.operationIndex] ?? false;
-    await create('mrp.bom.line', {
+    const lineId = await create('mrp.bom.line', {
       bom_id: bomId,
       product_id: compResolved.variantId,
       product_qty: comp.qty,
@@ -119,6 +122,7 @@ export async function importBomEntry(entry: BomEntry): Promise<'created' | 'exis
       sequence: i + 1,
       operation_id: operationId,
     });
+    track.bomLine(lineId);
 
     const label = comp.attributes.length
       ? `${comp.templateName} (${comp.attributes.map(a => a.value).join(', ')})`
@@ -149,7 +153,8 @@ async function ensureVariantLimit(minLimit = 10000): Promise<void> {
 
 type CехStat = { name: string; elapsed: number; created: number; existed: number; skipped: number; errors: number };
 
-export async function importAllBoms(boms: BomEntry[]): Promise<void> {
+export async function importAllBoms(boms: BomEntry[], label?: string): Promise<void> {
+  resetSession();
   let created = 0, existed = 0, skipped = 0, errors = 0;
   const totalStart = Date.now();
 
@@ -201,6 +206,7 @@ export async function importAllBoms(boms: BomEntry[]): Promise<void> {
     cехStats.push({ name: entry.product.variantDisplayName, elapsed, created: eCr, existed: eEx, skipped: eSk, errors: eEr });
   }
 
+  saveSession(label);
   const LINE = '='.repeat(60);
   console.log(`\n${LINE}`);
   console.log('СТАТИСТИКА ПО ЦЕХАХ');

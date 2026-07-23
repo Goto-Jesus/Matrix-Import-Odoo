@@ -1,4 +1,5 @@
 import { searchRead, create, write, executeKw } from '../api/odoo';
+import { track } from '../state/tracker';
 import type { ResolvedProduct } from './types';
 
 const normalizeStr = (s: string): string =>
@@ -115,6 +116,7 @@ export async function getOrCreateAttribute(name: string): Promise<number> {
   if (existing) { _attrCache.set(name, existing.id); return existing.id; }
 
   const id = await create('product.attribute', { name, create_variant: 'always' });
+  track.attribute(id);
   console.log(`  [+] Атрибут створено: "${name}" (ID: ${id})`);
   _attrCache.set(name, id);
   return id;
@@ -132,6 +134,7 @@ export async function getOrCreateAttributeValue(attrId: number, valueName: strin
   if (existing) { _attrValueCache.set(key, existing.id); return existing.id; }
 
   const id = await create('product.attribute.value', { attribute_id: attrId, name: valueName });
+  track.attributeValue(id);
   console.log(`    [+] Значення атрибуту створено: "${valueName}" (ID: ${id})`);
   _attrValueCache.set(key, id);
   return id;
@@ -146,6 +149,7 @@ export async function getOrCreateWorkcenter(name: string): Promise<number> {
   if (existing) { _workcenterCache.set(name, existing.id); return existing.id; }
 
   const id = await create('mrp.workcenter', { name, time_efficiency: 100 });
+  track.workcenter(id);
   console.log(`  [+] Робочий центр створено: "${name}" (ID: ${id})`);
   _workcenterCache.set(name, id);
   return id;

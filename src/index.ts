@@ -46,9 +46,10 @@ async function main() {
   npm run validate-all [папка]   — валідація всіх .md у папці (default: documents/)
   npm run import "<файл>"     — парсинг та імпорт специфікації в Odoo
   npm run check "<продукт>"   — перевірити чи продукт існує в Odoo
-  npm run snapshot [мітка]    — зберегти поточний стан Odoo
-  npm run restore [timestamp] — відкатити зміни за знімком
-  npm run restore             — показати список знімків
+  npm run snapshot [мітка]         — зберегти поточний стан Odoo
+  npm run restore                  — показати список імпортів
+  npm run restore -- "<назва>"     — відкатити конкретний імпорт
+  npm run restore -- all           — відкатити всі імпорти
   npm run dev bom             — legacy: Нео-3 Механізм з hardcoded TypeScript
       `);
   }

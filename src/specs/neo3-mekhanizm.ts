@@ -706,12 +706,18 @@ export const neo3Boms: BomDef[] = [
       { product: "Тік-так", qty: 3, uomId: UOM.UNITS, operationIndex: 0 },
       { product: "Распорка", qty: 3, uomId: UOM.UNITS, operationIndex: 0 },
       {
-        product: "[Соединитель]",
-        variants: ["83 эконом"],
-        qty: 8,
+        product: "Соединитель 83 эконом",
+        qty: 3,
         uomId: UOM.UNITS,
         operationIndex: 0,
       },
+      // {
+      //   product: "[Соединитель]",
+      //   variants: ["83 эконом"],
+      //   qty: 8,
+      //   uomId: UOM.UNITS,
+      //   operationIndex: 0,
+      // },
       // Точна назва значення атрибуту [Петля]: "K 113.01" (перевірте в Odoo)
       {
         product: "[Петля]",

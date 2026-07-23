@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Елегант НН.md",
-  "generatedAt": "2026-07-15T21:17:25.177Z",
+  "generatedAt": "2026-07-23T15:39:35.218Z",
   "boms": [
     {
       "product": {
@@ -13,7 +13,8 @@
         ],
         "variantDisplayName": "🪵[Каркас - нарізана деревина] (Д.Елегант)",
         "qty": 1,
-        "odooTemplateId": 49
+        "odooTemplateId": 49,
+        "odooVariantId": 41886
       },
       "operations": [
         {
@@ -188,7 +189,8 @@
         ],
         "variantDisplayName": "🧩[Планка - нарізані деталі] (Планка 194)",
         "qty": 1,
-        "odooTemplateId": 39
+        "odooTemplateId": 39,
+        "odooVariantId": 41893
       },
       "operations": [
         {
@@ -264,6 +266,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 18,
+          "odooVariantId": 41895,
           "odooUomId": 1
         },
         {
@@ -474,6 +477,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 49,
+          "odooVariantId": 41886,
           "odooUomId": 1
         },
         {
@@ -515,7 +519,8 @@
         ],
         "variantDisplayName": "🪤[Планка - напівфабрикат] (Планка 194)",
         "qty": 1,
-        "odooTemplateId": 17
+        "odooTemplateId": 17,
+        "odooVariantId": 41912
       },
       "operations": [
         {
@@ -538,6 +543,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 39,
+          "odooVariantId": 41893,
           "odooUomId": 1
         }
       ]
@@ -665,7 +671,7 @@
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [
@@ -796,7 +802,7 @@
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [
@@ -815,7 +821,8 @@
         ],
         "variantDisplayName": "[Наволочка] (Д.Елегант)",
         "qty": 1,
-        "odooTemplateId": 167
+        "odooTemplateId": 167,
+        "odooVariantId": 41925
       },
       "operations": [
         {
@@ -907,6 +914,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 17,
+          "odooVariantId": 41912,
           "odooUomId": 1
         },
         {
@@ -982,7 +990,7 @@
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [
@@ -1340,6 +1348,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 167,
+          "odooVariantId": 41926,
           "odooUomId": 1
         },
         {
@@ -1548,8 +1557,6 @@
           "qty": 4,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 6,
-          "odooVariantId": 21,
           "odooUomId": 1
         },
         {
@@ -1578,18 +1585,13 @@
           "odooUomId": 1
         },
         {
-          "templateName": "[Соединитель]",
-          "attributes": [
-            {
-              "attributeName": "Соединитель",
-              "value": "83 эконом"
-            }
-          ],
+          "templateName": "Соединитель 83 эконом",
+          "attributes": [],
           "qty": 2,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 193,
-          "odooVariantId": 539,
+          "odooTemplateId": 404,
+          "odooVariantId": 123903,
           "odooUomId": 1
         }
       ],
@@ -1683,7 +1685,7 @@
           "Сав Нова Дк Грей 14"
         ],
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [
@@ -1708,7 +1710,8 @@
         ],
         "variantDisplayName": "[Петля] (Накладная)",
         "qty": 1,
-        "odooTemplateId": 8
+        "odooTemplateId": 8,
+        "odooVariantId": 42624
       },
       "operations": [
         {
@@ -1737,6 +1740,8 @@
           "qty": 8,
           "uom": "шт",
           "operationIndex": 0,
+          "odooTemplateId": 281,
+          "odooVariantId": 42625,
           "odooUomId": 1
         },
         {

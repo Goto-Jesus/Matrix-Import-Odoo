@@ -224,14 +224,14 @@ function fixDefaultUomForSheetMaterials(line: string): string {
   );
 }
 
-// "[Соединитель] (83 эконом)-2 шт." → "[Соединитель] (83 эконом) - 2 шт."
-function fixConnectorFormat(line: string): string {
-  // "[Соединитель] (83 эконом)- 2 шт" or "[Соединитель] (83 эконом)-2 шт." → "[Соединитель] (83 эконом) - 2 шт."
-  return line.replace(
-    /^(\s*)Соединитель\s+(.+?)-(\d+)\s*шт\.?\s*$/,
-    "$1[Соединитель] ($2) - $3 шт.",
-  );
-}
+// "Соединитель 83 эконом-2 шт." → "Соединитель 83 эконом - 2 шт."
+// function fixConnectorFormat(line: string): string {
+//   // "Соединитель 83 эконом- 2 шт" or "Соединитель 83 эконом-2 шт." → "Соединитель 83 эконом - 2 шт."
+//   return line.replace(
+//     /^(\s*)Соединитель\s+(.+?)-(\d+)\s*шт\.?\s*$/,
+//     "$1[Соединитель] ($2) - $3 шт.",
+//   );
+// }
 
 // "Зацеп краб 10-шт" → "Зацеп краб - 10 шт."  (qty-uom stuck together without space)
 function fixQtyDashUom(line: string): string {
@@ -376,7 +376,7 @@ function fixAttrTagSpelling(line: string): string {
       // "Посилений" (один н) → "Посиленний" (два н) у значенні атрибута
       .replace(
         /(\/\/\s*@Диван Пружинний Блок=Посилений)\b/g,
-        "// @Диван Пружинний Блок=Посиленний",
+        "// @Диван Пружинний Блок=Посилений",
       )
   );
 }
@@ -427,10 +427,10 @@ export function formatDocument(inputPath: string): FormatterResult {
       fixPlankaBareComponent,
       "Планка NNN - qty → 🧩[Планка - нарізані деталі] (Планка NNN)",
     );
-    apply(
-      fixConnectorFormat,
-      "Соединитель: → [Соединитель] (атрибут) - qty шт.",
-    );
+    // apply(
+    //   fixConnectorFormat,
+    //   "Соединитель: → [Соединитель] (атрибут) - qty шт.",
+    // );
     apply(fixQtyDashUom, "qty-шт → - qty шт.");
     apply(fixPorolonFormat, "Поролон: два парени → [Поролон] (код (розмір))");
     apply(fixVoylokFormat, "Войлок: додано дужки та квадратні дужки");

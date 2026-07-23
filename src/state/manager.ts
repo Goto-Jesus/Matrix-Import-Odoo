@@ -62,6 +62,67 @@ export function saveCreatedIds(created: CreatedIds): void {
   console.log(`[OK] Створені ID збережено: state/snapshots/${created.snapshotTimestamp}/created.json`);
 }
 
+// ─── Per-import records ───────────────────────────────────────────────────────
+
+export type ImportIds = CreatedIds['ids'];
+
+export interface ImportRecord {
+  snapshotTimestamp: string;
+  label: string;
+  createdAt: string;
+  ids: ImportIds;
+}
+
+function importsDir(snapshotTimestamp: string): string {
+  return path.join(snapshotDir(snapshotTimestamp), 'imports');
+}
+
+function sanitizeLabel(label: string): string {
+  return label.replace(/[<>:"/\\|?*]/g, '_').trim();
+}
+
+export function saveImportRecord(snapshotTimestamp: string, label: string, ids: ImportIds): void {
+  const dir = importsDir(snapshotTimestamp);
+  fs.mkdirSync(dir, { recursive: true });
+
+  const filePath = path.join(dir, `${sanitizeLabel(label)}.json`);
+
+  // Якщо цей диван вже імпортувався раніше — мержимо ID (повторні запуски)
+  let mergedIds = ids;
+  if (fs.existsSync(filePath)) {
+    const prev: ImportRecord = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    const merge = (a: number[], b: number[]) => [...new Set([...a, ...b])];
+    mergedIds = {
+      productTemplates:       merge(prev.ids.productTemplates,       ids.productTemplates),
+      productVariants:        merge(prev.ids.productVariants,        ids.productVariants),
+      productAttributes:      merge(prev.ids.productAttributes,      ids.productAttributes),
+      productAttributeValues: merge(prev.ids.productAttributeValues, ids.productAttributeValues),
+      boms:                   merge(prev.ids.boms,                   ids.boms),
+      bomLines:               merge(prev.ids.bomLines,               ids.bomLines),
+      bomOperations:          merge(prev.ids.bomOperations,          ids.bomOperations),
+      workcenters:            merge(prev.ids.workcenters,            ids.workcenters),
+    };
+  }
+
+  const record: ImportRecord = { snapshotTimestamp, label, createdAt: new Date().toISOString(), ids: mergedIds };
+  fs.writeFileSync(filePath, JSON.stringify(record, null, 2), 'utf-8');
+  console.log(`[OK] Import record збережено: state/snapshots/${snapshotTimestamp}/imports/${sanitizeLabel(label)}.json`);
+}
+
+export function loadImportRecord(snapshotTimestamp: string, label: string): ImportRecord | null {
+  const filePath = path.join(importsDir(snapshotTimestamp), `${sanitizeLabel(label)}.json`);
+  if (!fs.existsSync(filePath)) return null;
+  return JSON.parse(fs.readFileSync(filePath, 'utf-8')) as ImportRecord;
+}
+
+export function listImports(snapshotTimestamp: string): string[] {
+  const dir = importsDir(snapshotTimestamp);
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir)
+    .filter(f => f.endsWith('.json'))
+    .map(f => f.replace(/\.json$/, ''));
+}
+
 export function loadLatestSnapshot(): Snapshot | null {
   const snapshots = listSnapshots();
   if (snapshots.length === 0) return null;

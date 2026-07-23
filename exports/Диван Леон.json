@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Леон.md",
-  "generatedAt": "2026-07-15T21:17:35.964Z",
+  "generatedAt": "2026-07-23T15:39:36.588Z",
   "boms": [
     {
       "product": {
@@ -650,7 +650,7 @@
         "variantDisplayName": "🧩[Поролон - нарізані компоненти] (Д.Леон, %Диван Пружинний Блок%, %Диван Розмір Бильця❌%)",
         "qty": 1,
         "ifAttr": {
-          "Диван Пружинний Блок": "Звичайний Блок"
+          "Диван Пружинний Блок": "Звичайний"
         },
         "odooTemplateId": 216
       },
@@ -675,6 +675,7 @@
           "uom": "кг",
           "operationIndex": 0,
           "odooTemplateId": 19,
+          "odooVariantId": 43141,
           "odooUomId": 15
         },
         {
@@ -719,12 +720,13 @@
           "uom": "m",
           "operationIndex": 0,
           "odooTemplateId": 20,
+          "odooVariantId": 43142,
           "odooUomId": 8
         }
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [
@@ -752,7 +754,7 @@
         "variantDisplayName": "🧩[Поролон - нарізані компоненти] (Д.Леон, %Диван Пружинний Блок%, %Диван Розмір Бильця❌%)",
         "qty": 1,
         "ifAttr": {
-          "Диван Пружинний Блок": "Посилений Блок"
+          "Диван Пружинний Блок": "Посилений"
         },
         "odooTemplateId": 216
       },
@@ -783,6 +785,7 @@
           "uom": "кг",
           "operationIndex": 0,
           "odooTemplateId": 19,
+          "odooVariantId": 43141,
           "odooUomId": 15
         },
         {
@@ -827,12 +830,13 @@
           "uom": "m",
           "operationIndex": 0,
           "odooTemplateId": 20,
+          "odooVariantId": 43142,
           "odooUomId": 8
         }
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [
@@ -957,7 +961,7 @@
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [
@@ -1707,8 +1711,6 @@
           "qty": 4,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 6,
-          "odooVariantId": 21,
           "odooUomId": 1
         },
         {
@@ -1717,20 +1719,21 @@
           "qty": 4,
           "uom": "шт",
           "operationIndex": 0,
+          "odooTemplateId": 281,
+          "odooVariantId": 42625,
           "odooUomId": 1
         },
         {
           "templateName": "[Соединитель]",
           "attributes": [
             {
-              "attributeName": "Соединитель",
+              "attributeName": "Модель",
               "value": "83 єконом"
             }
           ],
           "qty": 2,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 193,
           "odooUomId": 1
         },
         {
@@ -1865,7 +1868,7 @@
           "Сав Нова Дк Грей 14"
         ],
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Наповнювач Подушек": [

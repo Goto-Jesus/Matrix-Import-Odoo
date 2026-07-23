@@ -4,7 +4,7 @@ import { parseDocToJson } from '../tools/docToJson';
 
 const inputPath = process.argv[2];
 if (!inputPath) {
-  console.error('Usage: npm run export-json <path-to-md-file>');
+  console.error('Usage: npm run export-json <path-to-md-file-or-directory>');
   process.exit(1);
 }
 
@@ -30,21 +30,31 @@ if (snapshotPath) {
   console.log('No snapshot found — exporting without Odoo IDs');
 }
 
-const result = parseDocToJson(absInput, snapshotPath);
-
 const outDir = path.join(process.cwd(), 'exports');
 if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
 
-const baseName = path.basename(absInput, path.extname(absInput));
-const outPath = path.join(outDir, `${baseName}.json`);
+function exportFile(filePath: string) {
+  const result = parseDocToJson(filePath, snapshotPath);
+  const baseName = path.basename(filePath, path.extname(filePath));
+  const outPath = path.join(outDir, `${baseName}.json`);
+  fs.writeFileSync(outPath, JSON.stringify(result, null, 2), 'utf-8');
+  console.log(`\nParsed ${result.boms.length} BOMs from "${result.sourceFile}"`);
+  result.boms.forEach((b, i) => {
+    const varId = b.product.odooVariantId ? ` [variant=${b.product.odooVariantId}]` : '';
+    console.log(`  BOM ${i + 1}: ${b.product.variantDisplayName}${varId}`);
+    console.log(`    Operations: ${b.operations.map(o => o.name).join(' | ')}`);
+    console.log(`    Components: ${b.components.length}`);
+  });
+  console.log(`Output: ${outPath}`);
+}
 
-fs.writeFileSync(outPath, JSON.stringify(result, null, 2), 'utf-8');
-
-console.log(`\nParsed ${result.boms.length} BOMs from "${result.sourceFile}"`);
-result.boms.forEach((b, i) => {
-  const varId = b.product.odooVariantId ? ` [variant=${b.product.odooVariantId}]` : '';
-  console.log(`  BOM ${i + 1}: ${b.product.variantDisplayName}${varId}`);
-  console.log(`    Operations: ${b.operations.map(o => o.name).join(' | ')}`);
-  console.log(`    Components: ${b.components.length}`);
-});
-console.log(`\nOutput: ${outPath}`);
+const stat = fs.statSync(absInput);
+if (stat.isDirectory()) {
+  const files = fs.readdirSync(absInput).filter(f => f.endsWith('.md'));
+  console.log(`Processing ${files.length} files from directory: ${absInput}`);
+  for (const file of files) {
+    exportFile(path.join(absInput, file));
+  }
+} else {
+  exportFile(absInput);
+}

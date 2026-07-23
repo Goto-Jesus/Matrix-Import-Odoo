@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Угол Лофт-2 Колеса.md",
-  "generatedAt": "2026-07-15T21:21:17.180Z",
+  "generatedAt": "2026-07-23T15:39:41.748Z",
   "boms": [
     {
       "product": {
@@ -48,7 +48,8 @@
         ],
         "variantDisplayName": "🪵[Каркас - нарізана деревина] (М.Ч.Лофт)",
         "qty": 1,
-        "odooTemplateId": 49
+        "odooTemplateId": 49,
+        "odooVariantId": 75032
       },
       "operations": [
         {
@@ -500,6 +501,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 18,
+          "odooVariantId": 75042,
           "odooUomId": 1
         },
         {
@@ -514,6 +516,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 18,
+          "odooVariantId": 75043,
           "odooUomId": 1
         }
       ],
@@ -744,6 +747,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 49,
+          "odooVariantId": 75032,
           "odooUomId": 1
         },
         {
@@ -834,7 +838,7 @@
         "variantDisplayName": "🧩[Поролон - нарізані компоненти] (Угол Лофт-2, %Диван Пружинний Блок%, %Диван Розмір Бильця%)",
         "qty": 1,
         "ifAttr": {
-          "Диван Пружинний Блок": "Звичайний Блок"
+          "Диван Пружинний Блок": "Звичайний"
         },
         "odooTemplateId": 216
       },
@@ -955,7 +959,7 @@
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця": [
@@ -984,7 +988,7 @@
         "variantDisplayName": "🧩[Поролон - нарізані компоненти] (Угол Лофт-2, %Диван Пружинний Блок%, %Диван Розмір Бильця%)",
         "qty": 1,
         "ifAttr": {
-          "Диван Пружинний Блок": "Посилений Блок"
+          "Диван Пружинний Блок": "Посилений"
         },
         "odooTemplateId": 216
       },
@@ -1105,7 +1109,7 @@
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця": [
@@ -1310,12 +1314,13 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 24,
+          "odooVariantId": 75216,
           "odooUomId": 1
         }
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця": [
@@ -1905,8 +1910,6 @@
           "qty": 4,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 6,
-          "odooVariantId": 21,
           "odooUomId": 1
         },
         {
@@ -1935,18 +1938,13 @@
           "odooUomId": 1
         },
         {
-          "templateName": "[Соединитель]",
-          "attributes": [
-            {
-              "attributeName": "Соединитель",
-              "value": "83 эконом"
-            }
-          ],
+          "templateName": "Соединитель 83 эконом",
+          "attributes": [],
           "qty": 8,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 193,
-          "odooVariantId": 539,
+          "odooTemplateId": 404,
+          "odooVariantId": 123903,
           "odooUomId": 1
         },
         {
@@ -1970,6 +1968,8 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
+          "odooTemplateId": 338,
+          "odooVariantId": 76338,
           "odooUomId": 1
         },
         {
@@ -2104,7 +2104,7 @@
           "Сав Нова Дк Грей 14"
         ],
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця": [

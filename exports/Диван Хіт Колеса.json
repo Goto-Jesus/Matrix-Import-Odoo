@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Хіт Колеса.md",
-  "generatedAt": "2026-07-15T21:22:36.299Z",
+  "generatedAt": "2026-07-23T15:39:43.236Z",
   "boms": [
     {
       "product": {
@@ -13,7 +13,8 @@
         ],
         "variantDisplayName": "🪵[Каркас - нарізана деревина] (Д.Леон-Люкс Колеса)",
         "qty": 1,
-        "odooTemplateId": 49
+        "odooTemplateId": 49,
+        "odooVariantId": 42626
       },
       "operations": [
         {
@@ -322,7 +323,8 @@
         ],
         "variantDisplayName": "🧩[Планка - нарізані деталі] (Планка 195)",
         "qty": 1,
-        "odooTemplateId": 39
+        "odooTemplateId": 39,
+        "odooVariantId": 118107
       },
       "operations": [
         {
@@ -584,6 +586,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 49,
+          "odooVariantId": 42626,
           "odooUomId": 1
         },
         {
@@ -627,7 +630,8 @@
         ],
         "variantDisplayName": "🪤[Планка - напівфабрикат] (Планка 195)",
         "qty": 1,
-        "odooTemplateId": 17
+        "odooTemplateId": 17,
+        "odooVariantId": 118111
       },
       "operations": [
         {
@@ -650,6 +654,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 39,
+          "odooVariantId": 118107,
           "odooUomId": 1
         }
       ]
@@ -674,7 +679,7 @@
         "variantDisplayName": "🧩[Поролон - нарізані компоненти] (Д.Хіт, %Диван Пружинний Блок%, %Диван Розмір Бильця❌%)",
         "qty": 1,
         "ifAttr": {
-          "Диван Пружинний Блок": "Звичайний Блок"
+          "Диван Пружинний Блок": "Звичайний"
         },
         "odooTemplateId": 216
       },
@@ -699,6 +704,7 @@
           "uom": "кг",
           "operationIndex": 0,
           "odooTemplateId": 19,
+          "odooVariantId": 43141,
           "odooUomId": 15
         },
         {
@@ -758,12 +764,13 @@
           "uom": "m",
           "operationIndex": 0,
           "odooTemplateId": 20,
+          "odooVariantId": 43142,
           "odooUomId": 8
         }
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [
@@ -791,7 +798,7 @@
         "variantDisplayName": "🧩[Поролон - нарізані компоненти] (Д.Хіт, %Диван Пружинний Блок%, %Диван Розмір Бильця❌%)",
         "qty": 1,
         "ifAttr": {
-          "Диван Пружинний Блок": "Посилений Блок"
+          "Диван Пружинний Блок": "Посилений"
         },
         "odooTemplateId": 216
       },
@@ -816,6 +823,7 @@
           "uom": "кг",
           "operationIndex": 0,
           "odooTemplateId": 19,
+          "odooVariantId": 43141,
           "odooUomId": 15
         },
         {
@@ -875,12 +883,13 @@
           "uom": "m",
           "operationIndex": 0,
           "odooTemplateId": 20,
+          "odooVariantId": 43142,
           "odooUomId": 8
         }
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [
@@ -899,7 +908,8 @@
         ],
         "variantDisplayName": "[Наволочка] (Д.Хіт)",
         "qty": 1,
-        "odooTemplateId": 167
+        "odooTemplateId": 167,
+        "odooVariantId": 118118
       },
       "operations": [
         {
@@ -1060,7 +1070,7 @@
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [
@@ -1405,6 +1415,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 167,
+          "odooVariantId": 118118,
           "odooUomId": 1
         },
         {
@@ -1558,6 +1569,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 167,
+          "odooVariantId": 118118,
           "odooUomId": 1
         },
         {
@@ -1823,7 +1835,7 @@
           "Сав Нова Дк Грей 14"
         ],
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Наповнювач Подушек": [
@@ -1853,49 +1865,23 @@
           }
         ],
         "variantDisplayName": "[Колесо] (h32)",
-        "qty": 1,
-        "odooTemplateId": 6,
-        "odooVariantId": 21
+        "qty": 1
       },
       "operations": [
         {
           "name": "Операція (Цех №9) [Колесо] (h32)",
           "workcenterName": "Цех №9 Оббивки",
-          "priceRate": 100,
-          "odooWorkcenterId": 10
-        }
-      ],
-      "components": []
-    },
-    {
-      "product": {
-        "templateName": "[Соединитель]",
-        "attributes": [
-          {
-            "attributeName": "Соединитель",
-            "value": "83 эконом"
-          }
-        ],
-        "variantDisplayName": "[Соединитель] (83 эконом)",
-        "qty": 1,
-        "odooTemplateId": 193,
-        "odooVariantId": 539
-      },
-      "operations": [
-        {
-          "name": "Операція (Цех №9) [Соединитель] (83 эконом)",
-          "workcenterName": "Цех №9 Оббивки",
           "priceRate": 0,
           "odooWorkcenterId": 10
         },
         {
-          "name": "Операція (Цех №10) [Соединитель] (83 эконом)",
+          "name": "Операція (Цех №10) [Колесо] (h32)",
           "workcenterName": "Цех №10 Упаковки",
           "priceRate": 120,
           "odooWorkcenterId": 11
         },
         {
-          "name": "ВТК [Соединитель] (83 эконом)",
+          "name": "ВТК [Колесо] (h32)",
           "workcenterName": "ВТК",
           "priceRate": 100,
           "odooWorkcenterId": 14
@@ -1994,6 +1980,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 17,
+          "odooVariantId": 118111,
           "odooUomId": 1
         },
         {

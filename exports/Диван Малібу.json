@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Малібу.md",
-  "generatedAt": "2026-07-15T21:18:54.787Z",
+  "generatedAt": "2026-07-23T15:39:38.577Z",
   "boms": [
     {
       "product": {
@@ -13,7 +13,8 @@
         ],
         "variantDisplayName": "🪵[Каркас - нарізана деревина] (Д.Малібу)",
         "qty": 1,
-        "odooTemplateId": 49
+        "odooTemplateId": 49,
+        "odooVariantId": 58579
       },
       "operations": [
         {
@@ -42,20 +43,20 @@
         "attributes": [
           {
             "attributeName": "Модель",
-            "value": "б.Малібу"
+            "value": "Б.Малібу"
           },
           {
             "attributeName": "Диван Розмір Бильця❌",
             "value": "%Диван Розмір Бильця❌%"
           }
         ],
-        "variantDisplayName": "🪵[Бильце - нарізана деревина] (б.Малібу, %Диван Розмір Бильця❌%)",
+        "variantDisplayName": "🪵[Бильце - нарізана деревина] (Б.Малібу, %Диван Розмір Бильця❌%)",
         "qty": 1,
         "odooTemplateId": 179
       },
       "operations": [
         {
-          "name": "Операція (Цех №1) 🪵[Бильце - нарізана деревина] (б.Малібу, %Диван Розмір Бильця❌%)",
+          "name": "Операція (Цех №1) 🪵[Бильце - нарізана деревина] (Б.Малібу, %Диван Розмір Бильця❌%)",
           "workcenterName": "Цех №1 Дерева (Нарізка)",
           "priceRate": 0,
           "odooWorkcenterId": 19
@@ -85,20 +86,20 @@
         "attributes": [
           {
             "attributeName": "Модель",
-            "value": "б.Малібу"
+            "value": "Б.Малібу"
           },
           {
             "attributeName": "Диван Розмір Бильця❌",
             "value": "%Диван Розмір Бильця❌%"
           }
         ],
-        "variantDisplayName": "🧩[Бильце - нарізані деталі] (б.Малібу, %Диван Розмір Бильця❌%)",
+        "variantDisplayName": "🧩[Бильце - нарізані деталі] (Б.Малібу, %Диван Розмір Бильця❌%)",
         "qty": 1,
         "odooTemplateId": 36
       },
       "operations": [
         {
-          "name": "Операція (Цех №2-1) 🧩[Бильце - нарізані деталі] (б.Малібу, %Диван Розмір Бильця❌%)",
+          "name": "Операція (Цех №2-1) 🧩[Бильце - нарізані деталі] (Б.Малібу, %Диван Розмір Бильця❌%)",
           "workcenterName": "Цех №2-1 ДСП (Нарізка Бильце)",
           "priceRate": 0,
           "odooWorkcenterId": 20
@@ -289,20 +290,20 @@
         "attributes": [
           {
             "attributeName": "Модель",
-            "value": "б.Малібу"
+            "value": "Б.Малібу"
           },
           {
             "attributeName": "Диван Розмір Бильця❌",
             "value": "%Диван Розмір Бильця❌%"
           }
         ],
-        "variantDisplayName": "🪤[Бильце - напівфабрикат] (б.Малібу, %Диван Розмір Бильця❌%)",
+        "variantDisplayName": "🪤[Бильце - напівфабрикат] (Б.Малібу, %Диван Розмір Бильця❌%)",
         "qty": 1,
         "odooTemplateId": 12
       },
       "operations": [
         {
-          "name": "Операція (Цех №4-1) 🪤[Бильце - напівфабрикат] (б.Малібу, %Диван Розмір Бильця❌%)",
+          "name": "Операція (Цех №4-1) 🪤[Бильце - напівфабрикат] (Б.Малібу, %Диван Розмір Бильця❌%)",
           "workcenterName": "Цех №4-1 Сборка Бильце",
           "priceRate": 0,
           "odooWorkcenterId": 5
@@ -314,7 +315,7 @@
           "attributes": [
             {
               "attributeName": "Модель",
-              "value": "б.Малібу"
+              "value": "Б.Малібу"
             },
             {
               "attributeName": "Диван Розмір Бильця❌",
@@ -332,7 +333,7 @@
           "attributes": [
             {
               "attributeName": "Модель",
-              "value": "б.Малібу"
+              "value": "Б.Малібу"
             },
             {
               "attributeName": "Диван Розмір Бильця❌",
@@ -412,6 +413,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 49,
+          "odooVariantId": 58579,
           "odooUomId": 1
         },
         {
@@ -462,7 +464,7 @@
         "variantDisplayName": "🧩[Поролон - нарізані компоненти] (Д.Малібу, %Диван Пружинний Блок%, %Диван Розмір Бильця❌%)",
         "qty": 1,
         "ifAttr": {
-          "Диван Пружинний Блок": "Звичайний Блок"
+          "Диван Пружинний Блок": "Звичайний"
         },
         "odooTemplateId": 216
       },
@@ -568,7 +570,7 @@
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [
@@ -596,7 +598,7 @@
         "variantDisplayName": "🧩[Поролон - нарізані компоненти] (Д.Малібу, %Диван Пружинний Блок%, %Диван Розмір Бильця❌%)",
         "qty": 1,
         "ifAttr": {
-          "Диван Пружинний Блок": "Посилений Блок"
+          "Диван Пружинний Блок": "Посилений"
         },
         "odooTemplateId": 216
       },
@@ -702,7 +704,7 @@
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [
@@ -721,7 +723,8 @@
         ],
         "variantDisplayName": "[Наволочка] (Д.Малібу)",
         "qty": 1,
-        "odooTemplateId": 167
+        "odooTemplateId": 167,
+        "odooVariantId": 58644
       },
       "operations": [
         {
@@ -814,7 +817,7 @@
           "attributes": [
             {
               "attributeName": "Модель",
-              "value": "б.Малібу"
+              "value": "Б.Малібу"
             },
             {
               "attributeName": "Диван Розмір Бильця❌",
@@ -861,6 +864,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 24,
+          "odooVariantId": 58765,
           "odooUomId": 1
         },
         {
@@ -875,12 +879,13 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 24,
+          "odooVariantId": 58766,
           "odooUomId": 1
         }
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [
@@ -1238,6 +1243,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 167,
+          "odooVariantId": 58644,
           "odooUomId": 1
         },
         {
@@ -1359,7 +1365,8 @@
           }
         ],
         "variantDisplayName": "Диван Малібу (%Тканина%, %Диван Пружинний Блок%)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 394
       },
       "operations": [
         {
@@ -1462,8 +1469,6 @@
           "qty": 4,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 6,
-          "odooVariantId": 21,
           "odooUomId": 1
         },
         {
@@ -1492,18 +1497,13 @@
           "odooUomId": 1
         },
         {
-          "templateName": "[Соединитель]",
-          "attributes": [
-            {
-              "attributeName": "Соединитель",
-              "value": "83 эконом"
-            }
-          ],
+          "templateName": "Соединитель 83 эконом",
+          "attributes": [],
           "qty": 2,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 193,
-          "odooVariantId": 539,
+          "odooTemplateId": 404,
+          "odooVariantId": 123903,
           "odooUomId": 1
         },
         {
@@ -1542,6 +1542,8 @@
           "qty": 8,
           "uom": "шт",
           "operationIndex": 0,
+          "odooTemplateId": 281,
+          "odooVariantId": 42625,
           "odooUomId": 1
         },
         {
@@ -1676,7 +1678,7 @@
           "Сав Нова Дк Грей 14"
         ],
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [

@@ -1,37 +1,17 @@
 [
   {
-    "timestamp": "2026-07-08T18-55-24",
-    "label": "snapshot-2026-07-08T18-55-24",
+    "timestamp": "2026-07-23T09-29-57",
+    "label": "snapshot-2026-07-23T09-29-57",
     "type": "snapshot"
   },
   {
-    "timestamp": "2026-07-08T19-18-16",
-    "label": "snapshot-2026-07-08T19-18-16",
+    "timestamp": "2026-07-23T09-33-25",
+    "label": "snapshot-2026-07-23T09-33-25",
     "type": "snapshot"
   },
   {
-    "timestamp": "2026-07-08T20-19-45",
-    "label": "snapshot-2026-07-08T20-19-45",
-    "type": "snapshot"
-  },
-  {
-    "timestamp": "2026-07-08T20-53-33",
-    "label": "snapshot-2026-07-08T20-53-33",
-    "type": "snapshot"
-  },
-  {
-    "timestamp": "2026-07-08T21-11-28",
-    "label": "snapshot-2026-07-08T21-11-28",
-    "type": "snapshot"
-  },
-  {
-    "timestamp": "2026-07-09T11-48-04",
-    "label": "snapshot-2026-07-09T11-48-04",
-    "type": "snapshot"
-  },
-  {
-    "timestamp": "2026-07-15T15-30-32",
-    "label": "snapshot-2026-07-15T15-30-32",
+    "timestamp": "2026-07-23T15-38-56",
+    "label": "snapshot-2026-07-23T15-38-56",
     "type": "snapshot"
   }
 ]

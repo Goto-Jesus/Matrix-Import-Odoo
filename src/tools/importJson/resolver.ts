@@ -1,5 +1,6 @@
 import { searchRead, create, write, fieldsGet } from '../../api/odoo';
 import { findTemplate, cacheTemplate, getOrCreateAttribute, getOrCreateAttributeValue, resolveProduct, invalidateTemplateVariantCache } from '../../bom/product';
+import { track } from '../../state/tracker';
 import type { AttributeVal, BomEntry } from '../docToJson/types';
 import type { ResolvedProduct } from '../../bom/types';
 
@@ -52,6 +53,7 @@ export async function preSeedAttributeLines(entries: BomEntry[]): Promise<void> 
         uom_id: 1,
         ...(isComponent ? { sale_ok: false } : {}),
       });
+      track.template(templateId);
       cacheTemplate(templateName, templateId);
       console.log(`  [+] Шаблон: "${templateName}" (ID: ${templateId}) (${sec(t)})`);
     }
@@ -168,6 +170,7 @@ export async function ensureVariantFromAttrs(
       uom_id: 1,
       ...(isComponent ? { sale_ok: false } : {}),
     });
+    track.template(templateId);
     console.log(`  [+] Шаблон створено: "${templateName}" (ID: ${templateId})`);
   }
 

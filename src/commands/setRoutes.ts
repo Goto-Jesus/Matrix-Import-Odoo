@@ -68,9 +68,10 @@ async function run() {
     'product.template', [['id', 'in', tmplIds]], ['id', 'name', 'route_ids']
   );
 
-  // 5. Classify by max цех number
-  const mtsTemplates: typeof templates = [];   // цехи 1-6  → Manufacture only
-  const mtoTemplates: typeof templates = [];   // цехи 7-9  → Manufacture + MTO
+  // 5. Classify by max цех — for reporting only, ALL templates get Manufacture + MTO
+  //    (потрібно для повного каскаду sub-MO Цех 1 → 9 з підтвердженого SO)
+  const mtsTemplates: typeof templates = [];   // цехи 1-6  (напівфабрикати)
+  const mtoTemplates: typeof templates = [];   // цехи 7-9  (фінальні вироби)
   const unknownTemplates: typeof templates = []; // немає операцій з відомим цехом
 
   for (const tmpl of templates) {
@@ -83,10 +84,10 @@ async function run() {
   // 6. Print classification
   const LINE = '='.repeat(60);
   console.log(`\n${LINE}`);
-  console.log(`ЗАГОТОВКИ [Manufacture] — Цехи 1-6: ${mtsTemplates.length} шаблонів`);
+  console.log(`НАПІВФАБРИКАТИ — Цехи 1-6: ${mtsTemplates.length} шаблонів`);
   for (const t of mtsTemplates) console.log(`  - ${t.name}`);
 
-  console.log(`\nВИРОБНИЦТВО [Manufacture + MTO] — Цехи 7+: ${mtoTemplates.length} шаблонів`);
+  console.log(`\nФІНАЛЬНІ ВИРОБИ — Цехи 7+: ${mtoTemplates.length} шаблонів`);
   for (const t of mtoTemplates) console.log(`  - ${t.name}`);
 
   if (unknownTemplates.length > 0) {
@@ -94,7 +95,10 @@ async function run() {
     for (const t of unknownTemplates) console.log(`  ? ${t.name}`);
   }
 
+  const totalTemplates = mtsTemplates.length + mtoTemplates.length + unknownTemplates.length;
   console.log(`\n${LINE}`);
+  console.log(`ВСЬОГО: ${totalTemplates} шаблонів → Manufacture + MTO`);
+  console.log('(усі отримують обидва маршрути для повного каскаду MO Цех 1 → 9)');
 
   if (isDryRun) {
     console.log('DRY RUN — зміни не застосовано.');
@@ -103,19 +107,13 @@ async function run() {
     return;
   }
 
-  // 7. Apply
-  if (mtsTemplates.length > 0) {
-    await write('product.template', mtsTemplates.map(t => t.id), {
-      route_ids: [[6, 0, [mfgRoute.id]]],
-    });
-    console.log(`[+] Manufacture → ${mtsTemplates.length} шаблонів (заготовки)`);
-  }
-
-  if (mtoTemplates.length > 0) {
-    await write('product.template', mtoTemplates.map(t => t.id), {
+  // 7. Apply Manufacture + MTO to ALL templates with BOMs
+  const allTemplates = [...mtsTemplates, ...mtoTemplates, ...unknownTemplates];
+  if (allTemplates.length > 0) {
+    await write('product.template', allTemplates.map(t => t.id), {
       route_ids: [[6, 0, [mfgRoute.id, mtoRoute.id]]],
     });
-    console.log(`[+] Manufacture + MTO → ${mtoTemplates.length} шаблонів`);
+    console.log(`[+] Manufacture + MTO → ${allTemplates.length} шаблонів`);
   }
 
   console.log('\nМаршрути налаштовано!');

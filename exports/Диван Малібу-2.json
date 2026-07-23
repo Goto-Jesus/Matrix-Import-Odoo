@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Малібу-2.md",
-  "generatedAt": "2026-07-15T21:19:05.459Z",
+  "generatedAt": "2026-07-23T15:39:38.379Z",
   "boms": [
     {
       "product": {
@@ -13,7 +13,8 @@
         ],
         "variantDisplayName": "🪵[Каркас - нарізана деревина] (Д.Малібу)",
         "qty": 1,
-        "odooTemplateId": 49
+        "odooTemplateId": 49,
+        "odooVariantId": 58579
       },
       "operations": [
         {
@@ -421,6 +422,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 49,
+          "odooVariantId": 58579,
           "odooUomId": 1
         },
         {
@@ -471,7 +473,7 @@
         "variantDisplayName": "🧩[Поролон - нарізані компоненти] (Д.Малібу-2, %Диван Пружинний Блок%, %Диван Розмір Бильця❌%)",
         "qty": 1,
         "ifAttr": {
-          "Диван Пружинний Блок": "Звичайний Блок"
+          "Диван Пружинний Блок": "Звичайний"
         },
         "odooTemplateId": 216
       },
@@ -577,7 +579,7 @@
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [
@@ -605,7 +607,7 @@
         "variantDisplayName": "🧩[Поролон - нарізані компоненти] (Д.Малібу-2, %Диван Пружинний Блок%, %Диван Розмір Бильця❌%)",
         "qty": 1,
         "ifAttr": {
-          "Диван Пружинний Блок": "Посилений Блок"
+          "Диван Пружинний Блок": "Посилений"
         },
         "odooTemplateId": 216
       },
@@ -711,7 +713,7 @@
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [
@@ -730,7 +732,8 @@
         ],
         "variantDisplayName": "[Наволочка] (Д.Малібу-2)",
         "qty": 1,
-        "odooTemplateId": 167
+        "odooTemplateId": 167,
+        "odooVariantId": 59513
       },
       "operations": [
         {
@@ -862,6 +865,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 24,
+          "odooVariantId": 58765,
           "odooUomId": 1
         },
         {
@@ -876,12 +880,13 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 24,
+          "odooVariantId": 58766,
           "odooUomId": 1
         }
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [
@@ -1239,6 +1244,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 167,
+          "odooVariantId": 59513,
           "odooUomId": 1
         },
         {
@@ -1412,8 +1418,6 @@
           "qty": 4,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 6,
-          "odooVariantId": 21,
           "odooUomId": 1
         }
       ],
@@ -1507,7 +1511,7 @@
           "Сав Нова Дк Грей 14"
         ],
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця❌": [
@@ -1532,7 +1536,8 @@
         ],
         "variantDisplayName": "[Петля] (Накладная)",
         "qty": 1,
-        "odooTemplateId": 8
+        "odooTemplateId": 8,
+        "odooVariantId": 42624
       },
       "operations": [
         {
@@ -1581,18 +1586,13 @@
           "odooUomId": 1
         },
         {
-          "templateName": "[Соединитель]",
-          "attributes": [
-            {
-              "attributeName": "Соединитель",
-              "value": "83 эконом"
-            }
-          ],
+          "templateName": "Соединитель 83 эконом",
+          "attributes": [],
           "qty": 2,
           "uom": "шт",
           "operationIndex": 0,
-          "odooTemplateId": 193,
-          "odooVariantId": 539,
+          "odooTemplateId": 404,
+          "odooVariantId": 123903,
           "odooUomId": 1
         },
         {
@@ -1631,6 +1631,8 @@
           "qty": 8,
           "uom": "шт",
           "operationIndex": 0,
+          "odooTemplateId": 281,
+          "odooVariantId": 42625,
           "odooUomId": 1
         },
         {

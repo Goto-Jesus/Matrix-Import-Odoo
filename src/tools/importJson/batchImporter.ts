@@ -2,6 +2,7 @@ import { searchRead, write, create, createMany, unlink, executeKw } from '../../
 import { getOrCreateWorkcenter } from '../../bom/product';
 import { ensureVariantFromAttrs, preSeedAttributeLines, clearVariantDisplayCache } from './resolver';
 import { expandEntry } from './expander';
+import { track, resetSession, saveSession } from '../../state/tracker';
 import type { BomEntry } from '../docToJson/types';
 
 const UOM_MAP: Record<string, number> = {
@@ -94,7 +95,7 @@ async function resolveEntry(entry: BomEntry): Promise<PreparedBom | null> {
   const comps: PreparedComp[] = [];
   for (let i = 0; i < entry.components.length; i++) {
     const comp = entry.components[i];
-    const compRes = await ensureVariantFromAttrs(comp.templateName, comp.attributes, comp.isService ?? false);
+    const compRes = await ensureVariantFromAttrs(comp.templateName, comp.attributes, comp.isService ?? false, true);
     if (!compRes) {
       console.warn(`    [SKIP comp] "${comp.templateName}"`);
       continue;
@@ -122,28 +123,27 @@ async function resolveEntry(entry: BomEntry): Promise<PreparedBom | null> {
 // Tries mega-batch first; on failure falls back to per-BOM batches so one bad
 // record doesn't kill everything.
 
-async function createLinesBatch(groups: BomLineGroup[]): Promise<number> {
-  if (groups.length === 0) return 0;
+async function createLinesBatch(groups: BomLineGroup[]): Promise<number[]> {
+  if (groups.length === 0) return [];
 
   const allLines = groups.flatMap(g => g.lines);
   try {
-    await createMany('mrp.bom.line', allLines);
-    return allLines.length;
+    return await createMany('mrp.bom.line', allLines);
   } catch (err: any) {
     const msg = (err.message ?? '').slice(0, 120);
     console.warn(`\n[WARN] Mega-batch рядків не вдався (${msg})`);
     console.warn('[WARN] Перехід до per-BOM batch...\n');
 
-    let created = 0;
+    const allIds: number[] = [];
     for (const group of groups) {
       try {
-        await createMany('mrp.bom.line', group.lines);
-        created += group.lines.length;
+        const ids = await createMany('mrp.bom.line', group.lines);
+        allIds.push(...ids);
       } catch (e: any) {
         console.error(`  [ERROR] Рядки BOM ${group.bomId}: ${(e.message ?? '').slice(0, 120)}`);
       }
     }
-    return created;
+    return allIds;
   }
 }
 
@@ -222,14 +222,16 @@ async function repairIncompleteBoms(
     if (group.lines.length > 0) lineGroups.push(group);
   }
 
-  const created = await createLinesBatch(lineGroups);
-  console.log(`[repair] Відновлено ${created} рядків для ${lineGroups.length} BOM`);
-  return created;
+  const repairedIds = await createLinesBatch(lineGroups);
+  track.bomLines(repairedIds);
+  console.log(`[repair] Відновлено ${repairedIds.length} рядків для ${lineGroups.length} BOM`);
+  return repairedIds.length;
 }
 
 // ─── Main export ──────────────────────────────────────────────────────────────
 
-export async function batchImportAllBoms(boms: BomEntry[]): Promise<void> {
+export async function batchImportAllBoms(boms: BomEntry[], label?: string): Promise<void> {
+  resetSession();
   const totalStart = Date.now();
   const LINE = '='.repeat(60);
   const phases: Array<{ label: string; elapsed: number }> = [];
@@ -309,6 +311,7 @@ export async function batchImportAllBoms(boms: BomEntry[]): Promise<void> {
     product_qty: p.qty,
     type: 'normal',
   })));
+  track.boms(bomIds);
   phase(`Створення ${bomIds.length} BOM`, t);
 
   // ── Phase 5B: batch create operations ─────────────────────────────────────
@@ -332,6 +335,7 @@ export async function batchImportAllBoms(boms: BomEntry[]): Promise<void> {
   let allOpIds: number[] = [];
   if (opRows.length > 0) {
     allOpIds = await createMany('mrp.routing.workcenter', opRows);
+    track.operations(allOpIds);
     phase(`Створення ${allOpIds.length} операцій`, t);
   }
 
@@ -346,10 +350,12 @@ export async function batchImportAllBoms(boms: BomEntry[]): Promise<void> {
     if (group.lines.length > 0) lineGroups.push(group);
   }
 
-  const linesCreated = await createLinesBatch(lineGroups);
-  phase(`Створення ${linesCreated} рядків BOM`, t);
+  const createdLineIds = await createLinesBatch(lineGroups);
+  track.bomLines(createdLineIds);
+  phase(`Створення ${createdLineIds.length} рядків BOM`, t);
 
   // ── Summary ───────────────────────────────────────────────────────────────
+  saveSession(label);
   printSummary(phases, toCreate.length, existedCount, skippedCount, totalStart);
 }
 

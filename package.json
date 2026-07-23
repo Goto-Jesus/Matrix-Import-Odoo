@@ -18,7 +18,10 @@
     "set-routes": "ts-node src/commands/setRoutes.ts",
     "check-chain": "ts-node src/tools/check-chain.ts",
     "check-attrs": "ts-node src/tools/check-attributes.ts",
-    "check-all": "ts-node src/tools/check-all.ts"
+    "check-all": "ts-node src/tools/check-all.ts",
+    "import-template-bom": "ts-node src/commands/importTemplateBom.ts",
+    "fix-product-types": "ts-node src/commands/fixProductTypes.ts",
+    "diagnose-mo": "ts-node src/tools/diagnose-mo.ts"
   },
   "keywords": [],
   "author": "",

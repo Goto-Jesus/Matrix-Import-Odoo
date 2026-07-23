@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Угол Леон-Люкс 200 Механізм.md",
-  "generatedAt": "2026-07-15T21:21:08.532Z",
+  "generatedAt": "2026-07-23T15:39:41.548Z",
   "boms": [
     {
       "product": {
@@ -13,7 +13,8 @@
         ],
         "variantDisplayName": "🪵[Каркас - нарізана деревина] (Д.Леон-Люкс Механізм)",
         "qty": 1,
-        "odooTemplateId": 49
+        "odooTemplateId": 49,
+        "odooVariantId": 92158
       },
       "operations": [
         {
@@ -47,7 +48,8 @@
         ],
         "variantDisplayName": "🪵[Каркас - нарізана деревина] (143П)",
         "qty": 1,
-        "odooTemplateId": 49
+        "odooTemplateId": 49,
+        "odooVariantId": 79097
       },
       "operations": [
         {
@@ -468,7 +470,8 @@
         ],
         "variantDisplayName": "🧩[Планка - нарізані деталі] (Планка 263)",
         "qty": 1,
-        "odooTemplateId": 39
+        "odooTemplateId": 39,
+        "odooVariantId": 92163
       },
       "operations": [
         {
@@ -569,6 +572,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 18,
+          "odooVariantId": 41895,
           "odooUomId": 1
         },
         {
@@ -583,6 +587,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 18,
+          "odooVariantId": 92169,
           "odooUomId": 1
         }
       ],
@@ -648,6 +653,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 18,
+          "odooVariantId": 79118,
           "odooUomId": 1
         },
         {
@@ -837,6 +843,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 49,
+          "odooVariantId": 92158,
           "odooUomId": 1
         },
         {
@@ -928,6 +935,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 49,
+          "odooVariantId": 79097,
           "odooUomId": 1
         },
         {
@@ -974,7 +982,8 @@
         ],
         "variantDisplayName": "🪤[Планка - напівфабрикат] (Планка 263)",
         "qty": 1,
-        "odooTemplateId": 17
+        "odooTemplateId": 17,
+        "odooVariantId": 92210
       },
       "operations": [
         {
@@ -997,6 +1006,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 39,
+          "odooVariantId": 92163,
           "odooUomId": 1
         }
       ]
@@ -1021,7 +1031,7 @@
         "variantDisplayName": "🧩[Поролон - нарізані компоненти] (Угол Леон-Люкс 200, %Диван Пружинний Блок%, %Диван Розмір Бильця%)",
         "qty": 1,
         "ifAttr": {
-          "Диван Пружинний Блок": "Звичайний Блок"
+          "Диван Пружинний Блок": "Звичайний"
         },
         "odooTemplateId": 216
       },
@@ -1046,6 +1056,7 @@
           "uom": "кг",
           "operationIndex": 0,
           "odooTemplateId": 19,
+          "odooVariantId": 43141,
           "odooUomId": 15
         },
         {
@@ -1090,12 +1101,13 @@
           "uom": "m",
           "operationIndex": 0,
           "odooTemplateId": 20,
+          "odooVariantId": 43142,
           "odooUomId": 8
         }
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця": [
@@ -1124,7 +1136,7 @@
         "variantDisplayName": "🧩[Поролон - нарізані компоненти] (Угол Леон-Люкс 200, %Диван Пружинний Блок%, %Диван Розмір Бильця%)",
         "qty": 1,
         "ifAttr": {
-          "Диван Пружинний Блок": "Посилений Блок"
+          "Диван Пружинний Блок": "Посилений"
         },
         "odooTemplateId": 216
       },
@@ -1149,6 +1161,7 @@
           "uom": "кг",
           "operationIndex": 0,
           "odooTemplateId": 19,
+          "odooVariantId": 43141,
           "odooUomId": 15
         },
         {
@@ -1193,12 +1206,13 @@
           "uom": "m",
           "operationIndex": 0,
           "odooTemplateId": 20,
+          "odooVariantId": 43142,
           "odooUomId": 8
         }
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця": [
@@ -1395,12 +1409,13 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 24,
+          "odooVariantId": 79339,
           "odooUomId": 1
         }
       ],
       "expand": {
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Розмір Бильця": [
@@ -2260,6 +2275,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 17,
+          "odooVariantId": 92210,
           "odooUomId": 1
         },
         {
@@ -2268,6 +2284,8 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
+          "odooTemplateId": 228,
+          "odooVariantId": 36555,
           "odooUomId": 1
         },
         {
@@ -2286,6 +2304,8 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
+          "odooTemplateId": 350,
+          "odooVariantId": 92157,
           "odooUomId": 1
         },
         {
@@ -2300,6 +2320,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 8,
+          "odooVariantId": 42624,
           "odooUomId": 1
         },
         {
@@ -2469,7 +2490,7 @@
           "Сав Нова Дк Грей 14"
         ],
         "Диван Пружинний Блок": [
-          "Посиленний",
+          "Посилений",
           "Звичайний"
         ],
         "Диван Наповнювач Подушек": [

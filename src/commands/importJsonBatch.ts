@@ -37,7 +37,7 @@ async function run(): Promise<void> {
   }
 
   console.log(`\nBatch-import: ${data.boms.length} BOM-груп з "${data.sourceFile}"`);
-  await batchImportAllBoms(data.boms);
+  await batchImportAllBoms(data.boms, data.sourceFile);
 }
 
 run().catch((err: Error) => {
