@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Леон-Люкс Механізм.md",
-  "generatedAt": "2026-07-23T15:39:35.618Z",
+  "generatedAt": "2026-07-28T13:42:58.030Z",
   "boms": [
     {
       "product": {
@@ -181,19 +181,21 @@
     },
     {
       "product": {
-        "templateName": "[Планка - нарізані деталі]",
+        "templateName": "🧩[Планка - нарізані деталі]",
         "attributes": [
           {
             "attributeName": "Модель",
             "value": "Планка 193"
           }
         ],
-        "variantDisplayName": "[Планка - нарізані деталі] (Планка 193)",
-        "qty": 1
+        "variantDisplayName": "🧩[Планка - нарізані деталі] (Планка 193)",
+        "qty": 1,
+        "odooTemplateId": 39,
+        "odooVariantId": 63
       },
       "operations": [
         {
-          "name": "Операція (Цех №2-3) [Планка - нарізані деталі] (Планка 193)",
+          "name": "Операція (Цех №2-3) 🧩[Планка - нарізані деталі] (Планка 193)",
           "workcenterName": "Цех №2-3 ДСП (Нарізка Планка)",
           "priceRate": 11,
           "odooWorkcenterId": 22
@@ -305,6 +307,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 18,
+          "odooVariantId": 139680,
           "odooUomId": 1
         },
         {
@@ -880,7 +883,15 @@
           "attributes": [
             {
               "attributeName": "Модель",
-              "value": "Д.Леон-Люкс Механізм"
+              "value": "Д.Леон-Люкс"
+            },
+            {
+              "attributeName": "Диван Пружинний Блок",
+              "value": "%Диван Пружинний Блок%"
+            },
+            {
+              "attributeName": "Диван Розмір Бильця❌",
+              "value": "%Диван Розмір Бильця❌%"
             }
           ],
           "qty": 1,
@@ -1703,7 +1714,7 @@
           "attributes": [
             {
               "attributeName": "Модель",
-              "value": "Д.Леон-Люкс Механізм"
+              "value": "Д.Леон-Люкс"
             },
             {
               "attributeName": "Тканина",

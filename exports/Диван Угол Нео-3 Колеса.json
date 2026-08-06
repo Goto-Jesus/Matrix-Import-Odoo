@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Угол Нео-3 Колеса.md",
-  "generatedAt": "2026-07-23T15:39:42.742Z",
+  "generatedAt": "2026-07-28T13:43:10.760Z",
   "boms": [
     {
       "product": {
@@ -305,6 +305,12 @@
           "workcenterName": "Цех №2-2 ДСП (Нарізка Каркас)",
           "priceRate": 0,
           "odooWorkcenterId": 21
+        },
+        {
+          "name": "Операція (Цех №2-3) [ДСП]",
+          "workcenterName": "Цех №2-3 ДСП (Нарізка Планка)",
+          "priceRate": 0,
+          "odooWorkcenterId": 22
         }
       ],
       "components": [
@@ -349,23 +355,6 @@
           "odooUomId": 10
         }
       ]
-    },
-    {
-      "product": {
-        "templateName": "[Планка - нарізані деталі]",
-        "attributes": [],
-        "variantDisplayName": "[Планка - нарізані деталі]",
-        "qty": 1
-      },
-      "operations": [
-        {
-          "name": "Операція (Цех №2-3) [Планка - нарізані деталі]",
-          "workcenterName": "Цех №2-3 ДСП (Нарізка Планка)",
-          "priceRate": 0,
-          "odooWorkcenterId": 22
-        }
-      ],
-      "components": []
     },
     {
       "product": {
@@ -1160,7 +1149,15 @@
           "attributes": [
             {
               "attributeName": "Модель",
-              "value": "Угол Нео-3 Колеса"
+              "value": "Угол Нео-3"
+            },
+            {
+              "attributeName": "Диван Пружинний Блок",
+              "value": "%Диван Пружинний Блок%"
+            },
+            {
+              "attributeName": "Диван Розмір Бильця",
+              "value": "%Диван Розмір Бильця%"
             }
           ],
           "qty": 1,
@@ -1947,13 +1944,14 @@
           "attributes": [
             {
               "attributeName": "Петля",
-              "value": "к113.01"
+              "value": "К113.01"
             }
           ],
           "qty": 6,
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 8,
+          "odooVariantId": 8927,
           "odooUomId": 1
         },
         {

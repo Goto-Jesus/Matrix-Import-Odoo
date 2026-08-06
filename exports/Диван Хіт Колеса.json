@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Хіт Колеса.md",
-  "generatedAt": "2026-07-23T15:39:43.236Z",
+  "generatedAt": "2026-07-28T13:43:11.252Z",
   "boms": [
     {
       "product": {
@@ -153,6 +153,9 @@
         ],
         "variantDisplayName": "🧩[Каркас - нарізані деталі] (Д.Леон-Люкс Колеса, %Дно Каркасу%)",
         "qty": 1,
+        "ifAttr": {
+          "Дно Каркасу": "ДВП Білий"
+        },
         "odooTemplateId": 177
       },
       "operations": [
@@ -203,16 +206,13 @@
           "templateName": "[ДВП дно]",
           "attributes": [
             {
-              "attributeName": "Модель",
-              "value": "ДВП Білий"
+              "attributeName": "Дно Каркасу",
+              "value": "%Дно Каркасу%"
             }
           ],
           "qty": 1.43,
           "uom": "m²",
           "operationIndex": 0,
-          "ifAttr": {
-            "Дно Каркасу": "ДВП Білий"
-          },
           "odooTemplateId": 213,
           "odooUomId": 10
         }
@@ -240,6 +240,9 @@
         ],
         "variantDisplayName": "🧩[Каркас - нарізані деталі] (Д.Леон-Люкс Колеса, %Дно Каркасу%)",
         "qty": 1,
+        "ifAttr": {
+          "Дно Каркасу": "ДВП Черновое"
+        },
         "odooTemplateId": 177
       },
       "operations": [
@@ -290,16 +293,13 @@
           "templateName": "[ДВП дно]",
           "attributes": [
             {
-              "attributeName": "Модель",
-              "value": "ДВП Черновое"
+              "attributeName": "Дно Каркасу",
+              "value": "%Дно Каркасу%"
             }
           ],
           "qty": 1.43,
           "uom": "m²",
           "operationIndex": 0,
-          "ifAttr": {
-            "Дно Каркасу": "ДВП Черновое"
-          },
           "odooTemplateId": 213,
           "odooUomId": 10
         }
@@ -433,31 +433,11 @@
           "odooTemplateId": 18,
           "odooVariantId": 308,
           "odooUomId": 1
-        },
-        {
-          "templateName": "[Кромка]",
-          "attributes": [
-            {
-              "attributeName": "Колір Ламінату",
-              "value": "%Колір Ламінату%"
-            }
-          ],
-          "qty": 3.3,
-          "uom": "m",
-          "operationIndex": 0,
-          "odooTemplateId": 210,
-          "odooUomId": 8
         }
       ],
       "expand": {
         "Колір Ламінату❌": [
           "❌"
-        ],
-        "Колір Ламінату": [
-          "Венге",
-          "Білий",
-          "Трифе",
-          "Дуб крарт"
         ]
       }
     },
@@ -1392,6 +1372,9 @@
         ],
         "variantDisplayName": "[Подушка] (Д.Хіт, %Тканина%, %Диван Наповнювач Подушек%)",
         "qty": 1,
+        "ifAttr": {
+          "Диван Наповнювач Подушек": "ППУ Крихта"
+        },
         "odooTemplateId": 67
       },
       "operations": [
@@ -1424,9 +1407,6 @@
           "qty": 2.8,
           "uom": "кг",
           "operationIndex": 0,
-          "ifAttr": {
-            "Диван Наповнювач Подушек": "ППУ Крихта"
-          },
           "odooTemplateId": 145,
           "odooVariantId": 261,
           "odooUomId": 15
@@ -1546,6 +1526,9 @@
         ],
         "variantDisplayName": "[Подушка] (Д.Хіт, %Тканина%, %Диван Наповнювач Подушек%)",
         "qty": 1,
+        "ifAttr": {
+          "Диван Наповнювач Подушек": "Холофайбер"
+        },
         "odooTemplateId": 67
       },
       "operations": [
@@ -1578,9 +1561,6 @@
           "qty": 2.8,
           "uom": "кг",
           "operationIndex": 0,
-          "ifAttr": {
-            "Диван Наповнювач Подушек": "Холофайбер"
-          },
           "odooTemplateId": 204,
           "odooVariantId": 704,
           "odooUomId": 15
@@ -1951,7 +1931,7 @@
           "attributes": [
             {
               "attributeName": "Модель",
-              "value": "Д.Хіт Колеса"
+              "value": "Д.Хіт"
             },
             {
               "attributeName": "Тканина",

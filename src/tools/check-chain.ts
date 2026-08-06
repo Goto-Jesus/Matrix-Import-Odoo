@@ -491,6 +491,15 @@ function getProductId(output: string): string {
   return content;
 }
 
+// TODO: [CHECK] getProductType — витягує тип напівфабрикату без productId і атрибутів.
+// "🧩[Поролон - нарізані компоненти] (Д.Лофт-3, %Attr%)" → "🧩[Поролон - нарізані компоненти]"
+// Використовується у detectProductIdMismatches для групування за типом продукту.
+function getProductType(s: string): string {
+  const bracketEnd = s.indexOf("]");
+  if (bracketEnd < 0) return "";
+  return s.slice(0, bracketEnd + 1).trim();
+}
+
 /**
  * Returns line indices of the full BOM block: output line + all content lines
  * (materials AND input product lines), stopping before the next output or section.
@@ -577,24 +586,322 @@ function detectOrphans(
         const msg = `[FIX] ${out.section}: видалено шаблонний рядок без назви моделі: "${out.raw}"`;
         console.log(`  ${msg}`);
         issues.push(msg);
-      } else {
-        // Named orphan → human must fix, insert TODO comment in document
-        // Skip if TODO already present (idempotent re-runs)
-        const alreadyHasTodo = fileLines
-          .slice(out.bom.outputLineIdx + 1, out.bom.outputLineIdx + 5)
-          .some((l) => l.includes("<!-- TODO: [BREAK]"));
-        if (!commentedLines.has(out.bom.outputLineIdx) && !alreadyHasTodo) {
-          fixes.push({
-            lineIdx: out.bom.outputLineIdx,
-            content: `<!-- TODO: [BREAK] цей напівфабрикат виробляється але ніде не споживається -->`,
-            type: "insert-after",
-          });
-        }
-        const msg = `[BREAK] ${out.section}: напівфабрикат виробляється але ніде не споживається: "${out.raw}"`;
-        console.log(`  ${msg}`);
-        issues.push(msg);
+      }
+      // Named orphans (has productId but nothing consumes it) are reported
+      // by detectBrokenChains with richer context about where to look.
+    }
+  }
+
+  return { issues, fixes };
+}
+
+// ─── ProductId mismatch detection ───────────────────────────────────────────
+
+// TODO: [CHECK] detectProductIdMismatches ─────────────────────────────────────
+// ПРОБЛЕМА яку вирішує цей чек:
+//   Коли напівфабрикат визначається як output в Цеху X з одним productId,
+//   але споживається як input в Цеху Y з іншим productId —
+//   парсер (docToJson) створює ДВА різних templateName → Odoo бачить два шаблони.
+//   Перший (тільки в manufacturedNames) отримує "Готова продукція / Дивани" помилково.
+//
+// ПРИКЛАД БАГА (Диван Лофт-3 Механізм.md):
+//   Цех №5 output : 🧩[Поролон - нарізані компоненти] (Д.Лофт-3, ...)  ← "Д.Лофт-3"
+//   Цех №6 input  : 🧩[Поролон - нарізані компоненти] (Д.Лофт-3 Механізм) - 1 шт. ← "Д.Лофт-3 Механізм"
+//   Різниця в першому аргументі `()` = два шаблони в Odoo.
+//
+// ВИПРАВЛЕННЯ: зробити перший аргумент у `()` однаковим скрізь де зустрічається
+// один і той самий тип напівфабрикату (emoji + bracket).
+function detectProductIdMismatches(
+  sections: Map<string, { header: string; boms: BomBlock[] }>,
+  fileLines: string[],
+): { issues: string[]; fixes: Fix[] } {
+  type Occurrence = {
+    productId: string;
+    section: string;
+    lineIdx: number;
+    isOutput: boolean;
+  };
+
+  const byType = new Map<string, Occurrence[]>();
+
+  const addOcc = (
+    s: string,
+    section: string,
+    lineIdx: number,
+    isOutput: boolean,
+  ) => {
+    if (!EMOJI_PREFIX.test(s)) return;
+    const type = getProductType(s);
+    const pid = getProductId(s);
+    if (!type || !pid) return;
+    if (!byType.has(type)) byType.set(type, []);
+    byType.get(type)!.push({ productId: pid, section, lineIdx, isOutput });
+  };
+
+  for (const [sectionKey, sec] of sections) {
+    for (const bom of sec.boms) {
+      addOcc(bom.output, sectionKey, bom.outputLineIdx, true);
+      for (let ii = 0; ii < bom.inputs.length; ii++) {
+        // rawInputLines[ii] is the original line; find its index after the output
+        const rawLine = bom.rawInputLines[ii];
+        const lineIdx = fileLines.indexOf(rawLine, bom.outputLineIdx);
+        addOcc(bom.inputs[ii], sectionKey, lineIdx, false);
       }
     }
+  }
+
+  const issues: string[] = [];
+  const fixes: Fix[] = [];
+  const reported = new Set<string>();
+
+  for (const [type, occs] of byType) {
+    const outputIds = [
+      ...new Set(occs.filter((o) => o.isOutput).map((o) => o.productId)),
+    ];
+    const inputIds = [
+      ...new Set(occs.filter((o) => !o.isOutput).map((o) => o.productId)),
+    ];
+
+    for (const outId of outputIds) {
+      for (const inId of inputIds) {
+        if (outId === inId) continue; // точний збіг — ОК
+
+        // Виявляємо prefix-mismatch: один є початком іншого з пробілом-роздільником.
+        // "Д.Лофт-3" vs "Д.Лофт-3 Механізм" → mismatch
+        // "Д.Лофт" vs "Д.Лофт-3" → НЕ mismatch (різні моделі, різний дефіс)
+        const isMismatch =
+          inId.startsWith(outId + " ") || outId.startsWith(inId + " ");
+        if (!isMismatch) continue;
+
+        const key = `${type}::${outId}::${inId}`;
+        if (reported.has(key)) continue;
+        reported.add(key);
+
+        const msg =
+          `[BREAK] ${type}: productId не збігається — ` +
+          `виробляється як "${outId}" але споживається як "${inId}". ` +
+          `Це створює два окремі шаблони в Odoo і один з них ` +
+          `отримує категорію "Готова продукція / Дивани" помилково.`;
+        console.log(`  ${msg}`);
+        issues.push(msg);
+
+        // Вставляємо TODO після output-рядка виробника
+        for (const occ of occs.filter(
+          (o) => o.isOutput && o.productId === outId,
+        )) {
+          const alreadyTodo = fileLines
+            .slice(occ.lineIdx + 1, occ.lineIdx + 4)
+            .some((l) => l.includes("TODO: [BREAK] productId"));
+          if (!alreadyTodo) {
+            fixes.push({
+              lineIdx: occ.lineIdx,
+              content:
+                `<!-- TODO: [BREAK] productId "${outId}" — у компоненті записано "${inId}". ` +
+                `Привести до спільного вигляду скрізь у файлі -->`,
+              type: "insert-after",
+            });
+          }
+        }
+
+        // Вставляємо TODO після input-рядка з невідповідним productId
+        for (const occ of occs.filter(
+          (o) => !o.isOutput && o.productId === inId,
+        )) {
+          if (occ.lineIdx < 0) continue;
+          const alreadyTodo = fileLines
+            .slice(occ.lineIdx + 1, occ.lineIdx + 4)
+            .some((l) => l.includes("TODO: [BREAK] productId"));
+          if (!alreadyTodo) {
+            fixes.push({
+              lineIdx: occ.lineIdx,
+              content:
+                `<!-- TODO: [BREAK] productId "${inId}" — у заголовку записано "${outId}". ` +
+                `Привести до спільного вигляду скрізь у файлі -->`,
+              type: "insert-after",
+            });
+          }
+        }
+      }
+    }
+  }
+
+  return { issues, fixes };
+}
+
+// ─── Generic broken-chain detection ─────────────────────────────────────────
+// Перевіряє ланцюги списання для БУДЬ-ЯКОГО документа без hardcoded назв.
+//
+// [CHAIN-OUT] — виріб є заголовком цеху (виробляється), але ніде не фігурує
+//   як компонент "- N шт." в жодному наступному цеху.
+//   TODO ставиться на рядок виходу, вказується де саме очікували побачити цей виріб.
+//
+// [CHAIN-IN] — компонент "- N шт." чий тип [bracket] є виробничим в цьому документі,
+//   але конкретний ідентифікатор не знайдений серед заголовків жодного цеху.
+//   TODO ставиться на рядок компонента, вказується де виробляється схожий тип.
+//
+// Сировина (кг/m²/m³/m) та зовнішні деталі ([ДСП], [Тканина], [Ламінат - лист]…)
+// пропускаються: рядки з не-шт. одиницями відфільтровуються,
+// а компоненти типів що ніколи не є заголовком цеху — ігноруються автоматично.
+//
+// Prefix-mismatch ("Д.Лофт-3" vs "Д.Лофт-3 Механізм") залишається
+// за detectProductIdMismatches щоб зберегти Odoo-специфічне пояснення.
+
+const RAW_MATERIAL_UNIT_RE = /[-]\s*[\d.,]+\s*(кг|m³|m²|дм²|m)\s*$/u;
+
+function detectBrokenChains(
+  sections: Map<string, { header: string; boms: BomBlock[] }>,
+  fileLines: string[],
+): { issues: string[]; fixes: Fix[] } {
+  const issues: string[] = [];
+  const fixes: Fix[] = [];
+
+  type ChainEntry = {
+    bracketType: string; // e.g. "🧩[Поролон - нарізані компоненти]"
+    firstArg: string;    // e.g. "Угол Леон-Люкс 140 Механізм"
+    key: string;         // bracketType + "::" + firstArg
+    section: string;     // e.g. "Цех №5"
+    lineIdx: number;
+  };
+
+  function extractEntry(
+    s: string,
+    section: string,
+    lineIdx: number,
+  ): ChainEntry | null {
+    if (!s) return null;
+    // Raw-material lines (кг/m²/…) are treated as "output" by parseDocument
+    // because they don't end in "шт." — skip them, they're not semi-finished.
+    if (RAW_MATERIAL_UNIT_RE.test(s)) return null;
+    const bracketType = getProductType(s);
+    if (!bracketType) return null; // no bracket → sofa or service line
+    const firstArg = getProductId(s);
+    if (!firstArg) return null;   // empty productId → template leftover (handled by detectOrphans)
+    return { bracketType, firstArg, key: `${bracketType}::${firstArg}`, section, lineIdx };
+  }
+
+  const outputs: ChainEntry[] = [];
+  const inputs: ChainEntry[] = [];
+
+  for (const [sectionKey, sec] of sections) {
+    for (const bom of sec.boms) {
+      const out = extractEntry(bom.output, sectionKey, bom.outputLineIdx);
+      if (out) outputs.push(out);
+
+      for (let ii = 0; ii < bom.inputs.length; ii++) {
+        const rawLine = bom.rawInputLines[ii];
+        const lineIdx = fileLines.indexOf(rawLine, bom.outputLineIdx);
+        if (lineIdx < 0) continue;
+        const inp = extractEntry(bom.inputs[ii], sectionKey, lineIdx);
+        if (inp) inputs.push(inp);
+      }
+    }
+  }
+
+  const outputKeySet = new Set(outputs.map((e) => e.key));
+  const inputKeySet  = new Set(inputs.map((e) => e.key));
+  // Types that appear as outputs: used to skip raw-material inputs (like [ДСП])
+  // that never have a production BOM in this document.
+  const outputBracketTypes = new Set(outputs.map((e) => e.bracketType));
+
+  function hasTodoTag(lineIdx: number, tag: string): boolean {
+    return fileLines.slice(lineIdx + 1, lineIdx + 5).some((l) => l.includes(tag));
+  }
+
+  // Whether two firstArgs have a prefix relationship (handled by detectProductIdMismatches).
+  function isPrefixPair(a: string, b: string): boolean {
+    return a.startsWith(b + " ") || b.startsWith(a + " ");
+  }
+
+  const reportedOut = new Set<string>();
+  const reportedIn  = new Set<string>();
+
+  // ─── [CHAIN-OUT]: produced but not consumed ──────────────────────────────
+  for (const out of outputs) {
+    if (reportedOut.has(out.key)) continue;
+    if (inputKeySet.has(out.key)) continue; // correctly consumed → OK
+
+    // Prefix mismatch is detectProductIdMismatches territory — skip.
+    if (EMOJI_PREFIX.test(out.bracketType)) {
+      const hasPrefixInput = inputs
+        .filter((e) => e.bracketType === out.bracketType)
+        .some((e) => isPrefixPair(out.firstArg, e.firstArg));
+      if (hasPrefixInput) continue;
+    }
+
+    if (hasTodoTag(out.lineIdx, "[CHAIN-OUT]")) continue;
+    if (hasTodoTag(out.lineIdx, "[BREAK] productId")) continue;
+
+    reportedOut.add(out.key);
+
+    const consumedVariants = [
+      ...new Set(
+        inputs
+          .filter((e) => e.bracketType === out.bracketType)
+          .map((e) => `"${e.firstArg}" у ${e.section}`),
+      ),
+    ];
+
+    const msg =
+      `[CHAIN-OUT] ${out.section}: "${out.firstArg}" (${out.bracketType}) ` +
+      `виробляється але не знайдений як компонент` +
+      (consumedVariants.length
+        ? `. Цей тип споживається як: ${consumedVariants.join(", ")}`
+        : ` у жодному наступному цеху`);
+    console.log(`  ${msg}`);
+    issues.push(msg);
+
+    const todoText =
+      consumedVariants.length
+        ? `<!-- TODO: [CHAIN-OUT] виробляється у ${out.section}, але не знайдений як компонент. ` +
+          `Цей тип (${out.bracketType}) споживається як: ${consumedVariants.join("; ")} -->`
+        : `<!-- TODO: [CHAIN-OUT] виробляється у ${out.section}, але не споживається у жодному наступному цеху -->`;
+
+    fixes.push({ lineIdx: out.lineIdx, content: todoText, type: "insert-after" });
+  }
+
+  // ─── [CHAIN-IN]: consumed but not produced ───────────────────────────────
+  for (const inp of inputs) {
+    if (reportedIn.has(inp.key)) continue;
+    if (outputKeySet.has(inp.key)) continue; // correctly produced → OK
+
+    // Only check components whose bracketType IS produced somewhere in this file.
+    // Raw materials ([ДСП], [Тканина], …) never appear in outputBracketTypes → skip.
+    if (!outputBracketTypes.has(inp.bracketType)) continue;
+
+    // Prefix mismatch is detectProductIdMismatches territory — skip.
+    if (EMOJI_PREFIX.test(inp.bracketType)) {
+      const hasPrefixOutput = outputs
+        .filter((e) => e.bracketType === inp.bracketType)
+        .some((e) => isPrefixPair(inp.firstArg, e.firstArg));
+      if (hasPrefixOutput) continue;
+    }
+
+    if (hasTodoTag(inp.lineIdx, "[CHAIN-IN]")) continue;
+    if (hasTodoTag(inp.lineIdx, "[BREAK] productId")) continue;
+
+    reportedIn.add(inp.key);
+
+    const producedVariants = [
+      ...new Set(
+        outputs
+          .filter((e) => e.bracketType === inp.bracketType)
+          .map((e) => `"${e.firstArg}" у ${e.section}`),
+      ),
+    ];
+
+    const msg =
+      `[CHAIN-IN] ${inp.section}: "${inp.firstArg}" (${inp.bracketType}) ` +
+      `споживається але не знайдений як виріб. ` +
+      `Очікував виробництво у: ${producedVariants.join(", ")}`;
+    console.log(`  ${msg}`);
+    issues.push(msg);
+
+    const todoText =
+      `<!-- TODO: [CHAIN-IN] споживається у ${inp.section}, але не знайдений як виріб. ` +
+      `Очікував: ${inp.bracketType} "${inp.firstArg}". ` +
+      `Наявні варіанти виробництва: ${producedVariants.join("; ")} -->`;
+
+    fixes.push({ lineIdx: inp.lineIdx, content: todoText, type: "insert-after" });
   }
 
   return { issues, fixes };
@@ -829,9 +1136,19 @@ export function runChainCheck(
     sections,
     fileLines,
   );
+  // TODO: [CHECK] detectProductIdMismatches — перевірка невідповідності першого
+  // аргументу `()` між виробленим напівфабрикатом і його посиланням як компонента.
+  // Різниця в productId = два окремих шаблони в Odoo → неправильна категорія.
+  const { issues: mismatchIssues, fixes: mismatchFixes } =
+    detectProductIdMismatches(sections, fileLines);
+  // TODO: [CHECK] detectBrokenChains — перевірка цілісності ланцюгів списання.
+  // [CHAIN-OUT]: виріб виробляється але ніде не споживається як компонент.
+  // [CHAIN-IN]: компонент споживається але ніколи не виробляється у цьому документі.
+  const { issues: chainIssues, fixes: chainFixes } =
+    detectBrokenChains(sections, fileLines);
 
-  const allFixes = [...verifyFixes, ...orphanFixes];
-  const allIssues = [...verifyIssues, ...orphanIssues];
+  const allFixes = [...verifyFixes, ...orphanFixes, ...mismatchFixes, ...chainFixes];
+  const allIssues = [...verifyIssues, ...orphanIssues, ...mismatchIssues, ...chainIssues];
 
   if (allFixes.length === 0 && allIssues.length === 0) {
     console.log("  ✅ Всі ланцюги цілі.");

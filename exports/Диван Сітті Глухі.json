@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Сітті Глухі.md",
-  "generatedAt": "2026-07-23T15:39:40.296Z",
+  "generatedAt": "2026-07-28T13:43:07.307Z",
   "boms": [
     {
       "product": {
@@ -368,7 +368,11 @@
           "attributes": [
             {
               "attributeName": "Модель",
-              "value": "Б.Престиж Планка 10См"
+              "value": "Б.Престиж"
+            },
+            {
+              "attributeName": "Диван Розмір Бильця❌",
+              "value": "%Диван Розмір Бильця❌%"
             }
           ],
           "qty": 1,
@@ -1277,14 +1281,14 @@
           "attributes": [
             {
               "attributeName": "Модель",
-              "value": "Д.Сітті Глухі"
+              "value": "Д.Сітті"
             }
           ],
           "qty": 2,
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 167,
-          "odooVariantId": 72711,
+          "odooVariantId": 72710,
           "odooUomId": 1
         },
         {

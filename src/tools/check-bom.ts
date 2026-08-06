@@ -15,6 +15,21 @@ const QTY_EXTRACT_RE = /[-]\s*([\d.,]*)\s*(кг|m³|m²|дм²|m|шт\.?)?\s*$/u
 
 const VALID_UNITS = new Set(["кг", "m", "m²", "m³", "шт", "шт.", "дм²"]);
 
+// TODO: [CHECK] SPELLING_FIXES — авто-виправлення написання назв сировини/фурнітури.
+// Помилка в написанні = товар не знаходить свій keyword у RAW_MATERIAL_CATEGORY
+// (src/tools/importJson/template-bom/importer.ts) і залишається без категорії в Odoo.
+// Додавати нові правила при виявленні нових орфографічних варіантів.
+const SPELLING_FIXES: Array<{ wrong: RegExp; correct: string }> = [
+  // "Тик -так" (и замість і, пробіл перед дефісом) → "Тік-так"
+  { wrong: /Тик\s*-\s*так/u, correct: "Тік-так" },
+];
+
+// TODO: [CHECK] SERVICE_ITEMS — список назв сервісних товарів що ПОВИННІ мати
+// префікс "(Послуга)" перед назвою. Без нього docToJson не виставляє isService:true
+// → applyProductCategories (importer.ts) не пропускає товар при класифікації
+// → він може отримати неправильну категорію або залишитись без неї в Odoo.
+const SERVICE_ITEMS = new Set(["Перевірка Якості"]);
+
 function stripComment(line: string): string {
   let s = line.replace(/<!--.*?-->/g, "");
   const idx = s.indexOf("//");
@@ -53,6 +68,37 @@ export function runBomCheck(content: string, fileName: string): { content: strin
   const issues: string[] = [];
   const fixes: Fix[] = [];
   const pendingTodos = new Map<number, string[]>(); // lineIdx → todo messages
+
+  // TODO: [CHECK] Pre-pass: spelling + service prefix ─────────────────────
+  // Проходимо всі рядки ДО основного циклу. Pre-pass обробляє ВСІ рядки
+  // (включно з # ВТК яку основний цикл пропускає бо вона не є "Цех №").
+  for (let i = 0; i < lines.length; i++) {
+    // Spelling auto-fix: виправляємо відомі орфографічні варіанти назв
+    // сировини/фурнітури що є ключовими словами у RAW_MATERIAL_CATEGORY.
+    for (const rule of SPELLING_FIXES) {
+      if (!rule.wrong.test(lines[i])) continue;
+      const wrong = lines[i].match(rule.wrong)![0];
+      lines[i] = lines[i].replace(rule.wrong, rule.correct);
+      const msg = `[FIX] Написання: "${wrong}" → "${rule.correct}" (рядок ${i + 1})`;
+      console.log(`  ${msg}`);
+      issues.push(msg);
+    }
+
+    // Service prefix auto-fix: перевіряємо SERVICE_ITEMS рядки.
+    // # ВТК не є "Цех №" і пропускається основним циклом — тому перевіряємо тут.
+    // Рядки типу "Перевірка Якості - 1 шт." без "(Послуга)" виправляємо in-place.
+    const trimmedLine = lines[i].trim();
+    for (const svcName of SERVICE_ITEMS) {
+      if (!trimmedLine.includes(svcName)) continue;
+      if (trimmedLine.startsWith("(Послуга)")) break; // вже правильно
+      const indent = lines[i].match(/^(\s*)/)?.[1] ?? "";
+      lines[i] = indent + "(Послуга) " + lines[i].trimStart();
+      const msg = `[FIX] Сервіс: додано "(Послуга)" до "${trimmedLine.replace(/\s*-\s*[\d.,]*\s*шт\.?\s*$/, "").trim()}"`;
+      console.log(`  ${msg}`);
+      issues.push(msg);
+      break;
+    }
+  }
 
   let section = "";
 
@@ -106,6 +152,17 @@ export function runBomCheck(content: string, fileName: string): { content: strin
       continue;
     }
 
+    // "---" горизонтальна лінія — роздільник між паралельними групами продуктів
+    // (наприклад, Д.Леон-Люкс Механізм і 143П в одному цеху).
+    // Це НЕ "або" (альтернатива), але скидає стан блоку щоб не спрацьовував
+    // хибний [BREAK] "відсутнє або" між умовними блоками різних моделей.
+    if (t === "---") {
+      flushBlock();
+      resetBlock();
+      seenAbo = true;
+      continue;
+    }
+
     // Output line
     if (isOutputLine(t)) {
       const isConditional = hasConditionalTag(raw);
@@ -115,6 +172,16 @@ export function runBomCheck(content: string, fileName: string): { content: strin
         const msg = `[BREAK] ${section}: відсутнє "або" перед "${t}"`;
         console.log(`  ${msg}`);
         issues.push(msg);
+        // Insert TODO so the user sees the reason in the file
+        const alreadyTodo = lines
+          .slice(i + 1, i + 4)
+          .some((l) => l.includes("<!-- TODO: [BREAK] відсутнє"));
+        if (!alreadyTodo) {
+          fixes.push({
+            lineIdx: i,
+            content: `<!-- TODO: [BREAK] відсутнє "або" перед цим рядком — два умовні блоки підряд. Додайте "або" між ними якщо це альтернативи, або "---" якщо це різні моделі -->`,
+          });
+        }
       }
 
       flushBlock();

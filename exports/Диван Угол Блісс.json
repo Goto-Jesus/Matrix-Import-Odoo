@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Угол Блісс.md",
-  "generatedAt": "2026-07-23T15:39:40.699Z",
+  "generatedAt": "2026-07-28T13:43:07.869Z",
   "boms": [
     {
       "product": {
@@ -277,6 +277,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 18,
+          "odooVariantId": 169536,
           "odooUomId": 1
         },
         {
@@ -351,6 +352,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 18,
+          "odooVariantId": 169537,
           "odooUomId": 1
         },
         {
@@ -955,6 +957,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 24,
+          "odooVariantId": 169568,
           "odooUomId": 1
         },
         {
@@ -969,6 +972,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 24,
+          "odooVariantId": 169569,
           "odooUomId": 1
         }
       ],
@@ -1730,14 +1734,18 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
+          "odooTemplateId": 942,
+          "odooVariantId": 246618,
           "odooUomId": 1
         },
         {
-          "templateName": "Пруж Блюз",
+          "templateName": "Додатковий пруж.блюз",
           "attributes": [],
           "qty": 2,
           "uom": "шт",
           "operationIndex": 0,
+          "odooTemplateId": 346,
+          "odooVariantId": 79095,
           "odooUomId": 1
         },
         {

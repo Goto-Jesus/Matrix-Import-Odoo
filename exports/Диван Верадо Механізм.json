@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Верадо Механізм.md",
-  "generatedAt": "2026-07-23T15:39:33.930Z",
+  "generatedAt": "2026-07-28T13:42:55.247Z",
   "boms": [
     {
       "product": {
@@ -984,7 +984,8 @@
           }
         ],
         "variantDisplayName": "🧩[Чохол - нарізані матеріали Д.Верадо Механізм] (%Тканина%, %Диван Розмір Бильця%)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 970
       },
       "operations": [
         {
@@ -1150,7 +1151,8 @@
           }
         ],
         "variantDisplayName": "🪤[Чохол - напівфабрикат Д.Верадо Механізм] (%Тканина%, %Диван Розмір Бильця%)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 971
       },
       "operations": [
         {
@@ -1176,6 +1178,7 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
+          "odooTemplateId": 970,
           "odooUomId": 1
         }
       ],
@@ -1427,7 +1430,8 @@
           }
         ],
         "variantDisplayName": "Диван Верадо Механізм (%Тканина%, %Диван Пружинний Блок%, %Диван Розмір Бильця%)",
-        "qty": 1
+        "qty": 1,
+        "odooTemplateId": 972
       },
       "operations": [
         {
@@ -1495,24 +1499,7 @@
           "qty": 1,
           "uom": "шт",
           "operationIndex": 0,
-          "odooUomId": 1
-        },
-        {
-          "templateName": "[Подушка]",
-          "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "Д.Верадо Механізм"
-            },
-            {
-              "attributeName": "Тканина",
-              "value": "%Тканина%"
-            }
-          ],
-          "qty": 2,
-          "uom": "шт",
-          "operationIndex": 0,
-          "odooTemplateId": 67,
+          "odooTemplateId": 971,
           "odooUomId": 1
         },
         {
@@ -1528,6 +1515,28 @@
           "operationIndex": 0,
           "odooTemplateId": 17,
           "odooVariantId": 643,
+          "odooUomId": 1
+        },
+        {
+          "templateName": "[Подушка]",
+          "attributes": [
+            {
+              "attributeName": "Модель",
+              "value": "Д.Верадо"
+            },
+            {
+              "attributeName": "Тканина",
+              "value": "%Тканина%"
+            },
+            {
+              "attributeName": "Диван Наповнювач Подушек❌",
+              "value": "%Диван Наповнювач Подушек❌%"
+            }
+          ],
+          "qty": 2,
+          "uom": "шт",
+          "operationIndex": 0,
+          "odooTemplateId": 67,
           "odooUomId": 1
         },
         {
@@ -1713,6 +1722,9 @@
           "❌"
         ],
         "Дно Каркасу❌": [
+          "❌"
+        ],
+        "Диван Наповнювач Подушек❌": [
           "❌"
         ]
       }

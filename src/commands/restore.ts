@@ -145,8 +145,24 @@ async function del(
     await unlink(model, ids);
     stats.deleted += ids.length;
     console.log(`  [OK] ${label}: видалено ${ids.length}`);
-  } catch (err: any) {
-    stats.errors += ids.length;
-    console.log(`  [!!] ${label}: помилка — ${err.message}`);
+  } catch {
+    console.log(`  [!!] ${label}: пакетне видалення не вдалося — перевіряю кожен ID...`);
+    let deleted = 0;
+    let failed = 0;
+    for (const id of ids) {
+      try {
+        await unlink(model, [id]);
+        deleted++;
+      } catch (e: any) {
+        failed++;
+        const raw: string = e.message ?? String(e);
+        const msg = raw.replace(/^Odoo RPC error:\s*"?/, '').replace(/"$/, '').trim();
+        console.log(`       [!!] ID ${id}: ${msg}`);
+      }
+    }
+    stats.deleted += deleted;
+    stats.errors += failed;
+    if (deleted > 0) console.log(`       [OK] ${label}: видалено ${deleted}`);
+    if (failed > 0)  console.log(`       [!!] ${label}: не вдалося ${failed}`);
   }
 }

@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Угол Лофт-2 Колеса.md",
-  "generatedAt": "2026-07-23T15:39:41.748Z",
+  "generatedAt": "2026-07-28T13:43:09.535Z",
   "boms": [
     {
       "product": {
@@ -196,7 +196,7 @@
         {
           "name": "Операція (Цех №2-2) 🧩[Каркас - нарізані деталі] (100 Дерево Колеса, %Дно Каркасу❌%)",
           "workcenterName": "Цех №2-2 ДСП (Нарізка Каркас)",
-          "priceRate": 0,
+          "priceRate": 30,
           "odooWorkcenterId": 21
         }
       ],
@@ -227,16 +227,6 @@
           "odooUomId": 10
         },
         {
-          "templateName": "Фанера",
-          "attributes": [],
-          "qty": 0.83,
-          "uom": "m²",
-          "operationIndex": 0,
-          "odooTemplateId": 15,
-          "odooVariantId": 33,
-          "odooUomId": 10
-        },
-        {
           "templateName": "[ДВП]",
           "attributes": [
             {
@@ -249,6 +239,16 @@
           "operationIndex": 0,
           "odooTemplateId": 14,
           "odooVariantId": 325,
+          "odooUomId": 10
+        },
+        {
+          "templateName": "Фанера",
+          "attributes": [],
+          "qty": 0.83,
+          "uom": "m²",
+          "operationIndex": 0,
+          "odooTemplateId": 15,
+          "odooVariantId": 33,
           "odooUomId": 10
         }
       ],
@@ -283,31 +283,17 @@
           "odooWorkcenterId": 21
         }
       ],
-      "components": [],
-      "expand": {
-        "Дно Каркасу❌": [
-          "❌"
-        ]
-      }
-    },
-    {
-      "product": {
-        "templateName": "[ДСП]",
-        "attributes": [],
-        "variantDisplayName": "[ДСП]",
-        "qty": 1,
-        "odooTemplateId": 13,
-        "odooVariantId": 31
-      },
-      "operations": [
-        {
-          "name": "Операція (Цех №2-2) [ДСП]",
-          "workcenterName": "Цех №2-2 ДСП (Нарізка Каркас)",
-          "priceRate": 30,
-          "odooWorkcenterId": 21
-        }
-      ],
       "components": [
+        {
+          "templateName": "[ДСП]",
+          "attributes": [],
+          "qty": 0.8,
+          "uom": "m²",
+          "operationIndex": 0,
+          "odooTemplateId": 13,
+          "odooVariantId": 31,
+          "odooUomId": 10
+        },
         {
           "templateName": "[ДВП]",
           "attributes": [
@@ -348,7 +334,12 @@
           "odooVariantId": 325,
           "odooUomId": 10
         }
-      ]
+      ],
+      "expand": {
+        "Дно Каркасу❌": [
+          "❌"
+        ]
+      }
     },
     {
       "product": {
@@ -1263,7 +1254,15 @@
           "attributes": [
             {
               "attributeName": "Модель",
-              "value": "Угол Лофт-2 Колеса"
+              "value": "Угол Лофт-2"
+            },
+            {
+              "attributeName": "Диван Пружинний Блок",
+              "value": "%Диван Пружинний Блок%"
+            },
+            {
+              "attributeName": "Диван Розмір Бильця",
+              "value": "%Диван Розмір Бильця%"
             }
           ],
           "qty": 1,

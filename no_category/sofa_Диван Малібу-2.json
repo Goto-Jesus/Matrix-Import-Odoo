@@ -1,0 +1,24 @@
+{
+  "sofa": "Диван Малібу-2",
+  "count": 1,
+  "products": [
+    {
+      "id": 628,
+      "name": "🪤[Каркас - напівфабрикат] Д.Малібу-2",
+      "currentCategory": "немає",
+      "type": "consu",
+      "sale_ok": false,
+      "purchase_ok": true,
+      "usedInBoms": [
+        {
+          "bomId": 28394,
+          "bomCode": "tmpl::🪤🧽[Каркас + Поролон - напівфабрикат 2] Д.Малібу-2",
+          "parentTemplate": "🪤🧽[Каркас + Поролон - напівфабрикат 2] Д.Малібу-2"
+        }
+      ],
+      "belongsToSofas": [
+        "Диван Малібу-2"
+      ]
+    }
+  ]
+}

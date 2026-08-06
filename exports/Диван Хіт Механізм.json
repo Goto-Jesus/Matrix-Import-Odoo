@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Хіт Механізм.md",
-  "generatedAt": "2026-07-23T15:39:43.433Z",
+  "generatedAt": "2026-07-28T13:43:11.677Z",
   "boms": [
     {
       "product": {
@@ -153,6 +153,9 @@
         ],
         "variantDisplayName": "🧩[Каркас - нарізані деталі] (Д.Леон-Люкс Механізм, %Дно Каркасу%)",
         "qty": 1,
+        "ifAttr": {
+          "Дно Каркасу": "ДВП Білий"
+        },
         "odooTemplateId": 177
       },
       "operations": [
@@ -203,16 +206,13 @@
           "templateName": "[ДВП дно]",
           "attributes": [
             {
-              "attributeName": "Модель",
-              "value": "ДВП Білий"
+              "attributeName": "Дно Каркасу",
+              "value": "%Дно Каркасу%"
             }
           ],
           "qty": 1.43,
           "uom": "m²",
           "operationIndex": 0,
-          "ifAttr": {
-            "Дно Каркасу": "ДВП Білий"
-          },
           "odooTemplateId": 213,
           "odooUomId": 10
         }
@@ -240,6 +240,9 @@
         ],
         "variantDisplayName": "🧩[Каркас - нарізані деталі] (Д.Леон-Люкс Механізм, %Дно Каркасу%)",
         "qty": 1,
+        "ifAttr": {
+          "Дно Каркасу": "ДВП Черновое"
+        },
         "odooTemplateId": 177
       },
       "operations": [
@@ -290,16 +293,13 @@
           "templateName": "[ДВП дно]",
           "attributes": [
             {
-              "attributeName": "Модель",
-              "value": "ДВП Черновое"
+              "attributeName": "Дно Каркасу",
+              "value": "%Дно Каркасу%"
             }
           ],
           "qty": 1.43,
           "uom": "m²",
           "operationIndex": 0,
-          "ifAttr": {
-            "Дно Каркасу": "ДВП Черновое"
-          },
           "odooTemplateId": 213,
           "odooUomId": 10
         }
@@ -430,6 +430,7 @@
           "uom": "шт",
           "operationIndex": 0,
           "odooTemplateId": 18,
+          "odooVariantId": 226715,
           "odooUomId": 1
         }
       ],
@@ -980,7 +981,15 @@
           "attributes": [
             {
               "attributeName": "Модель",
-              "value": "Д.Хіт Механізм"
+              "value": "Д.Хіт"
+            },
+            {
+              "attributeName": "Диван Пружинний Блок",
+              "value": "%Диван Пружинний Блок%"
+            },
+            {
+              "attributeName": "Диван Розмір Бильця❌",
+              "value": "%Диван Розмір Бильця❌%"
             }
           ],
           "qty": 1,

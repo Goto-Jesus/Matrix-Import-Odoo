@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Доррі Механізм.md",
-  "generatedAt": "2026-07-23T15:39:34.574Z",
+  "generatedAt": "2026-07-28T13:42:56.146Z",
   "boms": [
     {
       "product": {
@@ -163,31 +163,17 @@
           "odooWorkcenterId": 21
         }
       ],
-      "components": [],
-      "expand": {
-        "Дно Каркасу❌": [
-          "❌"
-        ]
-      }
-    },
-    {
-      "product": {
-        "templateName": "[ДСП]",
-        "attributes": [],
-        "variantDisplayName": "[ДСП]",
-        "qty": 1,
-        "odooTemplateId": 13,
-        "odooVariantId": 31
-      },
-      "operations": [
-        {
-          "name": "Операція (Цех №2-2) [ДСП]",
-          "workcenterName": "Цех №2-2 ДСП (Нарізка Каркас)",
-          "priceRate": 0,
-          "odooWorkcenterId": 21
-        }
-      ],
       "components": [
+        {
+          "templateName": "[ДСП]",
+          "attributes": [],
+          "qty": 1.76,
+          "uom": "m²",
+          "operationIndex": 0,
+          "odooTemplateId": 13,
+          "odooVariantId": 31,
+          "odooUomId": 10
+        },
         {
           "templateName": "[ДВП]",
           "attributes": [
@@ -203,7 +189,12 @@
           "odooVariantId": 325,
           "odooUomId": 10
         }
-      ]
+      ],
+      "expand": {
+        "Дно Каркасу❌": [
+          "❌"
+        ]
+      }
     },
     {
       "product": {
@@ -1004,7 +995,15 @@
           "attributes": [
             {
               "attributeName": "Модель",
-              "value": "Д.Доррі Механізм"
+              "value": "Д.Доррі"
+            },
+            {
+              "attributeName": "Диван Пружинний Блок",
+              "value": "%Диван Пружинний Блок%"
+            },
+            {
+              "attributeName": "Диван Розмір Бильця❌",
+              "value": "%Диван Розмір Бильця❌%"
             }
           ],
           "qty": 1,

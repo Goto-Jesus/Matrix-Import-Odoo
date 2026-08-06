@@ -1,0 +1,41 @@
+{
+  "count": 3,
+  "products": [
+    {
+      "id": 71,
+      "name": "(Послуга) Перевірка Якості",
+      "currentCategory": "немає",
+      "type": "service",
+      "sale_ok": false,
+      "purchase_ok": false,
+      "usedInBoms": [],
+      "belongsToSofas": []
+    },
+    {
+      "id": 517,
+      "name": "[Наволочка] Д.Елегант НН",
+      "currentCategory": "немає",
+      "type": "consu",
+      "sale_ok": false,
+      "purchase_ok": true,
+      "usedInBoms": [
+        {
+          "bomId": 28299,
+          "bomCode": "tmpl::[Подушка] Д.Елегант НН",
+          "parentTemplate": "[Подушка] Д.Елегант НН"
+        }
+      ],
+      "belongsToSofas": []
+    },
+    {
+      "id": 809,
+      "name": "[Подушка] Д.Хіт Колеса",
+      "currentCategory": "немає",
+      "type": "consu",
+      "sale_ok": false,
+      "purchase_ok": true,
+      "usedInBoms": [],
+      "belongsToSofas": []
+    }
+  ]
+}

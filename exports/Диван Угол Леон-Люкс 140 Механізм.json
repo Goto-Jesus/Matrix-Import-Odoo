@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Угол Леон-Люкс 140 Механізм.md",
-  "generatedAt": "2026-07-23T15:39:40.966Z",
+  "generatedAt": "2026-07-28T13:43:08.602Z",
   "boms": [
     {
       "product": {
@@ -146,9 +146,6 @@
         ],
         "variantDisplayName": "🧩[Каркас - нарізані деталі] (Леон-Люкс 140 Механізм, %Дно Каркасу%)",
         "qty": 1,
-        "ifAttr": {
-          "Дно Каркасу": "ДВП Білий"
-        },
         "odooTemplateId": 177
       },
       "operations": [
@@ -189,85 +186,8 @@
           "templateName": "[ДВП дно]",
           "attributes": [
             {
-              "attributeName": "Модель",
-              "value": "ДВП Білий"
-            }
-          ],
-          "qty": 1,
-          "uom": "m²",
-          "operationIndex": 0,
-          "odooTemplateId": 213,
-          "odooUomId": 10
-        }
-      ],
-      "expand": {
-        "Дно Каркасу": [
-          "ДВП Черновое",
-          "ДВП Білий",
-          "- без дна"
-        ]
-      }
-    },
-    {
-      "product": {
-        "templateName": "🧩[Каркас - нарізані деталі]",
-        "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "Леон-Люкс 140 Механізм"
-          },
-          {
-            "attributeName": "Дно Каркасу",
-            "value": "%Дно Каркасу%"
-          }
-        ],
-        "variantDisplayName": "🧩[Каркас - нарізані деталі] (Леон-Люкс 140 Механізм, %Дно Каркасу%)",
-        "qty": 1,
-        "ifAttr": {
-          "Дно Каркасу": "ДВП Білий"
-        },
-        "odooTemplateId": 177
-      },
-      "operations": [
-        {
-          "name": "Операція (Цех №2-2) 🧩[Каркас - нарізані деталі] (Леон-Люкс 140 Механізм, %Дно Каркасу%)",
-          "workcenterName": "Цех №2-2 ДСП (Нарізка Каркас)",
-          "priceRate": 0,
-          "odooWorkcenterId": 21
-        }
-      ],
-      "components": [
-        {
-          "templateName": "[ДСП]",
-          "attributes": [],
-          "qty": 0.41,
-          "uom": "m²",
-          "operationIndex": 0,
-          "odooTemplateId": 13,
-          "odooVariantId": 31,
-          "odooUomId": 10
-        },
-        {
-          "templateName": "[ДВП]",
-          "attributes": [
-            {
-              "attributeName": "ДВП",
-              "value": "Звичайний"
-            }
-          ],
-          "qty": 2.56,
-          "uom": "m²",
-          "operationIndex": 0,
-          "odooTemplateId": 14,
-          "odooVariantId": 324,
-          "odooUomId": 10
-        },
-        {
-          "templateName": "[ДВП дно]",
-          "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "ДВП Білий"
+              "attributeName": "Дно Каркасу",
+              "value": "%Дно Каркасу%"
             }
           ],
           "qty": 1,
@@ -300,9 +220,6 @@
         ],
         "variantDisplayName": "🧩[Каркас - нарізані деталі] (143П, %Дно Каркасу%)",
         "qty": 1,
-        "ifAttr": {
-          "Дно Каркасу": "ДВП Білий"
-        },
         "odooTemplateId": 177
       },
       "operations": [
@@ -343,85 +260,8 @@
           "templateName": "[ДВП дно]",
           "attributes": [
             {
-              "attributeName": "Модель",
-              "value": "ДВП Білий"
-            }
-          ],
-          "qty": 1.05,
-          "uom": "m²",
-          "operationIndex": 0,
-          "odooTemplateId": 213,
-          "odooUomId": 10
-        }
-      ],
-      "expand": {
-        "Дно Каркасу": [
-          "ДВП Черновое",
-          "ДВП Білий",
-          "- без дна"
-        ]
-      }
-    },
-    {
-      "product": {
-        "templateName": "🧩[Каркас - нарізані деталі]",
-        "attributes": [
-          {
-            "attributeName": "Модель",
-            "value": "143П"
-          },
-          {
-            "attributeName": "Дно Каркасу",
-            "value": "%Дно Каркасу%"
-          }
-        ],
-        "variantDisplayName": "🧩[Каркас - нарізані деталі] (143П, %Дно Каркасу%)",
-        "qty": 1,
-        "ifAttr": {
-          "Дно Каркасу": "ДВП Черновое"
-        },
-        "odooTemplateId": 177
-      },
-      "operations": [
-        {
-          "name": "Операція (Цех №2-2) 🧩[Каркас - нарізані деталі] (143П, %Дно Каркасу%)",
-          "workcenterName": "Цех №2-2 ДСП (Нарізка Каркас)",
-          "priceRate": 0,
-          "odooWorkcenterId": 21
-        }
-      ],
-      "components": [
-        {
-          "templateName": "[ДСП]",
-          "attributes": [],
-          "qty": 0.027,
-          "uom": "m²",
-          "operationIndex": 0,
-          "odooTemplateId": 13,
-          "odooVariantId": 31,
-          "odooUomId": 10
-        },
-        {
-          "templateName": "[ДВП]",
-          "attributes": [
-            {
-              "attributeName": "ДВП",
-              "value": "Звичайний"
-            }
-          ],
-          "qty": 1.38,
-          "uom": "m²",
-          "operationIndex": 0,
-          "odooTemplateId": 14,
-          "odooVariantId": 324,
-          "odooUomId": 10
-        },
-        {
-          "templateName": "[ДВП дно]",
-          "attributes": [
-            {
-              "attributeName": "Модель",
-              "value": "ДВП Черновое"
+              "attributeName": "Дно Каркасу",
+              "value": "%Дно Каркасу%"
             }
           ],
           "qty": 1.05,
@@ -676,20 +516,20 @@
         "attributes": [
           {
             "attributeName": "Накладка",
-            "value": "Д.Леон-Люкс Колеса"
+            "value": "Д.Леон-Люкс"
           },
           {
             "attributeName": "Колір Ламінату",
             "value": "%Колір Ламінату%"
           }
         ],
-        "variantDisplayName": "🪤[Накладка] (Д.Леон-Люкс Колеса, %Колір Ламінату%)",
+        "variantDisplayName": "🪤[Накладка] (Д.Леон-Люкс, %Колір Ламінату%)",
         "qty": 1,
         "odooTemplateId": 11
       },
       "operations": [
         {
-          "name": "Операція (Цех №3-2) 🪤[Накладка] (Д.Леон-Люкс Колеса, %Колір Ламінату%)",
+          "name": "Операція (Цех №3-2) 🪤[Накладка] (Д.Леон-Люкс, %Колір Ламінату%)",
           "workcenterName": "Цех №3-2 ЛДСП (Нарізка Накладок)",
           "priceRate": 0,
           "odooWorkcenterId": 24
@@ -904,6 +744,10 @@
             {
               "attributeName": "Модель",
               "value": "143П"
+            },
+            {
+              "attributeName": "Дно Каркасу",
+              "value": "%Дно Каркасу%"
             }
           ],
           "qty": 1,
@@ -1232,7 +1076,23 @@
           "odooWorkcenterId": 17
         }
       ],
-      "components": []
+      "components": [
+        {
+          "templateName": "[Флізелін]",
+          "attributes": [
+            {
+              "attributeName": "Флізелін",
+              "value": "30"
+            }
+          ],
+          "qty": 1.1,
+          "uom": "m",
+          "operationIndex": 0,
+          "odooTemplateId": 25,
+          "odooVariantId": 340,
+          "odooUomId": 8
+        }
+      ]
     },
     {
       "product": {

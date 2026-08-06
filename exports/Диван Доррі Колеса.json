@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Доррі Колеса.md",
-  "generatedAt": "2026-07-23T15:39:34.282Z",
+  "generatedAt": "2026-07-28T13:42:55.722Z",
   "boms": [
     {
       "product": {
@@ -1013,7 +1013,15 @@
           "attributes": [
             {
               "attributeName": "Модель",
-              "value": "Д.Доррі Колеса"
+              "value": "Д.Доррі"
+            },
+            {
+              "attributeName": "Диван Пружинний Блок",
+              "value": "%Диван Пружинний Блок%"
+            },
+            {
+              "attributeName": "Диван Розмір Бильця❌",
+              "value": "%Диван Розмір Бильця❌%"
             }
           ],
           "qty": 1,
@@ -1390,6 +1398,9 @@
         ],
         "variantDisplayName": "[Подушка] (Д.Нео, %Тканина%, %Диван Наповнювач Подушек%)",
         "qty": 1,
+        "ifAttr": {
+          "Диван Наповнювач Подушек": "ППУ Крихта"
+        },
         "odooTemplateId": 67
       },
       "operations": [
@@ -1422,9 +1433,6 @@
           "qty": 2.7,
           "uom": "кг",
           "operationIndex": 0,
-          "ifAttr": {
-            "Диван Наповнювач Подушек": "ППУ Крихта"
-          },
           "odooTemplateId": 145,
           "odooVariantId": 261,
           "odooUomId": 15
@@ -1544,6 +1552,9 @@
         ],
         "variantDisplayName": "[Подушка] (Д.Нео, %Тканина%, %Диван Наповнювач Подушек%)",
         "qty": 1,
+        "ifAttr": {
+          "Диван Наповнювач Подушек": "Холофайдер"
+        },
         "odooTemplateId": 67
       },
       "operations": [
@@ -1576,9 +1587,6 @@
           "qty": 2.7,
           "uom": "кг",
           "operationIndex": 0,
-          "ifAttr": {
-            "Диван Наповнювач Подушек": "Холофайдер"
-          },
           "odooTemplateId": 204,
           "odooVariantId": 704,
           "odooUomId": 15

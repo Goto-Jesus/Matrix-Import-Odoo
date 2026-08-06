@@ -1,6 +1,6 @@
 {
   "sourceFile": "Диван Нео 196 Колеса.md",
-  "generatedAt": "2026-07-23T15:39:39.061Z",
+  "generatedAt": "2026-07-28T13:43:03.612Z",
   "boms": [
     {
       "product": {
@@ -849,7 +849,15 @@
           "attributes": [
             {
               "attributeName": "Модель",
-              "value": "Д.Нео 196 Колеса"
+              "value": "Д.Нео 196"
+            },
+            {
+              "attributeName": "Диван Пружинний Блок",
+              "value": "%Диван Пружинний Блок%"
+            },
+            {
+              "attributeName": "Диван Розмір Бильця",
+              "value": "%Диван Розмір Бильця%"
             }
           ],
           "qty": 1,
@@ -1568,7 +1576,23 @@
           "attributes": [
             {
               "attributeName": "Модель",
-              "value": "Д.Нео 196 Колесаі"
+              "value": "Д.Нео 196 Колеса"
+            },
+            {
+              "attributeName": "Диван Пружинний Блок",
+              "value": "%Диван Пружинний Блок%"
+            },
+            {
+              "attributeName": "Диван Розмір Бильця",
+              "value": "%Диван Розмір Бильця%"
+            },
+            {
+              "attributeName": "Колір Ламінату❌",
+              "value": "%Колір Ламінату❌%"
+            },
+            {
+              "attributeName": "Дно Каркасу❌",
+              "value": "%Дно Каркасу❌%"
             }
           ],
           "qty": 1,
@@ -1630,16 +1654,6 @@
           "odooUomId": 1
         },
         {
-          "templateName": "Стопор",
-          "attributes": [],
-          "qty": 2,
-          "uom": "шт",
-          "operationIndex": 0,
-          "odooTemplateId": 7,
-          "odooVariantId": 22,
-          "odooUomId": 1
-        },
-        {
           "templateName": "[Петля]",
           "attributes": [
             {
@@ -1655,16 +1669,6 @@
           "odooUomId": 1
         },
         {
-          "templateName": "Соединитель 83 эконом",
-          "attributes": [],
-          "qty": 4,
-          "uom": "шт",
-          "operationIndex": 0,
-          "odooTemplateId": 404,
-          "odooVariantId": 123903,
-          "odooUomId": 1
-        },
-        {
           "templateName": "[Ніжка]",
           "attributes": [
             {
@@ -1677,6 +1681,26 @@
           "operationIndex": 0,
           "odooTemplateId": 10,
           "odooVariantId": 332,
+          "odooUomId": 1
+        },
+        {
+          "templateName": "Стопор",
+          "attributes": [],
+          "qty": 2,
+          "uom": "шт",
+          "operationIndex": 0,
+          "odooTemplateId": 7,
+          "odooVariantId": 22,
+          "odooUomId": 1
+        },
+        {
+          "templateName": "Соединитель 83 эконом",
+          "attributes": [],
+          "qty": 4,
+          "uom": "шт",
+          "operationIndex": 0,
+          "odooTemplateId": 404,
+          "odooVariantId": 123903,
           "odooUomId": 1
         },
         {
@@ -1821,6 +1845,12 @@
         "Диван Розмір Бильця": [
           "Зменшені Бильця",
           "Звичайні Бильця"
+        ],
+        "Колір Ламінату❌": [
+          "❌"
+        ],
+        "Дно Каркасу❌": [
+          "❌"
         ]
       }
     }
