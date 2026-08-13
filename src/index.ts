@@ -4,6 +4,7 @@ import { runValidate } from './commands/validate';
 import { runValidateAll } from './commands/validateAll';
 import { runImport } from './commands/importSpec';
 import { runCheck } from './commands/check';
+import { runAddFabric } from './commands/addFabric';
 import { createAllBoms } from './bom/creator';
 import { neo3Boms } from './specs/neo3-mekhanizm';
 
@@ -35,6 +36,10 @@ async function main() {
       await runCheck(args[0], ...args.slice(1));
       break;
 
+    case 'add-fabric':
+      await runAddFabric(args[0]);
+      break;
+
     case 'bom':
       await createAllBoms(neo3Boms);
       break;
@@ -46,6 +51,7 @@ async function main() {
   npm run validate-all [папка]   — валідація всіх .md у папці (default: documents/)
   npm run import "<файл>"     — парсинг та імпорт специфікації в Odoo
   npm run check "<продукт>"   — перевірити чи продукт існує в Odoo
+  npm run add-fabric "<назва>"  — додати нову тканину до всіх чохлів і диванів
   npm run snapshot [мітка]         — зберегти поточний стан Odoo
   npm run restore                  — показати список імпортів
   npm run restore -- "<назва>"     — відкатити конкретний імпорт
