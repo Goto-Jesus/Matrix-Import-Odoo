@@ -79,6 +79,44 @@ function fixEmojiPosition(line: string): string {
   return line;
 }
 
+// Same mapping as right_names_odoo_base.md (Цех №1–8 manufactured templates).
+// More specific rules first. Raw [ДСП]/[Наволочка]/[Подушка] have no suffix → skip.
+function emojiForBracketName(name: string): string {
+  const n = name.toLowerCase().replace(/\s+/g, " ").trim();
+  if (/напівфабрикат\s*2/.test(n) || /\+\s*поролон/.test(n)) return "🪤🧽";
+  if (/нарізана\s+дерев/.test(n)) return "🪵";
+  if (/-\s*лист$/.test(n)) return "🧩";
+  if (/нарізан[іиа]\s+(деталі|матеріали|компонент)/.test(n)) return "🧩";
+  if (/напівфабрикат/.test(n)) return "🪤";
+  return "";
+}
+
+function hasEmojiBeforeBracket(line: string): boolean {
+  const t = line.trimStart();
+  const bracketIdx = t.indexOf("[");
+  if (bracketIdx < 0) return false;
+  return /[🪵🧩🪤🧽]/.test(t.slice(0, bracketIdx));
+}
+
+function fixMissingEmoji(line: string): string {
+  const trimmed = line.trimStart();
+  if (
+    !trimmed ||
+    trimmed.startsWith("#") ||
+    trimmed.startsWith("//") ||
+    trimmed.startsWith("<<") ||
+    trimmed.startsWith("<!--")
+  ) {
+    return line;
+  }
+  if (hasEmojiBeforeBracket(line)) return line;
+
+  return line.replace(/\[([^\[\]]+)\]/, (match, inner: string) => {
+    const emoji = emojiForBracketName(inner);
+    return emoji ? `${emoji}[${inner}]` : match;
+  });
+}
+
 function fixAttributeSpaces(line: string): string {
   // "(Б. Нео)" → "(Б.Нео)"
   return line.replace(/\(([^)]+)\)/g, (match, inner) => {
@@ -450,6 +488,7 @@ export function formatDocumentContent(original: string): FormatterResult {
     apply(fixVoylokFormat, "Войлок: додано дужки та квадратні дужки");
     apply(fixLaminateName, "[Ламінат] (розмір) → 🧩[Ламінат - лист] (розмір)");
     apply(fixMaterialNames, "назву матеріалу виправлено");
+    apply(fixMissingEmoji, "додано відсутній emoji-префікс");
     apply(fixPriceTypo, '"Цшна" → "Ціна"');
     apply(fixPriceFormat, '"Ціна Nгрн" → "Ціна N грн"');
     apply(fixWorkshopHeaders, 'заголовок цеху отримав "# " префікс');
