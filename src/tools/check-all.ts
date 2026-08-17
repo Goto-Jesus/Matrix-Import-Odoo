@@ -1,19 +1,10 @@
 import * as fs from "fs";
 import * as path from "path";
-import { runAttributeCheck } from "./check-attributes";
-import { runChainCheck } from "./check-chain";
-import { runBomCheck } from "./check-bom";
+import { isBlockingIssue, runSpecTools } from "../validator/specPipeline";
 
 const BASE_FOLDER = "docs_fixed";
 const GOOD_FOLDER = path.join(BASE_FOLDER, "good");
 const BAD_FOLDER = path.join(BASE_FOLDER, "bad");
-
-// Issues starting with these prefixes require human attention → file goes to bad/
-const BLOCKING_PREFIXES = ["[BREAK]", "[ZERO]", "[EMPTY]", "[NOUNIT]"];
-
-function isBlocking(issue: string): boolean {
-  return BLOCKING_PREFIXES.some((p) => issue.startsWith(p));
-}
 
 interface FileResult {
   fileName: string;
@@ -29,17 +20,19 @@ function processFile(absInput: string, goodDir: string, badDir: string): FileRes
   console.log(`  Перевірка: ${fileName}`);
   console.log(`════════════════════════════════════════`);
 
-  const attrResult = runAttributeCheck(original, fileName);
-  const chainResult = runChainCheck(attrResult.content, fileName);
-  const bomResult = runBomCheck(chainResult.content, fileName);
-
-  const allIssues = [...attrResult.issues, ...chainResult.issues, ...bomResult.issues];
-  const autoFixed = allIssues.filter((i) => !isBlocking(i));
-  const blocking = allIssues.filter(isBlocking);
+  const tools = runSpecTools(original, fileName);
+  const allIssues = [
+    ...tools.attr.issues,
+    ...tools.chain.issues,
+    ...tools.bom.issues,
+  ];
+  if (tools.attr.error) allIssues.push(tools.attr.error);
+  const autoFixed = allIssues.filter((i) => !isBlockingIssue(i));
+  const blocking = allIssues.filter(isBlockingIssue);
 
   const destDir = blocking.length > 0 ? badDir : goodDir;
   const outputPath = path.join(destDir, fileName);
-  fs.writeFileSync(outputPath, bomResult.content, "utf-8");
+  fs.writeFileSync(outputPath, tools.content, "utf-8");
 
   const label = blocking.length > 0 ? "❌ bad" : autoFixed.length > 0 ? "🔧 fixed→good" : "✅ good";
   console.log(`  → [${label}] ${outputPath}`);

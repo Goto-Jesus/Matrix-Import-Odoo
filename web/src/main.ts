@@ -1,0 +1,1027 @@
+import knownNamesMd from "../../right_names_odoo_base.md?raw";
+import { applyFix, type QuickFix } from "./lint";
+import {
+  recheckSpec,
+  runValidation,
+  type SheetStatus,
+  type UiIssue,
+  type ValidationResult,
+} from "./pipeline";
+import { mountShop } from "./shop-view";
+import "./styles.css";
+
+const SPLIT_KEY = "matrix-spec-raw-split";
+const DOCK_KEY = "matrix-spec-issues-dock";
+const HINTS_KEY = "matrix-spec-hints";
+const DRAFT_KEY = "matrix-spec-draft";
+const SHOP_KEY = "matrix-spec-shop";
+const SHOP_H_KEY = "matrix-spec-shop-h";
+const CHROME_KEY = "matrix-spec-chrome";
+const DEBOUNCE_MS = 480;
+const SHOP_MS = 240;
+const UNDO_LIMIT = 80;
+
+const BULB_SVG = `
+<svg viewBox="0 0 16 16" aria-hidden="true">
+  <path class="glass" fill="#e8b400" d="M8 1.15A4.7 4.7 0 0 0 3.9 8.15c.4.7.85 1.25.85 2.05v.5h6.5v-.5c0-.8.45-1.35.85-2.05A4.7 4.7 0 0 0 8 1.15z"/>
+  <path fill="none" stroke="#5a4710" stroke-width="0.85" stroke-linecap="round" d="M6.2 8.15c.55.45 1.15.7 1.8.7s1.25-.25 1.8-.7"/>
+  <path fill="none" stroke="#5a4710" stroke-width="0.7" stroke-linecap="round" d="M8 3.3v2.35M6.55 4.15 8 5.65l1.45-1.5"/>
+  <path fill="#6b6258" d="M6.15 11.05h3.7v.95h-3.7z"/>
+  <path fill="none" stroke="#6b6258" stroke-width="0.85" stroke-linecap="round" d="M6.45 12.35h3.1M6.75 13.35h2.5"/>
+  <path fill="#6b6258" d="M7.15 13.85h1.7l-.35.7H7.5z"/>
+</svg>
+`.trim();
+
+const STAMP: Record<SheetStatus, string> = {
+  idle: "ЧЕРНЕТКА",
+  ready: "ГОТОВО",
+  fixed: "ВИПРАВЛЕНО",
+  bad: "НЕ ГОТОВО",
+};
+
+const STAMP_HINT: Record<SheetStatus, string> = {
+  idle: "Ще не перевіряли. Встав сирий текст зліва і натисни «Перевірити».",
+  ready: "Помилок немає. Можна зберігати файл і відправляти.",
+  fixed: "Дрібниці сторінка виправила сама. Глянь список помилок, тоді зберігай.",
+  bad: "Є помилки, які треба виправити руками. Не відправляй, поки штамп не стане зеленим або синім.",
+};
+
+const KIND_LABEL: Record<UiIssue["kind"], string> = {
+  blocking: "блокує",
+  error: "помилка",
+  auto: "авто",
+  warning: "увага",
+};
+
+const SOURCE_LABEL: Record<UiIssue["source"], string> = {
+  prep: "оформлення",
+  format: "формат",
+  check: "перевірка",
+  attrs: "атрибути",
+  chain: "ланцюг",
+  bom: "bom",
+  lint: "лінтер",
+};
+
+const raw = document.querySelector<HTMLTextAreaElement>("#raw")!;
+const editor = document.querySelector<HTMLTextAreaElement>("#editor")!;
+const gutter = document.querySelector<HTMLDivElement>("#gutter")!;
+const backdrop = document.querySelector<HTMLPreElement>("#backdrop")!;
+const dropZone = document.querySelector<HTMLElement>("#drop-zone")!;
+const stamp = document.querySelector<HTMLElement>("#stamp")!;
+const stampHint = document.querySelector<HTMLElement>("#stamp-hint")!;
+const countsEl = document.querySelector<HTMLElement>("#counts")!;
+const issuesEl = document.querySelector<HTMLOListElement>("#issues")!;
+const fileHint = document.querySelector<HTMLElement>("#file-hint")!;
+const fileInput = document.querySelector<HTMLInputElement>("#file-input")!;
+const btnCheck = document.querySelector<HTMLButtonElement>("#btn-check")!;
+const btnCopy = document.querySelector<HTMLButtonElement>("#btn-copy")!;
+const btnDownload = document.querySelector<HTMLButtonElement>("#btn-download")!;
+const saveHint = document.querySelector<HTMLElement>("#save-hint")!;
+const workspace = document.querySelector<HTMLElement>("#workspace")!;
+const workRow = document.querySelector<HTMLElement>("#work-row")!;
+const splitter = document.querySelector<HTMLElement>("#splitter")!;
+const shopSplit = document.querySelector<HTMLElement>("#shop-split")!;
+const shopBoard = document.querySelector<HTMLElement>("#shop-board")!;
+const btnShop = document.querySelector<HTMLButtonElement>("#btn-shop")!;
+const btnChrome = document.querySelector<HTMLButtonElement>("#btn-chrome")!;
+const fixPop = document.querySelector<HTMLDivElement>("#fix-pop")!;
+const btnDock = document.querySelector<HTMLButtonElement>("#btn-dock")!;
+const btnHints = document.querySelector<HTMLButtonElement>("#btn-hints")!;
+const modal = document.querySelector<HTMLDivElement>("#confirm-modal")!;
+const confirmYes = document.querySelector<HTMLButtonElement>("#confirm-yes")!;
+const confirmNo = document.querySelector<HTMLButtonElement>("#confirm-no")!;
+
+const shop = mountShop(shopBoard, { onJump: (line) => jumpToLine(line) });
+
+let last: ValidationResult | null = null;
+let fileName = "специфікація.md";
+let lineKinds = new Map<number, UiIssue["kind"]>();
+let lineFixes = new Map<number, QuickFix[]>();
+let activeLine: number | null = null;
+let debounceTimer = 0;
+let shopTimer = 0;
+let persistTimer = 0;
+let popLine: number | null = null;
+let undoStack: string[] = [];
+let redoStack: string[] = [];
+let applyingHistory = false;
+let typingBurst = false;
+let shownKinds = new Set<UiIssue["kind"]>(["blocking", "error", "warning"]);
+
+const CHIP_KIND: Record<string, UiIssue["kind"]> = {
+  blocking: "blocking",
+  errors: "error",
+  auto: "auto",
+  warnings: "warning",
+};
+
+function kindRank(kind: UiIssue["kind"]): number {
+  return { blocking: 0, error: 1, warning: 2, auto: 3 }[kind];
+}
+
+function lineKindMap(issues: UiIssue[]): Map<number, UiIssue["kind"]> {
+  const map = new Map<number, UiIssue["kind"]>();
+  for (const issue of issues) {
+    if (!issue.line || !shownKinds.has(issue.kind)) continue;
+    const prev = map.get(issue.line);
+    if (!prev || kindRank(issue.kind) < kindRank(prev)) {
+      map.set(issue.line, issue.kind);
+    }
+  }
+  return map;
+}
+
+function lineFixMap(issues: UiIssue[]): Map<number, QuickFix[]> {
+  const map = new Map<number, QuickFix[]>();
+  for (const issue of issues) {
+    if (!issue.line || !issue.fixes?.length || !shownKinds.has(issue.kind)) continue;
+    const cur = map.get(issue.line) ?? [];
+    for (const fix of issue.fixes) {
+      if (!cur.some((f) => f.id === fix.id && f.label === fix.label)) {
+        cur.push(fix);
+      }
+    }
+    map.set(issue.line, cur);
+  }
+  return map;
+}
+
+function applySpecMarks(issues: UiIssue[]): void {
+  lineKinds = lineKindMap(issues);
+  lineFixes = lineFixMap(issues);
+  renderDecorations(editor.value);
+}
+
+function pushUndo(value: string): void {
+  if (applyingHistory) return;
+  if (undoStack[undoStack.length - 1] === value) return;
+  undoStack.push(value);
+  if (undoStack.length > UNDO_LIMIT) undoStack.shift();
+  redoStack = [];
+}
+
+function persistDraft(): void {
+  window.clearTimeout(persistTimer);
+  persistTimer = window.setTimeout(() => {
+    try {
+      localStorage.setItem(
+        DRAFT_KEY,
+        JSON.stringify({
+          spec: editor.value,
+          raw: raw.value,
+          fileName,
+          status: last?.status ?? stamp.dataset.status ?? "idle",
+          issues: last?.issues ?? [],
+          counts: last?.counts ?? { blocking: 0, errors: 0, auto: 0, warnings: 0 },
+        }),
+      );
+    } catch {
+      /* quota */
+    }
+  }, 280);
+}
+
+function recount(result: ValidationResult, issues: UiIssue[]): ValidationResult {
+  const counts = {
+    blocking: issues.filter((i) => i.kind === "blocking").length,
+    errors: issues.filter((i) => i.kind === "error").length,
+    auto: issues.filter((i) => i.kind === "auto").length,
+    warnings: issues.filter((i) => i.kind === "warning").length,
+  };
+  const status: SheetStatus =
+    counts.blocking > 0 || counts.errors > 0
+      ? "bad"
+      : counts.auto > 0
+        ? "fixed"
+        : "ready";
+  return { ...result, issues, counts, status };
+}
+
+function keepAutos(fresh: ValidationResult): ValidationResult {
+  const autos = last?.issues.filter((i) => i.kind === "auto") ?? [];
+  if (autos.length === 0) return fresh;
+  return recount(fresh, [...autos, ...fresh.issues.filter((i) => i.kind !== "auto")]);
+}
+
+function restoreDraft(): boolean {
+  const blob = localStorage.getItem(DRAFT_KEY);
+  if (!blob) return false;
+  try {
+    const draft = JSON.parse(blob) as {
+      spec?: string;
+      raw?: string;
+      fileName?: string;
+      status?: SheetStatus;
+      issues?: UiIssue[];
+      counts?: ValidationResult["counts"];
+    };
+    if (draft.raw) raw.value = draft.raw;
+    if (draft.spec) editor.value = draft.spec;
+    if (draft.fileName) fileName = draft.fileName;
+    if (!draft.spec?.trim() && !draft.raw?.trim()) return false;
+    fileHint.textContent = `Відновлено: ${fileName}`;
+    enableExport();
+    if (draft.issues?.length) {
+      last = {
+        original: draft.raw ?? "",
+        content: draft.spec ?? editor.value,
+        fileName,
+        status: draft.status ?? "idle",
+        issues: draft.issues,
+        counts: draft.counts ?? {
+          blocking: 0,
+          errors: 0,
+          auto: 0,
+          warnings: 0,
+        },
+      };
+    }
+    if (draft.status && draft.status !== "idle") setStamp(draft.status);
+    renderDecorations(editor.value);
+    if (editor.value.trim()) runLintNow();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function setSpec(next: string, fromHistory = false): void {
+  if (next === editor.value) return;
+  if (!fromHistory) pushUndo(editor.value);
+  applyingHistory = true;
+  editor.focus();
+  editor.setSelectionRange(0, editor.value.length);
+  let ok = false;
+  try {
+    ok = document.execCommand("insertText", false, next);
+  } catch {
+    ok = false;
+  }
+  if (!ok || editor.value !== next) {
+    editor.value = next;
+  }
+  applyingHistory = false;
+  if (last) last = { ...last, content: next };
+  persistDraft();
+}
+
+function undoSpec(): void {
+  if (document.activeElement === raw) return;
+  if (undoStack.length === 0) return;
+  applyingHistory = true;
+  redoStack.push(editor.value);
+  const prev = undoStack.pop()!;
+  editor.value = prev;
+  if (last) last = { ...last, content: prev };
+  applyingHistory = false;
+  typingBurst = false;
+  enableExport();
+  renderDecorations(prev);
+  scheduleLint();
+  scheduleShop();
+  persistDraft();
+}
+
+function redoSpec(): void {
+  if (document.activeElement === raw) return;
+  if (redoStack.length === 0) return;
+  applyingHistory = true;
+  undoStack.push(editor.value);
+  const next = redoStack.pop()!;
+  editor.value = next;
+  if (last) last = { ...last, content: next };
+  applyingHistory = false;
+  typingBurst = false;
+  enableExport();
+  renderDecorations(next);
+  scheduleLint();
+  scheduleShop();
+  persistDraft();
+}
+
+function setStamp(status: SheetStatus, customHint?: string): void {
+  stamp.dataset.status = status;
+  stamp.textContent = STAMP[status];
+  stampHint.textContent = customHint ?? STAMP_HINT[status];
+}
+
+function setCounts(result: ValidationResult | null): void {
+  const c = result?.counts ?? { blocking: 0, errors: 0, auto: 0, warnings: 0 };
+  countsEl.querySelector('[data-k="blocking"]')!.textContent = `${c.blocking} блокують`;
+  countsEl.querySelector('[data-k="errors"]')!.textContent = `${c.errors} помилок`;
+  countsEl.querySelector('[data-k="auto"]')!.textContent = `${c.auto} авто`;
+  countsEl.querySelector('[data-k="warnings"]')!.textContent = `${c.warnings} увага`;
+  for (const el of countsEl.querySelectorAll("[data-k]")) {
+    const kind = CHIP_KIND[el.getAttribute("data-k") ?? ""];
+    el.setAttribute("aria-pressed", kind && shownKinds.has(kind) ? "true" : "false");
+  }
+}
+
+function bindCounts(): void {
+  countsEl.addEventListener("click", (event) => {
+    const el = (event.target as HTMLElement).closest("[data-k]");
+    if (!(el instanceof HTMLElement)) return;
+    const kind = CHIP_KIND[el.getAttribute("data-k") ?? ""];
+    if (!kind) return;
+    if (shownKinds.has(kind)) shownKinds.delete(kind);
+    else shownKinds.add(kind);
+    if (last) {
+      setCounts(last);
+      renderIssues(last);
+      applySpecMarks(last.issues);
+    } else {
+      setCounts(null);
+    }
+  });
+  countsEl.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const el = event.target;
+    if (!(el instanceof HTMLElement) || !el.hasAttribute("data-k")) return;
+    event.preventDefault();
+    el.click();
+  });
+}
+
+function appendLineText(el: HTMLElement, line: string): void {
+  const re = /<!--[\s\S]*?-->/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(line))) {
+    if (m.index > last) el.append(line.slice(last, m.index));
+    const span = document.createElement("span");
+    span.className = "cmt";
+    span.textContent = m[0];
+    el.append(span);
+    last = m.index + m[0].length;
+  }
+  if (last < line.length) el.append(line.slice(last));
+  if (!line) el.append(" ");
+}
+
+function lineFromCaret(): number {
+  const pos = editor.selectionStart ?? 0;
+  return editor.value.slice(0, pos).split("\n").length;
+}
+
+function syncGutterHeights(): void {
+  const ticks = gutter.children;
+  const marks = backdrop.children;
+  const n = Math.min(ticks.length, marks.length);
+  for (let i = 0; i < n; i++) {
+    (ticks[i] as HTMLElement).style.height = `${(marks[i] as HTMLElement).offsetHeight}px`;
+  }
+}
+
+function highlightIssuesForLine(n: number | null): void {
+  activeLine = n;
+  for (const el of backdrop.querySelectorAll(".hl.active")) el.classList.remove("active");
+  if (n) document.getElementById(`HL${n}`)?.classList.add("active");
+  for (const el of issuesEl.querySelectorAll("li.active")) el.classList.remove("active");
+  shop.highlightLine(n);
+  if (!n || !last) return;
+  const matches = last.issues.filter(
+    (i) => i.line === n && shownKinds.has(i.kind),
+  );
+  let first: Element | null = null;
+  for (const issue of matches) {
+    const li = issuesEl.querySelector(`[data-id="${CSS.escape(issue.id)}"]`);
+    if (!(li instanceof HTMLElement)) continue;
+    li.classList.add("active");
+    first ??= li;
+  }
+  first?.scrollIntoView({ block: "nearest" });
+}
+
+function renderDecorations(text: string): void {
+  const lines = text.split("\n");
+  gutter.replaceChildren();
+  backdrop.replaceChildren();
+  lines.forEach((line, i) => {
+    const n = i + 1;
+    const kind = lineKinds.get(n);
+    const fixes = lineFixes.get(n) ?? [];
+
+    const tick = document.createElement("div");
+    tick.className = "gutter-line";
+    if (kind) tick.dataset.kind = kind;
+    if (fixes.length) {
+      tick.classList.add("has-fix");
+      const bulb = document.createElement("button");
+      bulb.type = "button";
+      bulb.className = "bulb";
+      bulb.title = "Варіанти виправлення";
+      bulb.setAttribute("aria-label", `Виправлення для рядка ${n}`);
+      bulb.innerHTML = BULB_SVG;
+      bulb.addEventListener("click", (event) => {
+        event.stopPropagation();
+        openFixes(n, bulb, fixes);
+      });
+      tick.append(bulb);
+    }
+    gutter.append(tick);
+
+    const hl = document.createElement("div");
+    hl.className = "hl";
+    hl.id = `HL${n}`;
+    appendLineText(hl, line);
+    if (kind) hl.dataset.kind = kind;
+    if (activeLine === n) hl.classList.add("active");
+    backdrop.append(hl);
+  });
+  syncScroll();
+  requestAnimationFrame(syncGutterHeights);
+}
+
+function syncScroll(): void {
+  backdrop.scrollTop = editor.scrollTop;
+  backdrop.scrollLeft = editor.scrollLeft;
+  gutter.style.transform = `translateY(${-editor.scrollTop}px)`;
+}
+
+function closeFixes(): void {
+  popLine = null;
+  fixPop.hidden = true;
+  fixPop.replaceChildren();
+  for (const el of gutter.querySelectorAll('.bulb[aria-expanded="true"]')) {
+    el.removeAttribute("aria-expanded");
+  }
+}
+
+function openFixes(line: number, anchor: HTMLElement, fixes: QuickFix[]): void {
+  if (popLine === line && !fixPop.hidden) {
+    closeFixes();
+    return;
+  }
+  popLine = line;
+  for (const el of gutter.querySelectorAll('.bulb[aria-expanded="true"]')) {
+    el.removeAttribute("aria-expanded");
+  }
+  anchor.setAttribute("aria-expanded", "true");
+  fixPop.replaceChildren();
+  const title = document.createElement("p");
+  title.className = "fix-pop-title";
+  title.textContent = `Рядок ${line}`;
+  fixPop.append(title);
+  for (const fix of fixes) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = fix.label;
+    btn.addEventListener("click", () => {
+      runFix(fix);
+      closeFixes();
+    });
+    fixPop.append(btn);
+  }
+  fixPop.hidden = false;
+  const rect = anchor.getBoundingClientRect();
+  const left = Math.min(rect.right + 8, window.innerWidth - 336);
+  let top = rect.top;
+  requestAnimationFrame(() => {
+    const h = fixPop.offsetHeight;
+    if (top + h > window.innerHeight - 8) top = Math.max(8, window.innerHeight - h - 8);
+    fixPop.style.left = `${Math.max(8, left)}px`;
+    fixPop.style.top = `${top}px`;
+  });
+}
+
+function renderIssues(result: ValidationResult): void {
+  issuesEl.replaceChildren();
+  const visible = result.issues.filter((i) => shownKinds.has(i.kind));
+
+  if (result.issues.length === 0) {
+    const li = document.createElement("li");
+    li.className = "issues-empty";
+    li.textContent = "Помилок немає. Можна зберігати файл і відправляти.";
+    issuesEl.append(li);
+    return;
+  }
+
+  if (visible.length === 0) {
+    const li = document.createElement("li");
+    li.className = "issues-empty";
+    li.textContent = "Ці типи вимкнені в лічильниках. Увімкни потрібні — або «авто», якщо хочеш журнал правок.";
+    issuesEl.append(li);
+    return;
+  }
+
+  const sorted = [...visible].sort((a, b) => {
+    const k = kindRank(a.kind) - kindRank(b.kind);
+    if (k !== 0) return k;
+    return (a.line ?? 99999) - (b.line ?? 99999);
+  });
+
+  for (const issue of sorted) {
+    const li = document.createElement("li");
+    li.dataset.id = issue.id;
+    li.title = issue.line
+      ? `Натисни, щоб перейти до рядка ${issue.line}`
+      : "Стосується всього документа";
+    const meta = document.createElement("div");
+    meta.className = "issue-meta";
+    meta.innerHTML = `
+      <span class="kind-${issue.kind}">${KIND_LABEL[issue.kind]}</span>
+      <span>${SOURCE_LABEL[issue.source]}</span>
+      <span>${issue.line ? `ряд. ${issue.line}` : "документ"}</span>
+    `;
+    const msg = document.createElement("div");
+    msg.className = "issue-msg";
+    msg.textContent = issue.message;
+    li.append(meta, msg);
+    if (issue.original) {
+      const orig = document.createElement("p");
+      orig.className = "issue-orig";
+      orig.textContent = issue.original;
+      li.append(orig);
+    }
+    if (issue.fixes?.length) {
+      const row = document.createElement("div");
+      row.className = "issue-fixes";
+      for (const fix of issue.fixes) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = fix.label;
+        btn.addEventListener("click", (event) => {
+          event.stopPropagation();
+          runFix(fix);
+        });
+        row.append(btn);
+      }
+      li.append(row);
+    }
+    li.addEventListener("click", () => jumpTo(issue));
+    issuesEl.append(li);
+  }
+}
+
+function jumpToLine(line: number): void {
+  jumpTo({
+    id: "shop-jump",
+    kind: "warning",
+    source: "chain",
+    line,
+    message: "",
+  });
+}
+
+function jumpTo(issue: UiIssue): void {
+  highlightIssuesForLine(issue.line);
+  if (!issue.line) return;
+
+  const lines = editor.value.split("\n");
+  let start = 0;
+  for (let i = 0; i < issue.line - 1; i++) start += lines[i].length + 1;
+  const end = start + (lines[issue.line - 1]?.length ?? 0);
+  editor.focus();
+  editor.setSelectionRange(start, end);
+
+  const hl = document.getElementById(`HL${issue.line}`);
+  hl?.scrollIntoView({ block: "center" });
+  editor.scrollTop = backdrop.scrollTop;
+  syncScroll();
+}
+
+function enableExport(): void {
+  const has = Boolean(editor.value.trim());
+  btnCopy.disabled = !has;
+  btnDownload.disabled = !has;
+  saveHint.textContent =
+    last?.status === "bad" ? "Є помилки — все одно можна зберегти" : "Завантажити собі";
+}
+
+function paintResult(result: ValidationResult, writeEditor: boolean): void {
+  closeFixes();
+  if (writeEditor) {
+    activeLine = null;
+    setSpec(result.content);
+  }
+  last = result;
+  fileName = result.fileName;
+  fileHint.textContent = `Файл: ${result.fileName}. Зліва сирий, справа специфікація.`;
+  setStamp(result.status);
+  setCounts(result);
+  applySpecMarks(result.issues);
+  renderIssues(result);
+  renderShopNow();
+  if (activeLine) highlightIssuesForLine(activeLine);
+  enableExport();
+  persistDraft();
+}
+
+function askOverwrite(): Promise<boolean> {
+  if (!editor.value.trim() || !raw.value.trim()) return Promise.resolve(true);
+  return new Promise((resolve) => {
+    modal.hidden = false;
+    confirmYes.focus();
+    const finish = (ok: boolean) => {
+      modal.hidden = true;
+      modal.removeEventListener("click", onBackdrop);
+      confirmYes.removeEventListener("click", onYes);
+      confirmNo.removeEventListener("click", onNo);
+      document.removeEventListener("keydown", onKey);
+      resolve(ok);
+    };
+    const onYes = () => finish(true);
+    const onNo = () => finish(false);
+    const onBackdrop = (event: MouseEvent) => {
+      if (event.target === modal) finish(false);
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        finish(false);
+      }
+      if (event.key === "Enter" && document.activeElement !== confirmNo) {
+        event.preventDefault();
+        finish(true);
+      }
+    };
+    confirmYes.addEventListener("click", onYes);
+    confirmNo.addEventListener("click", onNo);
+    modal.addEventListener("click", onBackdrop);
+    document.addEventListener("keydown", onKey);
+  });
+}
+
+async function runFull(): Promise<void> {
+  const source = raw.value.trim() ? raw.value : editor.value;
+  if (!source.trim()) {
+    fileHint.textContent = "Спочатку встав сирий текст зліва або відкрий файл.";
+    return;
+  }
+  if (raw.value.trim()) {
+    const ok = await askOverwrite();
+    if (!ok) return;
+    paintResult(runValidation(raw.value, fileName, knownNamesMd), true);
+  } else {
+    paintResult(recheckSpec(editor.value, fileName, knownNamesMd), false);
+  }
+}
+
+function runLintNow(): void {
+  if (!editor.value.trim()) return;
+  paintResult(keepAutos(recheckSpec(editor.value, fileName, knownNamesMd)), false);
+}
+
+function scheduleLint(): void {
+  window.clearTimeout(debounceTimer);
+  debounceTimer = window.setTimeout(runLintNow, DEBOUNCE_MS);
+}
+
+function renderShopNow(): void {
+  shop.render(editor.value, last?.issues ?? []);
+  if (activeLine) shop.highlightLine(activeLine);
+}
+
+function scheduleShop(): void {
+  window.clearTimeout(shopTimer);
+  shopTimer = window.setTimeout(renderShopNow, SHOP_MS);
+}
+
+function onSpecInput(): void {
+  if (applyingHistory) return;
+  closeFixes();
+  if (last) last = { ...last, content: editor.value };
+  enableExport();
+  renderDecorations(editor.value);
+  highlightIssuesForLine(lineFromCaret());
+  scheduleLint();
+  scheduleShop();
+  persistDraft();
+}
+
+function runFix(fix: QuickFix): void {
+  const prev = editor.value;
+  const next = applyFix(prev, fix);
+  if (next === prev) return;
+  setSpec(next);
+  enableExport();
+  runLintNow();
+  if (fix.line) {
+    jumpTo({
+      id: "after-fix",
+      kind: "warning",
+      source: "lint",
+      line: Math.min(fix.line, next.split("\n").length),
+      message: "",
+    });
+  }
+}
+
+async function readFile(file: File): Promise<void> {
+  const text = await file.text();
+  fileName = file.name.replace(/\.txt$/i, ".md");
+  last = null;
+  raw.value = text;
+  fileHint.textContent = `Відкрито: ${fileName}`;
+  setStamp("idle");
+  await runFull();
+}
+
+function download(): void {
+  const content = editor.value;
+  if (!content.trim()) return;
+  const name = (last?.fileName ?? fileName).endsWith(".md")
+    ? (last?.fileName ?? fileName)
+    : `${last?.fileName ?? fileName}.md`;
+  const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+async function copyText(): Promise<void> {
+  if (!editor.value.trim()) return;
+  await navigator.clipboard.writeText(editor.value);
+  const prev = btnCopy.textContent;
+  btnCopy.textContent = "Скопійовано";
+  setTimeout(() => {
+    btnCopy.textContent = prev;
+  }, 1200);
+}
+
+function applySplit(percent: number): void {
+  const clamped = Math.min(50, Math.max(8, percent));
+  workspace.style.setProperty("--split", `${clamped}%`);
+  localStorage.setItem(SPLIT_KEY, String(clamped));
+}
+
+function splitFromEvent(event: PointerEvent): void {
+  const rect = workRow.getBoundingClientRect();
+  const vertical = window.matchMedia("(max-width: 720px)").matches;
+  const ratio = vertical
+    ? (event.clientY - rect.top) / rect.height
+    : (event.clientX - rect.left) / rect.width;
+  applySplit(ratio * 100);
+}
+
+function bindSplitter(): void {
+  const saved = Number(localStorage.getItem(SPLIT_KEY));
+  if (saved >= 8 && saved <= 50) applySplit(saved);
+  else applySplit(18);
+
+  splitter.addEventListener("pointerdown", (event) => {
+    splitter.setPointerCapture(event.pointerId);
+    workspace.classList.add("is-resizing");
+    splitFromEvent(event);
+  });
+  splitter.addEventListener("pointermove", (event) => {
+    if (!splitter.hasPointerCapture(event.pointerId)) return;
+    splitFromEvent(event);
+  });
+  const stop = (event: PointerEvent) => {
+    if (splitter.hasPointerCapture(event.pointerId)) {
+      splitter.releasePointerCapture(event.pointerId);
+    }
+    workspace.classList.remove("is-resizing");
+  };
+  splitter.addEventListener("pointerup", stop);
+  splitter.addEventListener("pointercancel", stop);
+
+  splitter.addEventListener("keydown", (event) => {
+    const now =
+      Number(getComputedStyle(workspace).getPropertyValue("--split").replace("%", "")) || 18;
+    if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+      event.preventDefault();
+      applySplit(now - 3);
+    }
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+      event.preventDefault();
+      applySplit(now + 3);
+    }
+  });
+}
+
+function setDock(side: "bottom" | "right"): void {
+  workspace.dataset.issues = side;
+  localStorage.setItem(DOCK_KEY, side);
+  btnDock.textContent = side === "right" ? "Вниз" : "Вправо";
+  btnDock.title =
+    side === "right"
+      ? "Повернути панель помилок під специфікацію"
+      : "Перенести панель помилок вправо від специфікації";
+}
+
+function bindDock(): void {
+  const saved = localStorage.getItem(DOCK_KEY);
+  setDock(saved === "bottom" ? "bottom" : "right");
+  btnDock.addEventListener("click", () => {
+    setDock(workspace.dataset.issues === "right" ? "bottom" : "right");
+    const now =
+      Number(getComputedStyle(workspace).getPropertyValue("--shop").replace("px", "")) || 280;
+    applyShopHeight(now);
+  });
+}
+
+function applyShopHeight(px: number): void {
+  const rect = workspace.getBoundingClientRect();
+  const splitH = shopSplit.offsetHeight || 14;
+  const chromeOff = document.body.dataset.chrome === "off";
+  const reserve = chromeOff
+    ? workspace.dataset.issues === "bottom"
+      ? 200
+      : 120
+    : 0;
+  const max = Math.max(80, Math.round(rect.height - splitH - reserve));
+  const clamped = Math.min(Math.max(Math.round(px), 80), max);
+  workspace.style.setProperty("--shop", `${clamped}px`);
+  localStorage.setItem(SHOP_H_KEY, String(clamped));
+}
+
+function setShop(open: boolean): void {
+  workspace.dataset.shop = open ? "open" : "closed";
+  btnShop.textContent = open ? "Згорнути" : "Цех";
+  btnShop.title = open ? "Згорнути лінію цехів" : "Показати лінію цехів";
+  localStorage.setItem(SHOP_KEY, open ? "open" : "closed");
+  if (open) requestAnimationFrame(renderShopNow);
+}
+
+function setChrome(on: boolean): void {
+  document.body.dataset.chrome = on ? "on" : "off";
+  btnChrome.textContent = on ? "Компактно" : "Панелі";
+  btnChrome.setAttribute("aria-pressed", on ? "false" : "true");
+  btnChrome.title = on
+    ? "Сховати хедер, панель дій і сирий текст. Помилки лишаться стисло."
+    : "Показати хедер, панель дій і сирий текст.";
+  localStorage.setItem(CHROME_KEY, on ? "on" : "off");
+  requestAnimationFrame(() => {
+    const now =
+      Number(getComputedStyle(workspace).getPropertyValue("--shop").replace("px", "")) || 280;
+    applyShopHeight(now);
+    syncGutterHeights();
+    renderShopNow();
+  });
+}
+
+function bindShop(): void {
+  const savedH = Number(localStorage.getItem(SHOP_H_KEY));
+  if (Number.isFinite(savedH) && savedH >= 80) applyShopHeight(savedH);
+  setShop(localStorage.getItem(SHOP_KEY) !== "closed");
+  setChrome(localStorage.getItem(CHROME_KEY) !== "off");
+
+  btnShop.addEventListener("click", () => {
+    setShop(workspace.dataset.shop !== "open");
+  });
+  btnChrome.addEventListener("click", () => {
+    setChrome(document.body.dataset.chrome !== "on");
+  });
+
+  shopSplit.addEventListener("pointerdown", (event) => {
+    shopSplit.setPointerCapture(event.pointerId);
+    workspace.classList.add("is-shop-resizing");
+    applyShopHeight(workspace.getBoundingClientRect().bottom - event.clientY);
+  });
+  shopSplit.addEventListener("pointermove", (event) => {
+    if (!shopSplit.hasPointerCapture(event.pointerId)) return;
+    applyShopHeight(workspace.getBoundingClientRect().bottom - event.clientY);
+  });
+  const stop = (event: PointerEvent) => {
+    if (shopSplit.hasPointerCapture(event.pointerId)) {
+      shopSplit.releasePointerCapture(event.pointerId);
+    }
+    workspace.classList.remove("is-shop-resizing");
+    requestAnimationFrame(renderShopNow);
+  };
+  shopSplit.addEventListener("pointerup", stop);
+  shopSplit.addEventListener("pointercancel", stop);
+  shopSplit.addEventListener("keydown", (event) => {
+    const now = Number(getComputedStyle(workspace).getPropertyValue("--shop").replace("px", "")) || 280;
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      applyShopHeight(now + 24);
+      requestAnimationFrame(renderShopNow);
+    }
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      applyShopHeight(now - 24);
+      requestAnimationFrame(renderShopNow);
+    }
+  });
+}
+
+function setHints(on: boolean): void {
+  document.body.dataset.hints = on ? "on" : "off";
+  btnHints.setAttribute("aria-pressed", on ? "true" : "false");
+  btnHints.title = on ? "Сховати підказки" : "Показати підказки";
+  localStorage.setItem(HINTS_KEY, on ? "on" : "off");
+}
+
+function bindHints(): void {
+  setHints(localStorage.getItem(HINTS_KEY) === "on");
+  btnHints.addEventListener("click", () => {
+    setHints(document.body.dataset.hints !== "on");
+  });
+}
+
+btnCheck.addEventListener("click", () => void runFull());
+btnCopy.addEventListener("click", () => void copyText());
+btnDownload.addEventListener("click", download);
+fileInput.addEventListener("change", () => {
+  const file = fileInput.files?.[0];
+  if (file) void readFile(file);
+  fileInput.value = "";
+});
+
+editor.addEventListener("scroll", () => {
+  syncScroll();
+  syncGutterHeights();
+});
+editor.addEventListener("click", () => highlightIssuesForLine(lineFromCaret()));
+editor.addEventListener("keyup", () => highlightIssuesForLine(lineFromCaret()));
+editor.addEventListener("beforeinput", () => {
+  if (applyingHistory || typingBurst) return;
+  pushUndo(editor.value);
+  typingBurst = true;
+  window.setTimeout(() => {
+    typingBurst = false;
+  }, 500);
+});
+editor.addEventListener("input", onSpecInput);
+
+function bindDrop(el: HTMLElement): void {
+  ["dragenter", "dragover"].forEach((ev) => {
+    el.addEventListener(ev, (e) => {
+      e.preventDefault();
+      dropZone.classList.add("drop-active");
+    });
+  });
+  ["dragleave", "drop"].forEach((ev) => {
+    el.addEventListener(ev, (e) => {
+      e.preventDefault();
+      dropZone.classList.remove("drop-active");
+    });
+  });
+  el.addEventListener("drop", (e) => {
+    const file = e.dataTransfer?.files[0];
+    if (file) void readFile(file);
+  });
+}
+
+bindDrop(dropZone);
+bindDrop(workspace);
+
+document.addEventListener(
+  "keydown",
+  (e) => {
+    if (!modal.hidden) return;
+    const mod = e.ctrlKey || e.metaKey;
+    if (!mod) {
+      if (e.key === "Escape") {
+        closeFixes();
+        if (document.body.dataset.chrome === "off") setChrome(true);
+      }
+      return;
+    }
+    const code = e.code;
+    if (e.key === "Enter") {
+      e.preventDefault();
+      void runFull();
+      return;
+    }
+    const undoKey = code === "KeyZ" || e.key.toLowerCase() === "z" || e.key === "я" || e.key === "Я";
+    const redoKey = code === "KeyY" || e.key.toLowerCase() === "y" || (undoKey && e.shiftKey);
+    if (redoKey && (code === "KeyY" || e.shiftKey)) {
+      if (document.activeElement === raw) return;
+      e.preventDefault();
+      redoSpec();
+      return;
+    }
+    if (undoKey) {
+      if (document.activeElement === raw) return;
+      e.preventDefault();
+      undoSpec();
+    }
+  },
+  true,
+);
+document.addEventListener("pointerdown", (e) => {
+  if (fixPop.hidden) return;
+  const t = e.target;
+  if (t instanceof Node && (fixPop.contains(t) || (t instanceof Element && t.closest(".bulb")))) {
+    return;
+  }
+  closeFixes();
+});
+
+bindSplitter();
+bindDock();
+bindShop();
+bindHints();
+bindCounts();
+setCounts(null);
+window.addEventListener("resize", () => {
+  const now =
+    Number(getComputedStyle(workspace).getPropertyValue("--shop").replace("px", "")) || 280;
+  applyShopHeight(now);
+  requestAnimationFrame(syncGutterHeights);
+});
+new ResizeObserver(() => requestAnimationFrame(syncGutterHeights)).observe(editor);
+raw.addEventListener("input", persistDraft);
+if (!restoreDraft()) {
+  renderDecorations(editor.value);
+  renderShopNow();
+} else {
+  renderShopNow();
+}

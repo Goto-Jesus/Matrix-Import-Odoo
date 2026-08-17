@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Перевірка специфікації — Matrix</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+<body data-hints="off" data-chrome="on">
+    <div class="app">
+      <header class="top">
+        <div class="brand">
+          <span class="brand-mark">MATRIX</span>
+          <span class="brand-sub">перевірка специфікації</span>
+        </div>
+        <div class="stamp-wrap">
+          <div class="stamp" id="stamp" data-status="idle" title="Штамп перевірки. Зелений — можна відправляти. Червоний — ще є помилки.">ЧЕРНЕТКА</div>
+          <p class="stamp-hint hint" id="stamp-hint">Ще не перевіряли. Встав сирий текст зліва і натисни «Перевірити».</p>
+        </div>
+      </header>
+
+      <section class="toolbar" aria-label="Дії">
+        <div class="tool">
+          <label class="file-btn" title="Відкриває вікно, де можна обрати файл специфікації з комп’ютера (.md або .txt).">
+            Відкрити файл
+            <input id="file-input" type="file" accept=".md,.txt,.markdown,text/plain" hidden />
+          </label>
+          <span class="tool-hint hint">Файл з комп’ютера</span>
+        </div>
+        <div class="tool">
+          <button type="button" id="btn-check" class="primary" title="Бере сирий текст зліва, оформлює специфікацію справа і показує помилки.">
+            Перевірити
+          </button>
+          <span class="tool-hint hint">З сирого → специфікація</span>
+        </div>
+        <div class="tool">
+          <button type="button" id="btn-copy" disabled title="Копіює специфікацію справа.">
+            Скопіювати
+          </button>
+          <span class="tool-hint hint">Текст у буфер</span>
+        </div>
+        <div class="tool">
+          <button type="button" id="btn-download" disabled title="Зберігає специфікацію файлом на комп’ютер.">
+            Зберегти
+          </button>
+          <span class="tool-hint hint" id="save-hint">Завантажити собі</span>
+        </div>
+        <p class="file-hint hint" id="file-hint">Зліва сирий текст, справа специфікація. Смужку між ними можна потягнути — сирий майже сховати.</p>
+        <div class="tool tool-hints">
+          <button
+            type="button"
+            id="btn-hints"
+            class="hints-btn"
+            aria-pressed="false"
+            title="Показати або сховати підказки"
+          >?</button>
+          <span class="tool-hint hint">Підказки</span>
+        </div>
+      </section>
+
+      <main class="workspace" id="workspace" data-issues="right" data-shop="open">
+        <div class="work-row" id="work-row">
+        <section class="pane pane-raw" id="pane-raw">
+          <div class="pane-head">
+            <h2 class="pane-title">Сирий текст</h2>
+          </div>
+          <p class="pane-lead hint">Вставка з OneDrive. Стисни майже в нуль, трохи відкрий коли треба звірити як було.</p>
+          <div class="crop raw-crop" id="drop-zone">
+            <textarea
+              id="raw"
+              spellcheck="false"
+              placeholder="Встав сирий текст з доки — разом із «Синтаксис:». Потім «Перевірити»."
+            ></textarea>
+          </div>
+        </section>
+
+        <div
+          class="splitter"
+          id="splitter"
+          role="separator"
+          aria-orientation="vertical"
+          aria-label="Потягни, щоб змінити ширину сирого тексту"
+          title="Потягни: сирий текст можна майже сховати."
+          tabindex="0"
+        ></div>
+
+        <div class="pane-main" id="pane-main">
+          <section class="pane pane-spec" id="pane-spec">
+            <div class="pane-head">
+              <h2 class="pane-title">Специфікація</h2>
+            </div>
+            <p class="pane-lead hint">Після «Перевірити» тут готовий md. Коментарі <!-- --> напівпрозорі. Клікни рядок — справа підсвітиться його помилка. Жовта лампочка — варіанти виправлення.</p>
+            <div class="crop spec-crop">
+              <div class="gutter" aria-hidden="true">
+                <div id="gutter"></div>
+              </div>
+              <div class="editor-stack">
+                <pre id="backdrop" class="backdrop" aria-hidden="true"></pre>
+                <textarea
+                  id="editor"
+                  spellcheck="false"
+                  placeholder="Тут з’явиться специфікація після перевірки. Можна правити руками."
+                ></textarea>
+              </div>
+            </div>
+          </section>
+
+          <aside class="issues-dock" id="issues-dock">
+            <div class="pane-head issues-head">
+              <h2 class="pane-title">Помилки</h2>
+              <button
+                type="button"
+                id="btn-dock"
+                class="dock-btn"
+                title="Повернути панель помилок під специфікацію"
+              >Вниз</button>
+            </div>
+            <p class="pane-lead hint">Клікни пункт — стрибок на рядок. Клікни рядок у специфікації — підсвітиться помилка тут. Ціна 0 з «<!-- ? -->»: зітри мітку, якщо нуль правильний.</p>
+            <div class="counts" id="counts">
+              <span data-k="blocking" role="button" tabindex="0" title="Увімкнути або вимкнути блокуючі в списку.">0 блокують</span>
+              <span data-k="errors" role="button" tabindex="0" title="Увімкнути або вимкнути помилки в списку.">0 помилок</span>
+              <span data-k="auto" role="button" tabindex="0" title="Увімкнути або вимкнути автовиправлення в списку. За замовчуванням сховані.">0 авто</span>
+              <span data-k="warnings" role="button" tabindex="0" title="Увімкнути або вимкнути увагу в списку.">0 увага</span>
+            </div>
+            <ol class="issues" id="issues">
+              <li class="issues-empty">Ще немає перевірки. Встав сирий текст зліва і натисни «Перевірити».</li>
+            </ol>
+          </aside>
+        </div>
+        </div>
+
+        <div
+          class="shop-split"
+          id="shop-split"
+          role="separator"
+          aria-orientation="horizontal"
+          aria-label="Потягни, щоб змінити висоту цеху"
+          title="Потягни: висота лінії цехів."
+          tabindex="0"
+        ></div>
+
+        <section class="shop-dock" id="shop-dock">
+          <div class="pane-head shop-head">
+            <h2 class="pane-title" title="4 колонки: 1,2,3 · 4,5,7 · 6,9-1,8 · 9,10. Квиток — рядок у тексті.">Цех</h2>
+            <ul class="shop-key" aria-label="Легенда лінії цехів">
+              <li title="Суцільна бірюзова: виріб знайшов наступний цех.">
+                <i class="shop-key-line is-ok" aria-hidden="true"></i>хід
+              </li>
+              <li title="Суцільна червона: зв’язок є, але артикул або код не збігся.">
+                <i class="shop-key-line is-mismatch" aria-hidden="true"></i>інший код
+              </li>
+              <li title="Пунктир червоний на вході: цей виріб нізвідки не прийшов.">
+                <i class="shop-key-line is-break" aria-hidden="true"></i>немає звідки
+              </li>
+              <li title="Крапки червоні на виході: цей виріб ніхто далі не забрав.">
+                <i class="shop-key-line is-orphan" aria-hidden="true"></i>ніхто не взяв
+              </li>
+              <li title="Кружок справа: виріб вийшов із цеху.">
+                <i class="shop-key-dot is-out" aria-hidden="true"></i>вийшов
+              </li>
+              <li title="Кружок зліва: виріб зайшов у цех.">
+                <i class="shop-key-dot is-in" aria-hidden="true"></i>прийшов
+              </li>
+              <li title="Сірий дрібний рядок без кружка: матеріал, не напівфабрикат.">
+                <i class="shop-key-mat" aria-hidden="true">тк.</i>сировина
+              </li>
+              <li title="Червона підложка квитка: на цьому рядку є помилка в тексті.">
+                <i class="shop-key-err" aria-hidden="true">ряд</i>помилка
+              </li>
+            </ul>
+            <div class="shop-actions">
+              <button
+                type="button"
+                id="btn-shop"
+                class="dock-btn"
+                title="Згорнути або розгорнути лінію цехів"
+              >Згорнути</button>
+              <button
+                type="button"
+                id="btn-chrome"
+                class="dock-btn"
+                aria-pressed="false"
+                title="Сховати хедер, панель дій і сирий текст. Помилки лишаться стисло."
+              >Компактно</button>
+            </div>
+          </div>
+          <div class="crop shop-board" id="shop-board" aria-label="Лінія цехів"></div>
+        </section>
+      </main>
+    </div>
+    <div id="fix-pop" class="fix-pop" hidden></div>
+    <div id="confirm-modal" class="modal" hidden>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+        <p class="modal-stamp">УВАГА</p>
+        <h2 id="confirm-title">Перезаписати специфікацію?</h2>
+        <p class="modal-body">Сирий текст зліва замінить те, що зараз справа. Правки в специфікації пропадуть. Ctrl+Z поверне, якщо передумаєш.</p>
+        <div class="modal-actions">
+          <button type="button" id="confirm-no">Скасувати</button>
+          <button type="button" id="confirm-yes" class="danger">Перезаписати</button>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

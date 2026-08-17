@@ -64,6 +64,7 @@ async function main() {
   npm run to-novalid "<файл>"    — сирий дамп → documents_no_valid
   npm run validate "<файл>"       — авто-форматування + список помилок
   npm run validate-all [папка]   — валідація всіх .md у папці
+  npm run web                    — сторінка перевірки специфікації
 
   Жива база (потрібен ODOO_API_KEY в .env):
   npm run import "<файл>"

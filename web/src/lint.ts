@@ -1,0 +1,244 @@
+export interface QuickFix {
+  id: string;
+  label: string;
+  action: "delete-line" | "replace-line" | "merge-next" | "replace-all";
+  line: number;
+  extraLines?: number;
+  replacement?: string;
+  find?: string;
+}
+
+const SKIP_NAME =
+  /^(дерево|дсп|двп|фанера|тканина|синтепон|флізелін|поролон|войлок|скотч|плівка|картон|кромка|бонняль|холофайбер|крихта|крошка)$/i;
+
+const TYPOS: Array<{ re: RegExp; correct: string }> = [
+  { re: /Цшна/gi, correct: "Ціна" },
+  { re: /Цсна/gi, correct: "Ціна" },
+  { re: /деровина/gi, correct: "деревина" },
+  { re: /карказ/gi, correct: "Каркас" },
+  { re: /компонети/gi, correct: "компоненти" },
+  { re: /атримбут/gi, correct: "атрибут" },
+  { re: /обємі/gi, correct: "об'ємі" },
+  { re: /труегольн/gi, correct: "трикутн" },
+  { re: /накладная/gi, correct: "Накладна" },
+  { re: /холофайдер/gi, correct: "Холофайбер" },
+  { re: /крошка ппу/gi, correct: "Крихта ППУ" },
+  { re: /cинтепон/gi, correct: "Синтепон" },
+];
+
+const QTY_ONLY_RE =
+  /^-\s*([\d.,]*)\s*(шт\.?|кг|m³|m²|m|г)?\s*$/iu;
+
+const ZERO_QTY_RE = /-\s*0(?:[.,]0+)?\s*(шт\.?|кг|m³|m²|m|г)?\s*$/u;
+
+function levenshtein(a: string, b: string): number {
+  const m = a.length;
+  const n = b.length;
+  if (m === 0) return n;
+  if (n === 0) return m;
+  const row = Array.from({ length: n + 1 }, (_, i) => i);
+  for (let i = 1; i <= m; i++) {
+    let prev = i - 1;
+    row[0] = i;
+    for (let j = 1; j <= n; j++) {
+      const tmp = row[j];
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      row[j] = Math.min(row[j] + 1, row[j - 1] + 1, prev + cost);
+      prev = tmp;
+    }
+  }
+  return row[n];
+}
+
+function similar(a: string, b: string): boolean {
+  if (a === b) return false;
+  if (Math.abs(a.length - b.length) > 2) return false;
+  const maxLen = Math.max(a.length, b.length);
+  if (maxLen < 5) return false;
+  const d = levenshtein(a, b);
+  return d >= 1 && d <= 2;
+}
+
+function normalizeName(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/[🪵🧩🪤🧽]/gu, "")
+    .replace(/\s+/g, " ")
+    .replace(/\s*-\s*/g, "-")
+    .trim();
+}
+
+function extractNames(line: string): string[] {
+  if (/^\s*<!--/.test(line)) return [];
+  const names: string[] = [];
+  const re = /\[([^\]]+)\]/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(line)) !== null) {
+    const inner = m[1].trim();
+    if (inner && !SKIP_NAME.test(inner.split(/\s|-/)[0] ?? "")) {
+      names.push(inner);
+    }
+  }
+  return names;
+}
+
+export interface LintHit {
+  kind: "blocking" | "error" | "warning";
+  source: "lint";
+  line: number;
+  message: string;
+  original: string;
+  fixes: QuickFix[];
+}
+
+export function lintSpec(content: string): LintHit[] {
+  const lines = content.split("\n");
+  const hits: LintHit[] = [];
+  let seq = 0;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const t = line.trim();
+    const n = i + 1;
+    if (t.startsWith("<!--")) continue;
+
+    for (const typo of TYPOS) {
+      typo.re.lastIndex = 0;
+      if (!typo.re.test(line)) continue;
+      typo.re.lastIndex = 0;
+      hits.push({
+        kind: "error",
+        source: "lint",
+        line: n,
+        message: `Орфографія: має бути «${typo.correct}»`,
+        original: t,
+        fixes: [
+          {
+            id: `spell-${seq++}`,
+            label: `Замінити на «${typo.correct}»`,
+            action: "replace-line",
+            line: n,
+            replacement: line.replace(typo.re, typo.correct),
+          },
+        ],
+      });
+    }
+
+    if (ZERO_QTY_RE.test(t) || /-\s*0\s*шт/i.test(t)) {
+      hits.push({
+        kind: "blocking",
+        source: "lint",
+        line: n,
+        message: "Нульова кількість. Ймовірно рядок зайвий.",
+        original: t,
+        fixes: [
+          {
+            id: `zero-${seq++}`,
+            label: "Видалити рядок",
+            action: "delete-line",
+            line: n,
+          },
+        ],
+      });
+    }
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const t = lines[i].trim();
+    if (!t.includes("[") || /-\s*[\d.,]+\s*\S+\s*$/.test(t)) continue;
+    let j = i + 1;
+    while (j < lines.length && !lines[j].trim()) j++;
+    const qty = j < lines.length ? QTY_ONLY_RE.exec(lines[j].trim()) : null;
+    if (!qty) continue;
+    const qtyStr = qty[1] || "0";
+    let unit = qty[2] ?? "шт.";
+    if (/^шт/i.test(unit)) unit = "шт.";
+    const extra = j - i;
+    hits.push({
+      kind: "error",
+      source: "lint",
+      line: i + 1,
+      message: `Кількість стоїть окремим рядком («- ${qtyStr} ${unit}»). Має бути в одному рядку з назвою.`,
+      original: t,
+      fixes: [
+        {
+          id: `merge-${seq++}`,
+          label: `Поєднати в «${t} - ${qtyStr} ${unit}»`,
+          action: "merge-next",
+          line: i + 1,
+          extraLines: extra,
+          replacement: `${lines[i].trimEnd()} - ${qtyStr} ${unit}`,
+        },
+      ],
+    });
+  }
+
+  const counts = new Map<string, { raw: string; lines: number[] }>();
+  lines.forEach((line, i) => {
+    for (const name of extractNames(line)) {
+      const key = normalizeName(name);
+      if (!key || SKIP_NAME.test(key)) continue;
+      const cur = counts.get(key) ?? { raw: name, lines: [] };
+      cur.lines.push(i + 1);
+      counts.set(key, cur);
+    }
+  });
+
+  const allKeys = [...counts.keys()];
+  for (const [key, info] of counts) {
+    if (info.lines.length !== 1) continue;
+    if (!/напівфабрикат|нарізан|каркас|бильц|планка|чохол|накладк/i.test(key)) {
+      continue;
+    }
+    const near = allKeys
+      .filter((other) => similar(key, other))
+      .slice(0, 4)
+      .map((other) => counts.get(other)!.raw);
+    if (near.length === 0) continue;
+    const line = info.lines[0];
+    const original = lines[line - 1] ?? "";
+    hits.push({
+      kind: "warning",
+      source: "lint",
+      line,
+      message: `«${info.raw}» зустрічається один раз. Схожі назви: ${near.map((n) => `«${n}»`).join(", ")}. Можливо орфографія.`,
+      original: original.trim(),
+      fixes: near.map((n) => ({
+        id: `fuzzy-${seq++}`,
+        label: `Замінити на «${n}»`,
+        action: "replace-all",
+        line,
+        find: info.raw,
+        replacement: n,
+      })),
+    });
+  }
+
+  return hits;
+}
+
+export function applyFix(content: string, fix: QuickFix): string {
+  const lines = content.split("\n");
+  const idx = fix.line - 1;
+  if (idx < 0 || idx >= lines.length) return content;
+
+  if (fix.action === "delete-line") {
+    const drop =
+      idx + 1 < lines.length && !lines[idx + 1].trim() ? 2 : 1;
+    lines.splice(idx, drop);
+    return lines.join("\n");
+  }
+  if (fix.action === "replace-line" && fix.replacement !== undefined) {
+    lines[idx] = fix.replacement;
+    return lines.join("\n");
+  }
+  if (fix.action === "merge-next" && fix.replacement !== undefined) {
+    const drop = fix.extraLines ?? 1;
+    lines.splice(idx, drop + 1, fix.replacement);
+    return lines.join("\n");
+  }
+  if (fix.action === "replace-all" && fix.find && fix.replacement) {
+    return content.split(fix.find).join(fix.replacement);
+  }
+  return content;
+}

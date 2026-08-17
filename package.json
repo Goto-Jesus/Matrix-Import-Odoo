@@ -21,6 +21,9 @@
     "check-chain": "ts-node src/tools/check-chain.ts",
     "check-attrs": "ts-node src/tools/check-attributes.ts",
     "check-all": "ts-node src/tools/check-all.ts",
+    "web": "vite --config web/vite.config.ts",
+    "web:build": "vite build --config web/vite.config.ts",
+    "web:preview": "vite preview --config web/vite.config.ts",
     "import-template-bom": "ts-node src/commands/importTemplateBom.ts",
     "fix-product-types": "ts-node src/commands/fixProductTypes.ts",
     "diagnose-mo": "ts-node src/tools/diagnose-mo.ts",
@@ -36,6 +39,7 @@
   "devDependencies": {
     "@types/node": "^25.9.3",
     "ts-node": "^10.9.2",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vite": "^7.1.3"
   }
 }
