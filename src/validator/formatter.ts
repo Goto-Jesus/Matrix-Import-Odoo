@@ -42,7 +42,14 @@ function fixLineWhitespace(line: string): string {
     trimmed.startsWith("#")
   )
     return line;
-  return trimmed.replace(/[ \t]{2,}/g, " ").trimEnd();
+  const collapsed = trimmed.replace(/[ \t]{2,}/g, " ").trimEnd();
+  // 2–4 spaces: instruction body ("Значення", "Впливає", "}" or "[X] = ...").
+  // Not Word-dump padding inside workshops.
+  if (/^[ \t]{2,4}(Значення|Впливає|\}|\[.*=)/.test(line)) {
+    const indent = line.match(/^[ \t]+/)?.[0] ?? "";
+    return indent + collapsed;
+  }
+  return collapsed;
 }
 
 // Зчитати які атрибути є ✅ (активними) з секції АТРИБУТИ документу
@@ -301,21 +308,29 @@ function insertMissingPrices(lines: string[], changes: string[]): string[] {
   const result: string[] = [];
   let inWorkshop = false;
   let workshopHasPrice = false;
+  let workshopHasContent = false;
   let workshopLabel = "";
+
+  const closeWorkshop = () => {
+    if (inWorkshop && !workshopHasPrice && workshopHasContent) {
+      result.push("Ціна 0 грн <!-- ? -->");
+      result.push("");
+      changes.push(`Цех "${workshopLabel}": додано відсутню "Ціна 0 грн <!-- ? -->"`);
+    }
+  };
 
   for (let i = 0; i < lines.length; i++) {
     const trimmed = lines[i].trim();
     const isHeader = trimmed.startsWith("#") && trimmed.includes("№");
 
     if (isHeader) {
-      if (inWorkshop && !workshopHasPrice) {
-        result.push("Ціна 0 грн");
-        result.push("");
-        changes.push(`Цех "${workshopLabel}": додано відсутню "Ціна 0 грн"`);
-      }
+      closeWorkshop();
       workshopLabel = trimmed.match(/^#+\s*(Цех\s+№[\w-]+)/)?.[1] ?? trimmed;
       workshopHasPrice = false;
+      workshopHasContent = false;
       inWorkshop = true;
+    } else if (inWorkshop && trimmed) {
+      workshopHasContent = true;
     }
 
     if (inWorkshop && /^ціна\s+[\d.]+\s*грн/i.test(trimmed)) {
@@ -325,9 +340,9 @@ function insertMissingPrices(lines: string[], changes: string[]): string[] {
     result.push(lines[i]);
   }
 
-  if (inWorkshop && !workshopHasPrice) {
-    result.push("Ціна 0 грн");
-    changes.push(`Цех "${workshopLabel}": додано відсутню "Ціна 0 грн"`);
+  if (inWorkshop && !workshopHasPrice && workshopHasContent) {
+    result.push("Ціна 0 грн <!-- ? -->");
+    changes.push(`Цех "${workshopLabel}": додано відсутню "Ціна 0 грн <!-- ? -->"`);
   }
 
   return result;
@@ -386,8 +401,7 @@ export interface FormatterResult {
   changes: string[];
 }
 
-export function formatDocument(inputPath: string): FormatterResult {
-  const original = fs.readFileSync(inputPath, "utf-8");
+export function formatDocumentContent(original: string): FormatterResult {
   const originalLines = original.split("\n");
   const changes: string[] = [];
 
@@ -459,11 +473,144 @@ export function formatDocument(inputPath: string): FormatterResult {
   // Document-level passes (require multi-line context)
   let processedLines = fixMissingNapivfabrykatAttr(fixedLines, changes);
   processedLines = insertMissingPrices(processedLines, changes);
+  processedLines = mergeDanglingQty(processedLines, changes);
+  processedLines = compressWorkshopBlanks(processedLines, changes);
+
+  let content = processedLines.join("\n");
+  if (original.endsWith("\n") && !content.endsWith("\n")) content += "\n";
 
   return {
-    content: processedLines.join("\n"),
+    content,
     changes,
   };
+}
+
+const QTY_ONLY_RE =
+  /^-\s*([\d.,]*)\s*(шт\.?|кг|m³|m²|m|г)?\s*$/iu;
+
+function looksLikeProductLine(line: string): boolean {
+  const t = line.trim();
+  if (!t || t.startsWith("#") || t.startsWith("//") || t.startsWith("<<")) {
+    return false;
+  }
+  if (!t.includes("[") && !/^(Диван|Ліжко)\b/.test(t)) return false;
+  return !/-\s*[\d.,]+\s*\S+\s*$/.test(t);
+}
+
+function mergeDanglingQty(lines: string[], changes: string[]): string[] {
+  const result: string[] = [];
+  let i = 0;
+  while (i < lines.length) {
+    const cur = lines[i];
+    if (!looksLikeProductLine(cur)) {
+      result.push(cur);
+      i++;
+      continue;
+    }
+    let j = i + 1;
+    while (j < lines.length && !lines[j].trim()) j++;
+    const qtyMatch = j < lines.length ? QTY_ONLY_RE.exec(lines[j].trim()) : null;
+    if (!qtyMatch) {
+      result.push(cur);
+      i++;
+      continue;
+    }
+    const qty = qtyMatch[1] || "0";
+    let unit = qtyMatch[2] ?? "шт.";
+    if (/^шт/i.test(unit)) unit = "шт.";
+    result.push(`${cur.trimEnd()} - ${qty} ${unit}`);
+    changes.push(
+      `Рядок ${i + 1}: кількість з окремого рядка приєднано («- ${qty} ${unit}»)`,
+    );
+    i = j + 1;
+  }
+  return result;
+}
+
+// `\b` is ASCII-only — never use it after Cyrillic (Цех/Ціна/Диван).
+const WORKSHOP_HEADER_RE = /^#+\s*(?:Цех|ВТК)(?=\s|№|$)/i;
+const BARE_WORKSHOP_RE = /^Цех\s*№/i;
+const ANY_QTY_END_RE =
+  /[-]\s*(?:[\d.,]+\s*(кг|m³|m²|дм²|m|шт\.?)?|(кг|m³|m²|дм²|m|шт\.?))\s*$/u;
+const EMOJI_START_RE = /^[🪵🧩🪤🧽]+/u;
+
+type WorkshopLineKind =
+  | "header"
+  | "price"
+  | "abo"
+  | "comment"
+  | "output"
+  | "content";
+
+function classifyWorkshopLine(line: string): WorkshopLineKind | "blank" {
+  const t = line.trim();
+  if (!t) return "blank";
+  if (WORKSHOP_HEADER_RE.test(t) || BARE_WORKSHOP_RE.test(t)) return "header";
+  if (/^Ціна(\s|$)/i.test(t)) return "price";
+  if (/^(або)$/i.test(t)) return "abo";
+  if (/^<!--/.test(t)) return "comment";
+  if (ANY_QTY_END_RE.test(t)) return "content";
+  if (
+    (EMOJI_START_RE.test(t) && t.includes("[")) ||
+    /^\[.+\]\s*\(/u.test(t) ||
+    /^(Диван|Ліжко)(?=\s|$)/.test(t)
+  ) {
+    return "output";
+  }
+  return "content";
+}
+
+function needsWorkshopBlank(
+  prev: WorkshopLineKind,
+  cur: WorkshopLineKind,
+): boolean {
+  if (cur === "header" || prev === "header") return true;
+  if (cur === "price" || prev === "price") return true;
+  if (cur === "abo" || prev === "abo") return true;
+  if (cur === "comment" || prev === "comment") return true;
+  return cur === "output";
+}
+
+function compressWorkshopBlanks(lines: string[], changes: string[]): string[] {
+  const start = lines.findIndex((line) => {
+    const t = line.trim();
+    return WORKSHOP_HEADER_RE.test(t) || BARE_WORKSHOP_RE.test(t);
+  });
+  if (start < 0) return lines;
+
+  const kept: Array<{ kind: WorkshopLineKind; line: string }> = [];
+  let dropped = 0;
+  for (let i = start; i < lines.length; i++) {
+    const kind = classifyWorkshopLine(lines[i]);
+    if (kind === "blank") {
+      dropped++;
+      continue;
+    }
+    kept.push({ kind, line: lines[i] });
+  }
+
+  const body: string[] = [];
+  for (let i = 0; i < kept.length; i++) {
+    if (i > 0 && needsWorkshopBlank(kept[i - 1].kind, kept[i].kind)) {
+      body.push("");
+    }
+    body.push(kept[i].line);
+  }
+
+  const before = lines.slice(start).join("\n");
+  const after = body.join("\n");
+  if (before === after) return lines;
+
+  const reinserted = body.filter((line) => !line.trim()).length;
+  const net = dropped - reinserted;
+  changes.push(
+    `Цехи: прибрано порожні рядки всередині специфікацій (${net} порожніх стиснуто)`,
+  );
+  return [...lines.slice(0, start), ...body];
+}
+
+export function formatDocument(inputPath: string): FormatterResult {
+  return formatDocumentContent(fs.readFileSync(inputPath, "utf-8"));
 }
 
 export function writeFormattedDocument(

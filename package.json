@@ -4,6 +4,7 @@
   "description": "Цей скрипт автоматично створює товари з атрибутами, специфікації (BOMs) та операції в Odoo 19 через API.",
   "main": "index.js",
   "scripts": {
+    "to-novalid": "ts-node src/index.ts to-novalid",
     "validate": "ts-node src/index.ts validate",
     "validate-all": "ts-node src/index.ts validate-all",
     "import": "ts-node src/index.ts import",

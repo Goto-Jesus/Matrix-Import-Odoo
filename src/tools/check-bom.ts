@@ -62,7 +62,11 @@ interface Fix {
   content: string;
 }
 
-export function runBomCheck(content: string, fileName: string): { content: string; issues: string[] } {
+export function runBomCheck(
+  content: string,
+  fileName: string,
+  applyTodos = true,
+): { content: string; issues: string[] } {
   console.log(`\nBOM: ${fileName}`);
   const lines = content.split("\n");
   const issues: string[] = [];
@@ -244,12 +248,11 @@ export function runBomCheck(content: string, fileName: string): { content: strin
     fixes.push({ lineIdx, content: `<!-- TODO: ${msgs.join("; ")} -->` });
   }
 
-  if (fixes.length === 0) {
-    if (issues.length === 0) console.log("  ✅ BOM в порядку.");
-    return { content, issues };
+  if (issues.length === 0) console.log("  ✅ BOM в порядку.");
+  if (!applyTodos || fixes.length === 0) {
+    return { content: lines.join("\n"), issues };
   }
 
-  // Apply fixes (insert comments after output lines, descending order)
   fixes.sort((a, b) => b.lineIdx - a.lineIdx);
   const result = [...lines];
   for (const fix of fixes) {
@@ -281,4 +284,6 @@ function main() {
   }
 }
 
-if (require.main === module) main();
+if (typeof require !== "undefined" && require.main === module) {
+  main();
+}

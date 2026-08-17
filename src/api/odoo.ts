@@ -31,7 +31,14 @@ async function jsonRpc(service: string, method: string, args: any[]): Promise<an
 export async function authenticate(): Promise<number> {
   if (_uid !== null) return _uid;
 
-  const uid = await jsonRpc('common', 'authenticate', [
+  if (!ODOO_URL || !ODOO_DB || !ODOO_USERNAME || !ODOO_API_KEY) {
+    throw new Error(
+      "Odoo вимкнено: порожній ODOO_URL / ODOO_DB / ODOO_USERNAME / ODOO_API_KEY. " +
+        "Розкоментуй ключ у .env лише коли треба жива база.",
+    );
+  }
+
+  const uid = await jsonRpc("common", "authenticate", [
     ODOO_DB, ODOO_USERNAME, ODOO_API_KEY, {},
   ]);
 

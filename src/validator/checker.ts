@@ -14,19 +14,57 @@ export interface CheckResult {
   valid: boolean;
 }
 
-// Вилучити список відомих назв продуктів з right_names_odoo_base.md
-function loadKnownProducts(basePath: string): Set<string> {
-  const known = new Set<string>();
-  if (!fs.existsSync(basePath)) return known;
+export interface KnownCatalog {
+  set: Set<string>;
+  labels: string[];
+}
 
-  const content = fs.readFileSync(basePath, "utf-8");
+export function parseKnownCatalog(content: string): KnownCatalog {
+  const set = new Set<string>();
+  const labels: string[] = [];
   const re = /Товар:\s*"?([^"\n\r]+)"?/g;
   let m;
   while ((m = re.exec(content)) !== null) {
     const name = m[1].trim().replace(/^\[|\]$/g, "");
-    known.add(name.toLowerCase());
+    if (!name) continue;
+    set.add(name.toLowerCase());
+    labels.push(name);
   }
-  return known;
+  return { set, labels };
+}
+
+export function parseKnownProducts(content: string): Set<string> {
+  return parseKnownCatalog(content).set;
+}
+
+function levenshtein(a: string, b: string): number {
+  const m = a.length;
+  const n = b.length;
+  if (m === 0) return n;
+  if (n === 0) return m;
+  const row = Array.from({ length: n + 1 }, (_, i) => i);
+  for (let i = 1; i <= m; i++) {
+    let prev = i - 1;
+    row[0] = i;
+    for (let j = 1; j <= n; j++) {
+      const tmp = row[j];
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      row[j] = Math.min(row[j] + 1, row[j - 1] + 1, prev + cost);
+      prev = tmp;
+    }
+  }
+  return row[n];
+}
+
+function similarKnownNames(needle: string, labels: string[], limit = 3): string[] {
+  const q = needle.toLowerCase();
+  const maxDist = Math.max(2, Math.min(5, Math.floor(q.length / 3)));
+  return labels
+    .map((label) => ({ label, d: levenshtein(q, label.toLowerCase()) }))
+    .filter((x) => x.d > 0 && x.d <= maxDist)
+    .sort((a, b) => a.d - b.d || a.label.length - b.label.length)
+    .slice(0, limit)
+    .map((x) => x.label);
 }
 
 const KNOWN_UOMS = new Set([
@@ -109,18 +147,14 @@ function checkQty(qtyStr: string): boolean {
   return qty > 0;
 }
 
-export function checkDocument(
-  filePath: string,
-  referenceBasePath?: string,
+export function checkDocumentContent(
+  content: string,
+  knownProducts: Set<string> = new Set(),
+  knownLabels: string[] = [...knownProducts],
 ): CheckResult {
-  const content = fs.readFileSync(filePath, "utf-8");
   const lines = content.split("\n");
   const errors: CheckError[] = [];
   const warnings: CheckError[] = [];
-
-  const knownProducts = referenceBasePath
-    ? loadKnownProducts(referenceBasePath)
-    : new Set<string>();
 
   let inWorkshop = false;
   let hasWorkshops = false;
@@ -174,11 +208,11 @@ export function checkDocument(
       if (priceMatch) {
         workshopHasPrice = true;
         const price = parseFloat(priceMatch[1]);
-        if (price === 0) {
+        if (price === 0 && /<!--\s*\?\s*-->/.test(trimmed)) {
           warnings.push({
             line: lineNum,
             severity: "warning",
-            message: `Ціна = 0 у цеху “${workshopLabel}”. Вкажіть реальну ціну або залиште як заглушку.`,
+            message: `Ціна = 0 у цеху “${workshopLabel}” — ще не підтверджена. Зітріть «<!-- ? -->», якщо нуль правильний.`,
             original: trimmed,
           });
         }
@@ -190,6 +224,7 @@ export function checkDocument(
     if (
       trimmed.startsWith("//") ||
       trimmed.startsWith("<<") ||
+      trimmed.startsWith("<!--") ||
       trimmed === "або" ||
       trimmed === "Або" ||
       trimmed === "---"
@@ -320,10 +355,15 @@ export function checkDocument(
       if (bracketMatch) {
         const productName = bracketMatch[1].trim().toLowerCase();
         if (!knownProducts.has(productName)) {
+          const shown = bracketMatch[1].trim();
+          const near = similarKnownNames(shown, knownLabels);
+          const hint = near.length
+            ? `. Схожі: ${near.map((n) => `«${n}»`).join(", ")}`
+            : "";
           warnings.push({
             line: lineNum,
             severity: "warning",
-            message: `Товар "${bracketMatch[1].trim()}" не знайдено в right_names_odoo_base.md`,
+            message: `Товар "${shown}" не знайдено в right_names_odoo_base.md${hint}`,
             original: trimmed,
           });
         }
@@ -348,6 +388,18 @@ export function checkDocument(
     warnings,
     valid: errors.length === 0,
   };
+}
+
+export function checkDocument(
+  filePath: string,
+  referenceBasePath?: string,
+): CheckResult {
+  const content = fs.readFileSync(filePath, "utf-8");
+  if (!referenceBasePath || !fs.existsSync(referenceBasePath)) {
+    return checkDocumentContent(content);
+  }
+  const catalog = parseKnownCatalog(fs.readFileSync(referenceBasePath, "utf-8"));
+  return checkDocumentContent(content, catalog.set, catalog.labels);
 }
 
 export function formatCheckReport(

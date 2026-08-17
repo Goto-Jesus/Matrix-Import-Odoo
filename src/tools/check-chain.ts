@@ -815,10 +815,16 @@ function detectBrokenChains(
   const reportedOut = new Set<string>();
   const reportedIn  = new Set<string>();
 
+  function isFinishedGood(bracketType: string): boolean {
+    const t = bracketType.replace(/^[🪵🧩🪤🧽\s]+/u, "").trim();
+    return t === "[Диван]" || t === "[Ліжко]";
+  }
+
   // ─── [CHAIN-OUT]: produced but not consumed ──────────────────────────────
   for (const out of outputs) {
     if (reportedOut.has(out.key)) continue;
     if (inputKeySet.has(out.key)) continue; // correctly consumed → OK
+    if (isFinishedGood(out.bracketType)) continue; // sofa/bed is the chain end
 
     // Prefix mismatch is detectProductIdMismatches territory — skip.
     if (EMOJI_PREFIX.test(out.bracketType)) {
@@ -1119,9 +1125,14 @@ function applyFixes(fileLines: string[], fixes: Fix[]): string[] {
  * Run chain checks on in-memory content.
  * Returns the fixed content and list of issues found.
  */
+function isTodoAnnotation(content: string): boolean {
+  return /<!--\s*(TODO:|!!!)/i.test(content);
+}
+
 export function runChainCheck(
   content: string,
   fileName: string,
+  applyTodos = true,
 ): { content: string; issues: string[] } {
   console.log(`\nЛанцюги: ${fileName}`);
   const fileLines = content.split("\n");
@@ -1155,9 +1166,12 @@ export function runChainCheck(
     return { content, issues: [] };
   }
 
-  if (allFixes.length > 0) console.log(`  Виправлень: ${allFixes.length}`);
+  const usable = applyTodos
+    ? allFixes
+    : allFixes.filter((f) => !isTodoAnnotation(f.content));
+  if (usable.length > 0) console.log(`  Виправлень: ${usable.length}`);
   return {
-    content: applyFixes(fileLines, allFixes).join("\n"),
+    content: usable.length ? applyFixes(fileLines, usable).join("\n") : content,
     issues: allIssues,
   };
 }
@@ -1190,4 +1204,6 @@ function main() {
   console.log(`✅ Файл оновлено з коментарями про розриви.`);
 }
 
-if (require.main === module) main();
+if (typeof require !== "undefined" && require.main === module) {
+  main();
+}
