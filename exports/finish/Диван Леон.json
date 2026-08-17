@@ -1394,13 +1394,13 @@
       ],
       "components": [
         {
-          "templateName": "Холофайбер",
+          "templateName": "Холлофайбер",
           "attributes": [],
           "qty": 3,
           "uom": "кг",
           "operationIndex": 0,
           "ifAttr": {
-            "Диван Наповнювач Подушек": "Холофайбер"
+            "Диван Наповнювач Подушек": "Холлофайбер"
           },
           "odooTemplateId": 204,
           "odooVariantId": 704,

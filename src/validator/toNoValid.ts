@@ -21,7 +21,7 @@ const ATTR_CATALOG: Array<{
   },
   {
     name: "Диван Наповнювач Подушек",
-    detect: /холофайбер|холофайдер|крошк|крихт|наповнювач/i,
+    detect: /Холлофайбер|холофайдер|крошк|крихт|наповнювач/i,
   },
   {
     name: "Диван Розмір Бильця",
@@ -50,7 +50,7 @@ const INSTRUCTIONS_BLOCK = `## Інструкції який атрибут вп
    Значення атрибута: "Посилений", "Звичайний"
    Впливає на цехи: (5, 6, 9)
 
-3. %Диван Наповнювач Подушек%: Холофайбер - списується як "Крихта ППУ" в такому об'ємі.
+3. %Диван Наповнювач Подушек%: Холлофайбер - списується як "Крихта ППУ" в такому об'ємі.
    Значення атрибута: "Холофайдер", "ППУ Крихта"
    Впливає на цехи: (9-1, 9)
 
@@ -67,7 +67,10 @@ const INSTRUCTIONS_BLOCK = `## Інструкції який атрибут вп
    Впливає на цехи: (2-2, 4-2, 6, 9)`;
 
 function normalizeLine(line: string): string {
-  return line.replace(/\t/g, " ").replace(/[ \u00a0]{2,}/g, " ").trimEnd();
+  return line
+    .replace(/\t/g, " ")
+    .replace(/[ \u00a0]{2,}/g, " ")
+    .trimEnd();
 }
 
 function squeezeBlanks(lines: string[]): string[] {
@@ -87,14 +90,21 @@ function squeezeBlanks(lines: string[]): string[] {
   return out;
 }
 
-function stripSyntaxPreamble(content: string): { text: string; stripped: boolean } {
+function stripSyntaxPreamble(content: string): {
+  text: string;
+  stripped: boolean;
+} {
   const match = content.match(/^\s*Синтаксис\s*:/im);
-  if (!match || match.index === undefined) return { text: content, stripped: false };
+  if (!match || match.index === undefined)
+    return { text: content, stripped: false };
 
   const fromSyntax = content.slice(match.index);
   const dash = fromSyntax.search(/\n[ \t]*---[ \t]*\n/);
   if (dash >= 0) {
-    return { text: fromSyntax.slice(dash).replace(/^\s*---\s*/, ""), stripped: true };
+    return {
+      text: fromSyntax.slice(dash).replace(/^\s*---\s*/, ""),
+      stripped: true,
+    };
   }
 
   const product = fromSyntax.search(/\n[ \t]*(Диван\b|Ліжко\b)/);
@@ -146,7 +156,7 @@ function inferFlags(notes: string, body: string): Record<string, boolean> {
   if (/\b[Аа]бо\b/.test(body) && /поролон/i.test(body)) {
     flags["Диван Пружинний Блок"] = true;
   }
-  if (/\b[Аа]бо\b/.test(body) && /подушк|холофайбер|крошк|крихт/i.test(body)) {
+  if (/\b[Аа]бо\b/.test(body) && /подушк|Холлофайбер|крошк|крихт/i.test(body)) {
     flags["Диван Наповнювач Подушек"] = true;
   }
   return flags;
@@ -206,7 +216,9 @@ function extractNotes(head: string): string {
 }
 
 function tidyBody(body: string): string {
-  const lines = squeezeBlanks(body.split("\n").map((l) => normalizeLine(l).trimStart()));
+  const lines = squeezeBlanks(
+    body.split("\n").map((l) => normalizeLine(l).trimStart()),
+  );
   return lines.join("\n");
 }
 
@@ -227,10 +239,19 @@ export function toNoValidContent(raw: string): ToNoValidResult {
   const notes = extractNotes(head);
   const flags = existingFlags ?? inferFlags(notes, body);
 
-  if (!existingFlags) changes.push("згенеровано «# СПИСОК АТРИБУТІВ» з нотаток технолога");
+  if (!existingFlags)
+    changes.push("згенеровано «# СПИСОК АТРИБУТІВ» з нотаток технолога");
   if (!hasInstructions) changes.push("додано шаблон «## Інструкції»");
 
-  const header = [title, "", renderAttrList(flags), "", INSTRUCTIONS_BLOCK, "", tidyBody(body)]
+  const header = [
+    title,
+    "",
+    renderAttrList(flags),
+    "",
+    INSTRUCTIONS_BLOCK,
+    "",
+    tidyBody(body),
+  ]
     .join("\n")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
@@ -241,7 +262,8 @@ export function toNoValidContent(raw: string): ToNoValidResult {
     }
   }
 
-  if (changes.length === 0) changes.push("вже схоже на no_valid — змін майже немає");
+  if (changes.length === 0)
+    changes.push("вже схоже на no_valid — змін майже немає");
 
   return {
     content: `${header}\n`,

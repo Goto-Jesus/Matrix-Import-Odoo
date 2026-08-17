@@ -8,7 +8,7 @@
     "notes": [
       "IDs prefixed with $ — symbolic refs resolved from previous phase",
       "Spec 'Крихта ППУ' = Odoo 'ППУ Крихта' (attr_val id:375) — same material, different word order",
-      "Spec 'Холофайбер' = Odoo 'Холофайдер' (attr_val id:374) — same material, typo in Odoo",
+      "Spec 'Холлофайбер' = Odoo 'Холофайдер' (attr_val id:374) — same material, typo in Odoo",
       "Spec '[Петля] (К.11301)' = Odoo '[Петля] (K 113.01)' (variant id:337) — different encoding",
       "Spec '[Поролон] (ST-2535 2000x1600x20)' = Odoo variant id:302 (uses Cyrillicxin dims)",
       "Тік-так Odoo name is 'Tік-так' (Latin T) — same product, variant id:45",
@@ -124,7 +124,7 @@
       "Плівка": 46,
       "Скотч": 188,
       "Крихта_ППУ": 261,
-      "Холофайбер": 704,
+      "Холлофайбер": 704,
       "Тканина_Рене_4": 527,
       "Тканина_Рене_20": 354,
       "Тканина_Рене_23": 355,
@@ -1036,7 +1036,7 @@
       {
         "status": "CREATE",
         "ref": "bom_ceh91_Podushka_DNeo_Rene4_Xolo",
-        "цех": "Цех №9-1 Набивки Подушек (Холофайдер/Холофайбер)",
+        "цех": "Цех №9-1 Набивки Подушек (Холофайдер/Холлофайбер)",
         "model": "mrp.bom",
         "fields": {
           "product_tmpl_id": 67,

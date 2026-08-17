@@ -9,7 +9,7 @@ export interface QuickFix {
 }
 
 const SKIP_NAME =
-  /^(дерево|дсп|двп|фанера|тканина|синтепон|флізелін|поролон|войлок|скотч|плівка|картон|кромка|бонняль|холофайбер|крихта|крошка)$/i;
+  /^(дерево|дсп|двп|фанера|тканина|синтепон|флізелін|поролон|войлок|скотч|плівка|картон|кромка|бонняль|Холлофайбер|крихта|крошка)$/i;
 
 const TYPOS: Array<{ re: RegExp; correct: string }> = [
   { re: /Цшна/gi, correct: "Ціна" },
@@ -21,13 +21,12 @@ const TYPOS: Array<{ re: RegExp; correct: string }> = [
   { re: /обємі/gi, correct: "об'ємі" },
   { re: /труегольн/gi, correct: "трикутн" },
   { re: /накладная/gi, correct: "Накладна" },
-  { re: /холофайдер/gi, correct: "Холофайбер" },
+  { re: /холофайдер/gi, correct: "Холлофайбер" },
   { re: /крошка ппу/gi, correct: "Крихта ППУ" },
   { re: /cинтепон/gi, correct: "Синтепон" },
 ];
 
-const QTY_ONLY_RE =
-  /^-\s*([\d.,]*)\s*(шт\.?|кг|m³|m²|m|г)?\s*$/iu;
+const QTY_ONLY_RE = /^-\s*([\d.,]*)\s*(шт\.?|кг|m³|m²|m|г)?\s*$/iu;
 
 const ZERO_QTY_RE = /-\s*0(?:[.,]0+)?\s*(шт\.?|кг|m³|m²|m|г)?\s*$/u;
 
@@ -223,8 +222,7 @@ export function applyFix(content: string, fix: QuickFix): string {
   if (idx < 0 || idx >= lines.length) return content;
 
   if (fix.action === "delete-line") {
-    const drop =
-      idx + 1 < lines.length && !lines[idx + 1].trim() ? 2 : 1;
+    const drop = idx + 1 < lines.length && !lines[idx + 1].trim() ? 2 : 1;
     lines.splice(idx, drop);
     return lines.join("\n");
   }

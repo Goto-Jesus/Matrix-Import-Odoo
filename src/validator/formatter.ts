@@ -12,7 +12,7 @@ const MATERIAL_FIXES: Record<string, string> = {
   деровина: "деревина",
   компонети: "компоненти",
   "крошка ппу": "Крихта ППУ",
-  холофайдер: "Холофайбер", // product template name in Odoo
+  холофайдер: "Холлофайбер", // product template name in Odoo
   карказ: "Каркас",
   cинтепон: "Синтепон", // латинська C замість кириличної С
 };
@@ -353,7 +353,9 @@ function insertMissingPrices(lines: string[], changes: string[]): string[] {
     if (inWorkshop && !workshopHasPrice && workshopHasContent) {
       result.push("Ціна 0 грн <!-- ? -->");
       result.push("");
-      changes.push(`Цех "${workshopLabel}": додано відсутню "Ціна 0 грн <!-- ? -->"`);
+      changes.push(
+        `Цех "${workshopLabel}": додано відсутню "Ціна 0 грн <!-- ? -->"`,
+      );
     }
   };
 
@@ -380,7 +382,9 @@ function insertMissingPrices(lines: string[], changes: string[]): string[] {
 
   if (inWorkshop && !workshopHasPrice && workshopHasContent) {
     result.push("Ціна 0 грн <!-- ? -->");
-    changes.push(`Цех "${workshopLabel}": додано відсутню "Ціна 0 грн <!-- ? -->"`);
+    changes.push(
+      `Цех "${workshopLabel}": додано відсутню "Ціна 0 грн <!-- ? -->"`,
+    );
   }
 
   return result;
@@ -405,12 +409,12 @@ function fixTkanynaPlaceholder(line: string, activeAttrs: Set<string>): string {
   );
 }
 
-// Додати // @Діван Наповнювач Подушек=... до рядків з Холофайбером і Крихтою ППУ (якщо атрибут ✅)
+// Додати // @Діван Наповнювач Подушек=... до рядків з Холлофайбером і Крихтою ППУ (якщо атрибут ✅)
 function fixFillingTag(line: string, activeAttrs: Set<string>): string {
   if (!activeAttrs.has("Диван Наповнювач Подушек")) return line;
   if (line.includes("// @")) return line; // вже є тег
   const t = line.trim();
-  if (/^Холофайбер\s+-/.test(t)) {
+  if (/^Холлофайбер\s+-/.test(t)) {
     return line.trimEnd() + " // @Диван Наповнювач Подушек=Холофайдер";
   }
   if (/^Крихта ППУ\s+-/.test(t)) {
@@ -524,8 +528,7 @@ export function formatDocumentContent(original: string): FormatterResult {
   };
 }
 
-const QTY_ONLY_RE =
-  /^-\s*([\d.,]*)\s*(шт\.?|кг|m³|m²|m|г)?\s*$/iu;
+const QTY_ONLY_RE = /^-\s*([\d.,]*)\s*(шт\.?|кг|m³|m²|m|г)?\s*$/iu;
 
 function looksLikeProductLine(line: string): boolean {
   const t = line.trim();
@@ -548,7 +551,8 @@ function mergeDanglingQty(lines: string[], changes: string[]): string[] {
     }
     let j = i + 1;
     while (j < lines.length && !lines[j].trim()) j++;
-    const qtyMatch = j < lines.length ? QTY_ONLY_RE.exec(lines[j].trim()) : null;
+    const qtyMatch =
+      j < lines.length ? QTY_ONLY_RE.exec(lines[j].trim()) : null;
     if (!qtyMatch) {
       result.push(cur);
       i++;

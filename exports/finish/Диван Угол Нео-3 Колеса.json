@@ -1680,13 +1680,13 @@
           "odooUomId": 1
         },
         {
-          "templateName": "Холофайбер",
+          "templateName": "Холлофайбер",
           "attributes": [],
           "qty": 2.7,
           "uom": "кг",
           "operationIndex": 0,
           "ifAttr": {
-            "Диван Наповнювач Подушек": "Холофайбер"
+            "Диван Наповнювач Подушек": "Холлофайбер"
           },
           "odooTemplateId": 204,
           "odooVariantId": 704,
