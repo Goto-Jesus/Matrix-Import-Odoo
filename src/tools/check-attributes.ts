@@ -465,4 +465,6 @@ function main() {
   console.log(`✅ Файл оновлено.`);
 }
 
-if (require.main === module) main();
+if (typeof require !== "undefined" && require.main === module) {
+  main();
+}

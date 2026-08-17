@@ -1,67 +1,84 @@
-import { runSnapshot } from './commands/snapshot';
-import { runRestore } from './commands/restore';
-import { runValidate } from './commands/validate';
-import { runValidateAll } from './commands/validateAll';
-import { runImport } from './commands/importSpec';
-import { runCheck } from './commands/check';
-import { runAddFabric } from './commands/addFabric';
-import { createAllBoms } from './bom/creator';
-import { neo3Boms } from './specs/neo3-mekhanizm';
-
 const [, , command, ...args] = process.argv;
 
 async function main() {
   switch (command) {
-    case 'snapshot':
-      await runSnapshot(args[0]);
+    case "to-novalid": {
+      const { runToNoValid } = await import("./commands/toNoValid");
+      await runToNoValid(args[0], args[1]);
       break;
+    }
 
-    case 'restore':
-      await runRestore(args[0]);
-      break;
-
-    case 'validate':
+    case "validate": {
+      const { runValidate } = await import("./commands/validate");
       await runValidate(args[0]);
       break;
+    }
 
-    case 'validate-all':
+    case "validate-all": {
+      const { runValidateAll } = await import("./commands/validateAll");
       await runValidateAll(args[0]);
       break;
+    }
 
-    case 'import':
+    case "snapshot": {
+      const { runSnapshot } = await import("./commands/snapshot");
+      await runSnapshot(args[0]);
+      break;
+    }
+
+    case "restore": {
+      const { runRestore } = await import("./commands/restore");
+      await runRestore(args[0]);
+      break;
+    }
+
+    case "import": {
+      const { runImport } = await import("./commands/importSpec");
       await runImport(args[0]);
       break;
+    }
 
-    case 'check':
+    case "check": {
+      const { runCheck } = await import("./commands/check");
       await runCheck(args[0], ...args.slice(1));
       break;
+    }
 
-    case 'add-fabric':
+    case "add-fabric": {
+      const { runAddFabric } = await import("./commands/addFabric");
       await runAddFabric(args[0]);
       break;
+    }
 
-    case 'bom':
+    case "bom": {
+      const { createAllBoms } = await import("./bom/creator");
+      const { neo3Boms } = await import("./specs/neo3-mekhanizm");
       await createAllBoms(neo3Boms);
       break;
+    }
 
     default:
       console.log(`
 Використання:
+  Локально (Odoo не чіпає):
+  npm run to-novalid "<файл>"    — сирий дамп → documents_no_valid
   npm run validate "<файл>"       — авто-форматування + список помилок
-  npm run validate-all [папка]   — валідація всіх .md у папці (default: documents/)
-  npm run import "<файл>"     — парсинг та імпорт специфікації в Odoo
-  npm run check "<продукт>"   — перевірити чи продукт існує в Odoo
-  npm run add-fabric "<назва>"  — додати нову тканину до всіх чохлів і диванів
-  npm run snapshot [мітка]         — зберегти поточний стан Odoo
-  npm run restore                  — показати список імпортів
-  npm run restore -- "<назва>"     — відкатити конкретний імпорт
-  npm run restore -- all           — відкатити всі імпорти
-  npm run dev bom             — legacy: Нео-3 Механізм з hardcoded TypeScript
+  npm run validate-all [папка]   — валідація всіх .md у папці
+
+  Жива база (потрібен ODOO_API_KEY в .env):
+  npm run import "<файл>"
+  npm run check "<продукт>"
+  npm run add-fabric "<назва>"
+  npm run snapshot [мітка]
+  npm run restore
+  npm run restore -- "<назва>"
+  npm run restore -- all
+  npm run dev bom
       `);
   }
 }
 
-main().catch(err => {
-  console.error('\n[ПОМИЛКА]', err.message);
+main().catch((err) => {
+  console.error("\n[ПОМИЛКА]", err.message);
   process.exit(1);
 });

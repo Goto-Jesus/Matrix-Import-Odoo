@@ -249,7 +249,9 @@ async function main(): Promise<void> {
   await runAddFabric(fabricName);
 }
 
-main().catch(err => {
-  console.error('[FATAL]', err.message);
-  process.exit(1);
-});
+if (typeof require !== "undefined" && require.main === module) {
+  main().catch((err) => {
+    console.error("[FATAL]", err.message);
+    process.exit(1);
+  });
+}
