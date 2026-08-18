@@ -480,6 +480,11 @@ textarea {
   opacity: 0.38;
 }
 
+.hl .cmt-todo {
+  color: var(--grease);
+  font-weight: 600;
+}
+
 .hl[data-kind="blocking"],
 .hl[data-kind="error"] {
   background: rgba(180, 35, 24, 0.12);

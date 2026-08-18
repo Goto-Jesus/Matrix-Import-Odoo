@@ -19,17 +19,37 @@ export interface KnownCatalog {
   labels: string[];
 }
 
+interface FoamBlock {
+  lineNum: number;
+  variant: "Звичайний Блок" | "Посилений Блок" | null;
+  outputLine: string;
+  matLines: string[];
+}
+
 export function parseKnownCatalog(content: string): KnownCatalog {
   const set = new Set<string>();
   const labels: string[] = [];
-  const re = /Товар:\s*"?([^"\n\r]+)"?/g;
-  let m;
-  while ((m = re.exec(content)) !== null) {
-    const name = m[1].trim().replace(/^\[|\]$/g, "");
-    if (!name) continue;
+
+  function addName(raw: string): void {
+    const name = raw
+      .trim()
+      .replace(/^[🪵🧩🪤🧽]+/u, "")  // strip emoji prefix
+      .replace(/^\[|\]$/g, "")         // strip surrounding brackets
+      .trim();
+    if (!name || set.has(name.toLowerCase())) return;
     set.add(name.toLowerCase());
     labels.push(name);
   }
+
+  // Lines with explicit "Товар:" prefix
+  const re1 = /Товар:\s*"?([^"\n\r]+)"?/g;
+  let m: RegExpExecArray | null;
+  while ((m = re1.exec(content)) !== null) addName(m[1]);
+
+  // Standalone product lines without "Товар:" prefix: "🧩[Name]" or "[Name]"
+  const re2 = /^[🪵🧩🪤🧽]*\[([^\]]+)\]\s*$/gmu;
+  while ((m = re2.exec(content)) !== null) addName(m[1]);
+
   return { set, labels };
 }
 
@@ -54,6 +74,15 @@ function levenshtein(a: string, b: string): number {
     }
   }
   return row[n];
+}
+
+function extractTemplatePrefixes(labels: string[]): Set<string> {
+  const prefixes = new Set<string>();
+  for (const label of labels) {
+    const first = label.trim().split(/\s/)[0].toLowerCase();
+    if (first) prefixes.add(first);
+  }
+  return prefixes;
 }
 
 function similarKnownNames(needle: string, labels: string[], limit = 3): string[] {
@@ -155,6 +184,7 @@ export function checkDocumentContent(
   const lines = content.split("\n");
   const errors: CheckError[] = [];
   const warnings: CheckError[] = [];
+  const knownTemplatePrefixes = extractTemplatePrefixes(knownLabels);
 
   let inWorkshop = false;
   let hasWorkshops = false;
@@ -167,10 +197,70 @@ export function checkDocumentContent(
       warnings.push({
         line: workshopHeaderLine,
         severity: "warning",
-        message: `Цех “${workshopLabel}” не має рядка “Ціна”. Додати: “Ціна 0 грн”`,
+        message: `Цех "${workshopLabel}" не має рядка "Ціна". Додати: "Ціна 0 грн"`,
         original: "",
       });
     }
+  };
+
+  // ─── Foam variant tracking (Цех №5) ─────────────────────────────────────────
+  const FOAM_OUTPUT_RE = /🧩\[Поролон - нарізані компоненти\]/u;
+  const FOAM_VARIANT_RE = /@Диван Пружинний Блок=(Звичайний Блок|Посилений Блок)/;
+  const FOAM_DOUBLE_RES: RegExp[] = [
+    /\[Поролон\]\s*\(ST-2233\s*\(2000x1600x40x70\)\)/u,
+    /\[Войлок\]\s*\(1\.60\)/u,
+  ];
+
+  let inWorkshop5 = false;
+  const foamBlocks5: FoamBlock[] = [];
+  let currentFoam5: FoamBlock | null = null;
+
+  const flushFoam5 = () => {
+    if (currentFoam5) {
+      foamBlocks5.push({ ...currentFoam5 });
+      currentFoam5 = null;
+    }
+  };
+
+  const buildFoamSuggestion = (
+    existing: FoamBlock,
+    target: "Звичайний Блок" | "Посилений Блок",
+  ): string => {
+    const multiplier = target === "Посилений Блок" ? 2 : 0.5;
+    const newOutputLine = existing.outputLine.includes("@Диван Пружинний Блок=")
+      ? existing.outputLine.replace(FOAM_VARIANT_RE, `@Диван Пружинний Блок=${target}`)
+      : `${existing.outputLine} // @Диван Пружинний Блок=${target}`;
+    const newMatLines = existing.matLines.map((matLine) => {
+      if (!FOAM_DOUBLE_RES.some((re) => re.test(matLine))) return matLine;
+      return matLine.replace(/-\s*([\d.,]+)\s*([^\s]+)\s*$/, (_, qty, uom) => {
+        const newQty = parseFloat(qty.replace(",", ".")) * multiplier;
+        return `- ${parseFloat(newQty.toFixed(3))} ${uom}`;
+      });
+    });
+    return [newOutputLine, ...newMatLines].join("\n");
+  };
+
+  const validateFoam5 = () => {
+    flushFoam5();
+    if (foamBlocks5.length === 0 || foamBlocks5.length >= 2) {
+      foamBlocks5.length = 0;
+      currentFoam5 = null;
+      return;
+    }
+    const existing = foamBlocks5[0];
+    const missingVariant =
+      existing.variant === "Посилений Блок" ? "Звичайний Блок" : "Посилений Блок";
+    const suggestion = buildFoamSuggestion(existing, missingVariant);
+    warnings.push({
+      line: existing.lineNum,
+      severity: "warning",
+      message:
+        `Цех №5: відсутній варіант "${missingVariant}" для [Поролон - нарізані компоненти]. ` +
+        `Запропонований блок:\n\nабо\n\n${suggestion}`,
+      original: "",
+    });
+    foamBlocks5.length = 0;
+    currentFoam5 = null;
   };
 
   for (let i = 0; i < lines.length; i++) {
@@ -180,17 +270,17 @@ export function checkDocumentContent(
 
     if (!trimmed) continue;
 
-    // Workshop header (тільки якщо є “№” — щоб не чіпати “## Цехи:” тощо)
+    // Workshop header (тільки якщо є "№" — щоб не чіпати "## Цехи:" тощо)
     if (trimmed.startsWith("#") && trimmed.includes("№")) {
       warnMissingPrice();
       const m = trimmed.match(
-        /^#+\s*Цех\s+№([\w-]+)\s+(.+?)\s+-\s+(\S+)\s+[“”](.+?)[“”]\s*$/,
+        /^#+\s*Цех\s+№([\w-]+)\s+(.+?)\s+-\s+(\S+)\s+[“"](.+?)["”]\s*$/,
       );
       if (!m) {
         errors.push({
           line: lineNum,
           severity: "error",
-          message: `Некоректний заголовок цеху. Очікується: # Цех №N Назва - КОД “Операція (Цех №N)”`,
+          message: `Некоректний заголовок цеху. Очікується: # Цех №N Назва - КОД "Операція (Цех №N)"`,
           original: trimmed,
         });
       }
@@ -199,6 +289,10 @@ export function checkDocumentContent(
       workshopHasPrice = false;
       inWorkshop = true;
       hasWorkshops = true;
+      if (inWorkshop5) validateFoam5();
+      const wsNumM = trimmed.match(/Цех\s+№([\w-]+)/);
+      inWorkshop5 = wsNumM ? wsNumM[1] === "5" : false;
+      if (inWorkshop5) { foamBlocks5.length = 0; currentFoam5 = null; }
       continue;
     }
 
@@ -212,7 +306,7 @@ export function checkDocumentContent(
           warnings.push({
             line: lineNum,
             severity: "warning",
-            message: `Ціна = 0 у цеху “${workshopLabel}” — ще не підтверджена. Зітріть «<!-- ? -->», якщо нуль правильний.`,
+            message: `Ціна = 0 у цеху "${workshopLabel}" — ще не підтверджена. Зітріть «<!-- ? -->», якщо нуль правильний.`,
             original: trimmed,
           });
         }
@@ -221,6 +315,24 @@ export function checkDocumentContent(
     }
 
     if (!inWorkshop) continue;
+
+    if (inWorkshop5) {
+      if (trimmed === "або" || trimmed === "Або") {
+        flushFoam5();
+      } else if (FOAM_OUTPUT_RE.test(trimmed)) {
+        flushFoam5();
+        const varM = trimmed.match(FOAM_VARIANT_RE);
+        currentFoam5 = {
+          lineNum,
+          variant: varM ? (varM[1] as "Звичайний Блок" | "Посилений Блок") : null,
+          outputLine: trimmed,
+          matLines: [],
+        };
+      } else if (currentFoam5 && trimmed.startsWith("[") && /- [\d.,]+/.test(trimmed)) {
+        currentFoam5.matLines.push(trimmed);
+      }
+    }
+
     if (
       trimmed.startsWith("//") ||
       trimmed.startsWith("<<") ||
@@ -349,7 +461,7 @@ export function checkDocumentContent(
       }
     }
 
-    // Check product names against known list (warning only — product might be new)
+    // Check product names against known templates
     if (knownProducts.size > 0) {
       const bracketMatch = trimmed.match(/\[([^\]]+)\]/);
       if (bracketMatch) {
@@ -357,15 +469,27 @@ export function checkDocumentContent(
         if (!knownProducts.has(productName)) {
           const shown = bracketMatch[1].trim();
           const near = similarKnownNames(shown, knownLabels);
-          const hint = near.length
-            ? `. Схожі: ${near.map((n) => `«${n}»`).join(", ")}`
-            : "";
-          warnings.push({
-            line: lineNum,
-            severity: "warning",
-            message: `Товар "${shown}" не знайдено в right_names_odoo_base.md${hint}`,
-            original: trimmed,
-          });
+          if (near.length > 0) {
+            // Similar name found — likely a typo, suggest correction
+            warnings.push({
+              line: lineNum,
+              severity: "warning",
+              message: `Товар "${shown}" не знайдено в right_names_odoo_base.md. Схожі: ${near.map((n) => `«${n}»`).join(", ")}`,
+              original: trimmed,
+            });
+          } else {
+            // No similar name — check if it's a completely new template (unknown first word)
+            const firstWord = shown.split(/\s/)[0].toLowerCase();
+            if (!knownTemplatePrefixes.has(firstWord)) {
+              warnings.push({
+                line: lineNum,
+                severity: "warning",
+                message: `Новий шаблон товару "${shown}" — перевірте правильність назви`,
+                original: trimmed,
+              });
+            }
+            // Known prefix → new product variant, no warning needed
+          }
         }
       }
     }
@@ -373,6 +497,7 @@ export function checkDocumentContent(
 
   // Check last workshop price
   warnMissingPrice();
+  if (inWorkshop5) validateFoam5();
 
   if (!hasWorkshops) {
     errors.push({

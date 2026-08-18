@@ -27,7 +27,8 @@
     "import-template-bom": "ts-node src/commands/importTemplateBom.ts",
     "fix-product-types": "ts-node src/commands/fixProductTypes.ts",
     "diagnose-mo": "ts-node src/tools/diagnose-mo.ts",
-    "find-no-category": "ts-node src/tools/find-no-category.ts"
+    "find-no-category": "ts-node src/tools/find-no-category.ts",
+    "sync-base": "ts-node src/tools/sync-base.ts"
   },
   "keywords": [],
   "author": "",

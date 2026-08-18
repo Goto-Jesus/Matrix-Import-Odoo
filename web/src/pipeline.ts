@@ -133,6 +133,36 @@ function inferFixes(message: string, line: number | null, content: string): Quic
       ];
     }
   }
+  // Foam variant suggestion: Цех №5 missing Звичайний/Посилений Блок
+  if (/відсутній варіант/.test(message) && /Цех №5/.test(message)) {
+    const missingM = message.match(/відсутній варіант "([^"]+)"/);
+    const suggStart = message.indexOf("\nабо\n\n");
+    if (missingM && suggStart >= 0) {
+      const missingVariant = missingM[1];
+      const suggestion = message.slice(suggStart + "\nабо\n\n".length);
+      const docLines = content.split("\n");
+      // Scan forward from the foam output line to find Ціна or next section
+      let cenaIdx = docLines.length; // 0-indexed
+      for (let i = line; i < docLines.length; i++) {
+        const t = docLines[i].trim();
+        if (/^Ціна\s/i.test(t) || (t.startsWith("#") && t.includes("№"))) {
+          cenaIdx = i;
+          break;
+        }
+      }
+      // Insert before Ціна line: fix.line = 1-indexed line before Ціна
+      const insertLine = cenaIdx; // 1-indexed: cenaIdx (0-indexed) = line number cenaIdx+1-1 = cenaIdx
+      return [
+        {
+          id: `foam-insert-${line}`,
+          label: `Додати варіант "${missingVariant}"`,
+          action: "insert-after",
+          line: insertLine,
+          replacement: `або\n\n${suggestion}\n`,
+        },
+      ];
+    }
+  }
   const similar = message.match(/Схожі:\s*(.+)$/);
   const product = message.match(/Товар "([^"]+)"/);
   if (similar && product && line) {

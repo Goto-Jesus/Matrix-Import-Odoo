@@ -409,18 +409,43 @@ function fixTkanynaPlaceholder(line: string, activeAttrs: Set<string>): string {
   );
 }
 
-// Додати // @Діван Наповнювач Подушек=... до рядків з Холлофайбером і Крихтою ППУ (якщо атрибут ✅)
-function fixFillingTag(line: string, activeAttrs: Set<string>): string {
-  if (!activeAttrs.has("Диван Наповнювач Подушек")) return line;
-  if (line.includes("// @")) return line; // вже є тег
-  const t = line.trim();
-  if (/^Холлофайбер\s+-/.test(t)) {
-    return line.trimEnd() + " // @Диван Наповнювач Подушек=Холофайдер";
+// "[ДВП дно] (Двп Белое\Двп)" → "[ДВП дно] (%Дно Каркасу%)"  (тільки якщо Дно Каркасу ✅)
+function fixDnoKarkasuPlaceholder(line: string, activeAttrs: Set<string>): string {
+  if (!activeAttrs.has("Дно Каркасу")) return line;
+  if (line.includes("%Дно Каркасу%")) return line;
+  // Явне значення (ДВП Черновое / ДВП Білий) — не замінювати на placeholder
+  if (/\[ДВП дно\]\s*\(ДВП (Черновое|Білий)\)/i.test(line)) return line;
+  return line.replace(
+    /(\[ДВП дно\])\s*\([^)]+\)/,
+    "$1 (%Дно Каркасу%)",
+  );
+}
+
+function fixDnoExplicitComment(line: string, activeAttrs: Set<string>): string {
+  if (!activeAttrs.has("Дно Каркасу")) return line;
+  // Прибрати <!-- ДВП ... --> підказку, якщо вже є явне значення (Черновое/Білий)
+  if (!/\[ДВП дно\]\s*\(ДВП (Черновое|Білий)\)/i.test(line)) return line;
+  return line.replace(/\s*<!--\s*ДВП[^>]*-->/g, "").trimEnd();
+}
+
+// Document-level: до кожного "[ДВП дно] (%Дно Каркасу%)" рядка додати inline підказку
+function insertDnoKarkasuComment(
+  lines: string[],
+  changes: string[],
+  activeAttrs: Set<string>,
+): string[] {
+  if (!activeAttrs.has("Дно Каркасу")) return lines;
+  const result = [...lines];
+  for (let i = 0; i < result.length; i++) {
+    if (
+      /\[ДВП дно\].*%Дно Каркасу%/.test(result[i]) &&
+      !result[i].includes("<!-- ДВП")
+    ) {
+      result[i] = result[i].trimEnd() + " <!-- ДВП Білий або ДВП Черновое -->";
+      changes.push(`Рядок ${i + 1}: додано inline коментар-підказку для %Дно Каркасу%`);
+    }
   }
-  if (/^Крихта ППУ\s+-/.test(t)) {
-    return line.trimEnd() + " // @Диван Наповнювач Подушек=ППУ Крихта";
-  }
-  return line;
+  return result;
 }
 
 // Виправити написання в // @ тегах до Odoo-стандарту
@@ -502,8 +527,12 @@ export function formatDocumentContent(original: string): FormatterResult {
       "[Тканина] (назва) → [Тканина] (%Тканина%)",
     );
     apply(
-      (l) => fixFillingTag(l, activeAttrs),
-      "додано // @Диван Наповнювач Подушек=... тег",
+      (l) => fixDnoKarkasuPlaceholder(l, activeAttrs),
+      "[ДВП дно] (назва) → [ДВП дно] (%Дно Каркасу%)",
+    );
+    apply(
+      (l) => fixDnoExplicitComment(l, activeAttrs),
+      "[ДВП дно] (ДВП ...) — видалено зайвий коментар-підказку",
     );
     apply(
       fixAttrTagSpelling,
@@ -515,6 +544,9 @@ export function formatDocumentContent(original: string): FormatterResult {
 
   // Document-level passes (require multi-line context)
   let processedLines = fixMissingNapivfabrykatAttr(fixedLines, changes);
+  processedLines = fixAttrMarkersOnProducts(processedLines, changes, activeAttrs);
+  processedLines = insertDnoKarkasuComment(processedLines, changes, activeAttrs);
+  processedLines = removeDuplicateAboBlocks(processedLines, changes);
   processedLines = insertMissingPrices(processedLines, changes);
   processedLines = mergeDanglingQty(processedLines, changes);
   processedLines = compressWorkshopBlanks(processedLines, changes);
@@ -570,6 +602,114 @@ function mergeDanglingQty(lines: string[], changes: string[]): string[] {
   return result;
 }
 
+// Сканує рядки після fromIdx (до заголовку або "або") і повертає маркер наповнювача подушок
+function scanForFillingMarker(lines: string[], fromIdx: number): string {
+  for (let j = fromIdx + 1; j < lines.length && j < fromIdx + 12; j++) {
+    const t = lines[j].trim();
+    if (t.startsWith("#") || /^або$/i.test(t)) break;
+    if (/^Холлофайбер\s+-/.test(t)) return "Холлофайбер";
+    if (/^Крихта ППУ\s+-/.test(t)) return "ППУ Крихта";
+  }
+  return "";
+}
+
+// Сканує і повертає "ДВП Білий" або "ДВП Черновое" за наявністю [ДВП] (Білий) у блоці.
+// Якщо блок містить [ДВП дно] (%Дно Каркасу%) — значення невідоме, маркер не ставимо.
+function scanForDnoMarker(lines: string[], fromIdx: number): string {
+  let hasBilyi = false;
+  let hasZvychainy = false;
+  for (let j = fromIdx + 1; j < lines.length && j < fromIdx + 12; j++) {
+    const t = lines[j].trim();
+    if (t.startsWith("#") || /^або$/i.test(t)) break;
+    // Явне значення у [ДВП дно] — пріоритет над компонентами
+    if (/^\[ДВП дно\]\s*\(ДВП Білий\)/i.test(t)) return "ДВП Білий";
+    if (/^\[ДВП дно\]\s*\(ДВП Черновое\)/i.test(t)) return "ДВП Черновое";
+    if (/^\[ДВП дно\].*%Дно Каркасу%/.test(t)) return ""; // placeholder — значення невизначено
+    // Запасний варіант: виявлення через компоненти [ДВП]
+    if (/^\[ДВП\]\s*\(Білий\)/.test(t)) hasBilyi = true;
+    if (/^\[ДВП\]\s*\(Звичайний\)/.test(t)) hasZvychainy = true;
+  }
+  if (hasBilyi) return "ДВП Білий";
+  if (hasZvychainy) return "ДВП Черновое";
+  return "";
+}
+
+// Сканує і визначає тип пружинного блоку за кількістю [Войлок]
+function scanForSpringMarker(lines: string[], fromIdx: number): string {
+  for (let j = fromIdx + 1; j < lines.length && j < fromIdx + 12; j++) {
+    const t = lines[j].trim();
+    if (t.startsWith("#") || /^або$/i.test(t)) break;
+    const m = t.match(/^\[Войлок\].*-\s*([\d.,]+)\s*m/);
+    if (m) {
+      return parseFloat(m[1].replace(",", ".")) >= 3
+        ? "Посилений Блок"
+        : "Звичайний Блок";
+    }
+  }
+  return "";
+}
+
+// Document-level: додає // @Attr=Value маркери до рядків продуктів у цехах 2-2, 5, 9-1.
+// Маркер ставиться на рядок продукту (який містить %Атрибут%), а не на компонент.
+function fixAttrMarkersOnProducts(
+  lines: string[],
+  changes: string[],
+  activeAttrs: Set<string>,
+): string[] {
+  const result = [...lines];
+
+  for (let i = 0; i < result.length; i++) {
+    const line = result[i];
+    if (!line.includes("%")) continue;
+
+    // Цех 9-1: %Диван Наповнювач Подушек%
+    if (
+      activeAttrs.has("Диван Наповнювач Подушек") &&
+      line.includes("%Диван Наповнювач Подушек%") &&
+      !line.includes("// @Диван Наповнювач Подушек=")
+    ) {
+      const marker = scanForFillingMarker(result, i);
+      if (marker) {
+        result[i] = line.trimEnd() + ` // @Диван Наповнювач Подушек=${marker}`;
+        changes.push(
+          `Рядок ${i + 1}: додано маркер // @Диван Наповнювач Подушек=${marker}`,
+        );
+      }
+    }
+
+    // Цех 2-2: %Дно Каркасу%
+    if (activeAttrs.has("Дно Каркасу") && line.includes("%Дно Каркасу%")) {
+      const hasMarker = line.includes("// %Дно Каркасу%=");
+      const marker = scanForDnoMarker(result, i);
+      if (!hasMarker && marker) {
+        result[i] = line.trimEnd() + ` // %Дно Каркасу%=${marker}`;
+        changes.push(`Рядок ${i + 1}: додано маркер // %Дно Каркасу%=${marker}`);
+      } else if (hasMarker && !marker) {
+        // Блок вже має [ДВП дно] (%Дно Каркасу%) — значення визначиться при імпорті, маркер зайвий
+        result[i] = line.replace(/\s*\/\/\s*%Дно Каркасу%=[^\n]*/, "").trimEnd();
+        changes.push(`Рядок ${i + 1}: видалено застарілий маркер %Дно Каркасу%`);
+      }
+    }
+
+    // Цех 5: %Диван Пружинний Блок%
+    if (
+      activeAttrs.has("Диван Пружинний Блок") &&
+      line.includes("%Диван Пружинний Блок%") &&
+      !line.includes("// @Диван Пружинний Блок=")
+    ) {
+      const marker = scanForSpringMarker(result, i);
+      if (marker) {
+        result[i] = line.trimEnd() + ` // @Диван Пружинний Блок=${marker}`;
+        changes.push(
+          `Рядок ${i + 1}: додано маркер // @Диван Пружинний Блок=${marker}`,
+        );
+      }
+    }
+  }
+
+  return result;
+}
+
 // `\b` is ASCII-only — never use it after Cyrillic (Цех/Ціна/Диван).
 const WORKSHOP_HEADER_RE = /^#+\s*(?:Цех|ВТК)(?=\s|№|$)/i;
 const BARE_WORKSHOP_RE = /^Цех\s*№/i;
@@ -586,7 +726,7 @@ type WorkshopLineKind =
   | "content";
 
 function classifyWorkshopLine(line: string): WorkshopLineKind | "blank" {
-  const t = line.trim();
+  const t = line.trim().replace(/\s*<!--[^>]*-->\s*$/, "");
   if (!t) return "blank";
   if (WORKSHOP_HEADER_RE.test(t) || BARE_WORKSHOP_RE.test(t)) return "header";
   if (/^Ціна(\s|$)/i.test(t)) return "price";
@@ -612,6 +752,93 @@ function needsWorkshopBlank(
   if (cur === "abo" || prev === "abo") return true;
   if (cur === "comment" || prev === "comment") return true;
   return cur === "output";
+}
+
+function normalizeBlockForComparison(blockLines: string[]): string {
+  return blockLines
+    .map(l =>
+      l.trim()
+        .replace(/\s*\/\/\s*[@%][^\n]*/g, "")
+        .replace(/\s*<!--.*?-->/g, ""),
+    )
+    .filter(l => l !== "" && !/^Ціна\s/i.test(l))
+    .join("\n");
+}
+
+function removeDuplicateAboBlocks(
+  lines: string[],
+  changes: string[],
+): string[] {
+  const out: string[] = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const t = lines[i].trim();
+
+    // Non-workshop lines pass through
+    if (!WORKSHOP_HEADER_RE.test(t) && !(t.startsWith("#") && t.includes("№"))) {
+      out.push(lines[i]);
+      i++;
+      continue;
+    }
+
+    // Workshop header — emit and gather body until next workshop header
+    out.push(lines[i]);
+    i++;
+    const bodyStart = i;
+    while (i < lines.length) {
+      const lt = lines[i].trim();
+      if (
+        (WORKSHOP_HEADER_RE.test(lt) || (lt.startsWith("#") && lt.includes("№"))) &&
+        i !== bodyStart
+      )
+        break;
+      i++;
+    }
+    const workshopLines = lines.slice(bodyStart, i);
+
+    // Split into Або blocks
+    const blocks: string[][] = [];
+    const separatorLines: string[] = [];
+    let current: string[] = [];
+    for (const wl of workshopLines) {
+      if (/^(або)$/i.test(wl.trim())) {
+        blocks.push(current);
+        separatorLines.push(wl);
+        current = [];
+      } else {
+        current.push(wl);
+      }
+    }
+    blocks.push(current);
+
+    // Mark duplicate consecutive blocks for removal
+    const keepBlock = new Array(blocks.length).fill(true);
+    for (let b = 1; b < blocks.length; b++) {
+      let prevKept = -1;
+      for (let k = b - 1; k >= 0; k--) {
+        if (keepBlock[k]) { prevKept = k; break; }
+      }
+      if (prevKept < 0) continue;
+      const normPrev = normalizeBlockForComparison(blocks[prevKept]);
+      const normCur = normalizeBlockForComparison(blocks[b]);
+      if (normPrev === normCur && normCur !== "") {
+        keepBlock[b] = false;
+        changes.push(`Цех: видалено дублікат варіанту "Або" (ідентичний попередньому)`);
+      }
+    }
+
+    // Reconstruct workshop body
+    let firstKept = true;
+    for (let b = 0; b < blocks.length; b++) {
+      if (!keepBlock[b]) continue;
+      if (!firstKept) out.push(separatorLines[b - 1]);
+      out.push(...blocks[b]);
+      firstKept = false;
+    }
+  }
+
+  return out;
 }
 
 function compressWorkshopBlanks(lines: string[], changes: string[]): string[] {

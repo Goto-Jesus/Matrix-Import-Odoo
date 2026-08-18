@@ -350,7 +350,7 @@ function appendLineText(el: HTMLElement, line: string): void {
   while ((m = re.exec(line))) {
     if (m.index > last) el.append(line.slice(last, m.index));
     const span = document.createElement("span");
-    span.className = "cmt";
+    span.className = /<!--\s*TODO/i.test(m[0]) ? "cmt-todo" : "cmt";
     span.textContent = m[0];
     el.append(span);
     last = m.index + m[0].length;
