@@ -17,6 +17,7 @@ const DRAFT_KEY = "matrix-spec-draft";
 const SHOP_KEY = "matrix-spec-shop";
 const SHOP_H_KEY = "matrix-spec-shop-h";
 const CHROME_KEY = "matrix-spec-chrome";
+const ISSUES_H_KEY = "matrix-spec-issues-h";
 const DEBOUNCE_MS = 480;
 const SHOP_MS = 240;
 const UNDO_LIMIT = 80;
@@ -86,6 +87,7 @@ const shopBoard = document.querySelector<HTMLElement>("#shop-board")!;
 const btnShop = document.querySelector<HTMLButtonElement>("#btn-shop")!;
 const btnChrome = document.querySelector<HTMLButtonElement>("#btn-chrome")!;
 const fixPop = document.querySelector<HTMLDivElement>("#fix-pop")!;
+const issuesSplit = document.querySelector<HTMLElement>("#issues-split")!;
 const btnDock = document.querySelector<HTMLButtonElement>("#btn-dock")!;
 const btnHints = document.querySelector<HTMLButtonElement>("#btn-hints")!;
 const modal = document.querySelector<HTMLDivElement>("#confirm-modal")!;
@@ -815,6 +817,73 @@ function bindDock(): void {
   });
 }
 
+function isIssuesRight(): boolean {
+  return workspace.dataset.issues === "right";
+}
+
+function applyIssuesSize(px: number): void {
+  const paneMain = issuesSplit.parentElement!;
+  const rect = paneMain.getBoundingClientRect();
+  const right = isIssuesRight();
+  const total = right ? rect.width : rect.height;
+  const min = 60;
+  const max = Math.max(min, Math.round(total * 0.85));
+  const clamped = Math.min(Math.max(Math.round(px), min), max);
+  const prop = right ? "--issues" : "--issues-h";
+  workspace.style.setProperty(prop, `${clamped}px`);
+  localStorage.setItem(ISSUES_H_KEY, String(clamped));
+}
+
+function issuesSizeFromEvent(event: PointerEvent): void {
+  const paneMain = issuesSplit.parentElement!;
+  const rect = paneMain.getBoundingClientRect();
+  if (isIssuesRight()) {
+    applyIssuesSize(rect.right - event.clientX);
+  } else {
+    applyIssuesSize(rect.bottom - event.clientY);
+  }
+}
+
+function bindIssuesSplit(): void {
+  const saved = Number(localStorage.getItem(ISSUES_H_KEY));
+  if (Number.isFinite(saved) && saved >= 60) {
+    const prop = isIssuesRight() ? "--issues" : "--issues-h";
+    workspace.style.setProperty(prop, `${saved}px`);
+  }
+
+  issuesSplit.addEventListener("pointerdown", (event) => {
+    issuesSplit.setPointerCapture(event.pointerId);
+    workspace.classList.add("is-issues-resizing");
+    issuesSizeFromEvent(event);
+  });
+  issuesSplit.addEventListener("pointermove", (event) => {
+    if (!issuesSplit.hasPointerCapture(event.pointerId)) return;
+    issuesSizeFromEvent(event);
+  });
+  const stop = (event: PointerEvent) => {
+    if (issuesSplit.hasPointerCapture(event.pointerId)) {
+      issuesSplit.releasePointerCapture(event.pointerId);
+    }
+    workspace.classList.remove("is-issues-resizing");
+  };
+  issuesSplit.addEventListener("pointerup", stop);
+  issuesSplit.addEventListener("pointercancel", stop);
+  issuesSplit.addEventListener("keydown", (event) => {
+    const prop = isIssuesRight() ? "--issues" : "--issues-h";
+    const cur = parseInt(getComputedStyle(workspace).getPropertyValue(prop)) || 200;
+    const grow = isIssuesRight() ? "ArrowRight" : "ArrowUp";
+    const shrink = isIssuesRight() ? "ArrowLeft" : "ArrowDown";
+    if (event.key === grow) {
+      event.preventDefault();
+      applyIssuesSize(cur + 24);
+    }
+    if (event.key === shrink) {
+      event.preventDefault();
+      applyIssuesSize(cur - 24);
+    }
+  });
+}
+
 function applyShopHeight(px: number): void {
   const rect = workspace.getBoundingClientRect();
   const splitH = shopSplit.offsetHeight || 14;
@@ -823,7 +892,7 @@ function applyShopHeight(px: number): void {
     ? workspace.dataset.issues === "bottom"
       ? 200
       : 120
-    : 0;
+    : 200;
   const max = Math.max(80, Math.round(rect.height - splitH - reserve));
   const clamped = Math.min(Math.max(Math.round(px), 80), max);
   workspace.style.setProperty("--shop", `${clamped}px`);
@@ -1007,6 +1076,7 @@ document.addEventListener("pointerdown", (e) => {
 
 bindSplitter();
 bindDock();
+bindIssuesSplit();
 bindShop();
 bindHints();
 bindCounts();

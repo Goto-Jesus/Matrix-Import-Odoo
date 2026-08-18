@@ -562,6 +562,53 @@ textarea {
   user-select: none;
 }
 
+.issues-split {
+  flex: 0 0 14px;
+  cursor: col-resize;
+  position: relative;
+  touch-action: none;
+}
+
+.issues-split::before {
+  content: "";
+  position: absolute;
+  top: 28%;
+  bottom: 28%;
+  left: 5px;
+  width: 4px;
+  background: var(--graphite);
+  opacity: 0.35;
+}
+
+.workspace[data-issues="bottom"] .issues-split {
+  cursor: row-resize;
+}
+
+.workspace[data-issues="bottom"] .issues-split::before {
+  top: 5px;
+  bottom: auto;
+  left: 28%;
+  right: 28%;
+  width: auto;
+  height: 4px;
+}
+
+.issues-split:hover::before,
+.issues-split:focus-visible::before,
+.workspace.is-issues-resizing .issues-split::before {
+  opacity: 1;
+  background: var(--steel);
+}
+
+.workspace.is-issues-resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+
+.workspace.is-issues-resizing[data-issues="bottom"] {
+  cursor: row-resize;
+}
+
 .issues-dock {
   flex: 0 0 34%;
   min-height: 0;
@@ -572,9 +619,10 @@ textarea {
 }
 
 .workspace[data-issues="bottom"] .issues-dock {
-  flex: 1 1 28%;
-  max-height: 38%;
-  min-height: 0;
+  flex: 0 0 var(--issues-h, 28%);
+  min-height: 60px;
+  max-height: 70%;
+  margin-top: 0;
 }
 
 .issues-head {
@@ -592,9 +640,8 @@ textarea {
   flex: 0 0 var(--issues);
   width: var(--issues);
   min-width: 240px;
-  max-width: 420px;
   margin-top: 0;
-  margin-left: 10px;
+  margin-left: 0;
   min-height: 0;
   align-self: stretch;
 }
@@ -898,20 +945,18 @@ body[data-chrome="off"] .pane-main {
 }
 
 body[data-chrome="off"] .issues-dock {
-  flex: 0 0 180px;
-  width: 180px;
+  flex: 0 0 var(--issues, 180px);
+  width: var(--issues, 180px);
   min-width: 160px;
-  max-width: 200px;
   min-height: 80px;
   margin-top: 0;
   margin-left: 8px;
 }
 
 body[data-chrome="off"] .workspace[data-issues="right"] .issues-dock {
-  flex: 0 0 180px;
-  width: 180px;
+  flex: 0 0 var(--issues, 180px);
+  width: var(--issues, 180px);
   min-width: 160px;
-  max-width: 200px;
 }
 
 body[data-chrome="off"] .issues-dock .counts {
