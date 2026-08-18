@@ -271,6 +271,7 @@ function curvePath(
   b: { x: number; y: number },
   rank: number,
   count: number,
+  forcedLaneX?: number,
 ): string {
   const dx = b.x - a.x;
   const ax = a.x.toFixed(1);
@@ -285,7 +286,10 @@ function curvePath(
   const h = Math.min(32, Math.max(16, dx * 0.12));
   const left = a.x + h;
   const right = b.x - h;
-  const laneX = left + Math.max(right - left, 1) * ((rank + 1) / (n + 1));
+  const laneX =
+    forcedLaneX !== undefined
+      ? Math.max(left, Math.min(right, forcedLaneX))
+      : left + Math.max(right - left, 1) * ((rank + 1) / (n + 1));
   const midY = (a.y + b.y) / 2;
   return (
     `M ${ax} ${ay} ` +
@@ -296,6 +300,10 @@ function curvePath(
 
 function gutterKey(a: { x: number }, b: { x: number }): string {
   return `${Math.round(a.x / 72)}>${Math.round(b.x / 72)}`;
+}
+
+function clamp(n: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, n));
 }
 
 function drawRoutes(
@@ -318,6 +326,27 @@ function drawRoutes(
     from: { x: number; y: number };
     to: { x: number; y: number };
   }> = [];
+  const appendPath = (
+    edge: (typeof graph.edges)[number],
+    from: { x: number; y: number },
+    to: { x: number; y: number },
+    rank: number,
+    count: number,
+    forcedLaneX?: number,
+  ): void => {
+    const path = document.createElementNS(ns, "path");
+    path.dataset.edge = edge.id;
+    if (edge.fromId) path.dataset.from = edge.fromId;
+    if (edge.toId) path.dataset.to = edge.toId;
+    path.classList.add("shop-route", `is-${edge.status}`);
+    if (edge.issues.length) path.classList.add("has-issue");
+    if (edge.status === "orphan" || edge.status === "break") {
+      path.classList.add("shop-nub");
+    }
+    path.setAttribute("d", curvePath(from, to, rank, count, forcedLaneX));
+    if (edge.issues[0]) path.setAttribute("aria-label", edge.issues[0].message);
+    svg.append(path);
+  };
 
   for (const edge of graph.edges) {
     const from = edge.fromId ? anchorPort(canvas, edge.fromId, "out") : null;
@@ -343,20 +372,56 @@ function drawRoutes(
   }
 
   for (const list of groups.values()) {
-    list.forEach((item, rank) => {
-      const path = document.createElementNS(ns, "path");
-      path.dataset.edge = item.edge.id;
-      if (item.edge.fromId) path.dataset.from = item.edge.fromId;
-      if (item.edge.toId) path.dataset.to = item.edge.toId;
-      path.classList.add("shop-route", `is-${item.edge.status}`);
-      if (item.edge.issues.length) path.classList.add("has-issue");
-      if (item.edge.status === "orphan" || item.edge.status === "break") {
-        path.classList.add("shop-nub");
+    const byTarget = new Map<string, typeof list>();
+    for (const item of list) {
+      const key =
+        item.edge.status === "ok" && item.edge.toId
+          ? item.edge.toId
+          : `solo:${item.edge.id}`;
+      const pack = byTarget.get(key) ?? [];
+      pack.push(item);
+      byTarget.set(key, pack);
+    }
+    const packs = [...byTarget.values()].sort(
+      (a, b) =>
+        a[0].to.y - b[0].to.y ||
+        a.reduce((sum, item) => sum + item.from.y, 0) / a.length -
+          b.reduce((sum, item) => sum + item.from.y, 0) / b.length,
+    );
+    const leftEdge = Math.min(...list.map((item) => item.from.x)) + 22;
+    const rightEdge = Math.max(...list.map((item) => item.to.x)) - 22;
+    const laneSpan = Math.max(rightEdge - leftEdge, 1);
+    for (const [packIndex, pack] of packs.entries()) {
+      const laneX = leftEdge + laneSpan * ((packIndex + 1) / (packs.length + 1));
+      if (pack.length < 2 || !pack[0].edge.toId) {
+        pack.forEach((item, rank) =>
+          appendPath(item.edge, item.from, item.to, rank, pack.length, laneX),
+        );
+        continue;
       }
-      path.setAttribute("d", curvePath(item.from, item.to, rank, list.length));
-      if (item.edge.issues[0]) path.setAttribute("aria-label", item.edge.issues[0].message);
-      svg.append(path);
-    });
+      const target = pack[0].to;
+      const sourceX = Math.max(...pack.map((item) => item.from.x));
+      const mergePoint = {
+        x: clamp(laneX, sourceX + 18, target.x - 28),
+        y: pack.reduce((sum, item) => sum + item.from.y, 0) / pack.length,
+      };
+      pack.forEach((item, rank) =>
+        appendPath(item.edge, item.from, mergePoint, rank, pack.length, laneX),
+      );
+
+      const trunk = document.createElementNS(ns, "path");
+      trunk.dataset.to = pack[0].edge.toId;
+      trunk.classList.add("shop-route", `is-${pack[0].edge.status}`, "shop-route-trunk");
+      trunk.setAttribute("d", curvePath(mergePoint, target, 0, 1, laneX));
+      svg.append(trunk);
+
+      const dot = document.createElementNS(ns, "circle");
+      dot.classList.add("shop-route-join", `is-${pack[0].edge.status}`);
+      dot.setAttribute("cx", mergePoint.x.toFixed(1));
+      dot.setAttribute("cy", mergePoint.y.toFixed(1));
+      dot.setAttribute("r", "3");
+      svg.append(dot);
+    }
   }
 }
 

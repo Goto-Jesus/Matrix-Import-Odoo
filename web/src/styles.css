@@ -1192,6 +1192,23 @@ body[data-chrome="off"] .workspace[data-issues="bottom"] .issues-dock {
   stroke-width: 2.6;
 }
 
+.shop-route-trunk {
+  stroke-opacity: 0.7;
+}
+
+.shop-route-join {
+  fill: currentColor;
+  color: #3d6b72;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.shop-route-join.is-mismatch,
+.shop-route-join.is-break,
+.shop-route-join.is-orphan {
+  color: var(--grease);
+}
+
 .shop-empty {
   grid-column: 1 / -1;
   margin: auto;

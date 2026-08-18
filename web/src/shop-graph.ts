@@ -12,6 +12,8 @@ export interface ShopNode {
   label: string;
   typeKey: string;
   productId: string;
+  variantKey: string;
+  familyKey: string;
   matchKey: string;
   qty?: string;
   issues: UiIssue[];
@@ -125,8 +127,17 @@ function getProductId(s: string): string {
   return first;
 }
 
-function matchKey(typeKey: string, productId: string): string {
-  return `${typeKey}::${productId}`.toLowerCase();
+function normalizeKeyPart(s: string): string {
+  return s.replace(/\s+/g, " ").trim().toLowerCase();
+}
+
+function getVariantKey(s: string, typeKey: string): string {
+  const base = stripComment(s).replace(QTY_RE, "").replace(/\s+/g, " ").trim();
+  return `${normalizeKeyPart(typeKey)}::${normalizeKeyPart(base)}`;
+}
+
+function getFamilyKey(typeKey: string, productId: string): string {
+  return `${normalizeKeyPart(typeKey)}::${normalizeKeyPart(productId)}`;
 }
 
 function shortLabel(raw: string): string {
@@ -187,6 +198,8 @@ function makeNode(
 ): ShopNode {
   const typeKey = getTypeKey(raw);
   const productId = getProductId(raw);
+  const variantKey = getVariantKey(raw, typeKey);
+  const familyKey = getFamilyKey(typeKey, productId);
   return {
     id,
     kind,
@@ -196,7 +209,9 @@ function makeNode(
     label: shortLabel(raw),
     typeKey,
     productId,
-    matchKey: matchKey(typeKey, productId),
+    variantKey,
+    familyKey,
+    matchKey: familyKey,
     qty,
     issues: [],
   };
@@ -342,20 +357,23 @@ export function buildShopGraph(text: string, issues: UiIssue[] = []): ShopGraph 
     }
   }
 
-  const findProducer = (input: ShopNode): ShopNode | null => {
-    const exact = produced.filter((p) => p.matchKey === input.matchKey);
-    if (exact.length === 1) return exact[0];
-    if (exact.length > 1) {
-      const earlier = exact.filter((p) => p.line < input.line);
-      return earlier[earlier.length - 1] ?? exact[0];
-    }
+  const earlierOnly = (list: ShopNode[], input: ShopNode): ShopNode[] => {
+    const earlier = list.filter((p) => p.line < input.line);
+    return earlier.length ? earlier : list;
+  };
+
+  const findProducers = (input: ShopNode): ShopNode[] => {
+    const exact = produced.filter((p) => p.variantKey === input.variantKey);
+    if (exact.length > 0) return earlierOnly(exact, input);
+    const family = produced.filter((p) => p.familyKey === input.familyKey);
+    if (family.length > 0) return earlierOnly(family, input);
     const sameType = produced.filter(
       (p) => p.typeKey.toLowerCase() === input.typeKey.toLowerCase(),
     );
-    const prefix = sameType.find((p) =>
+    const prefix = sameType.filter((p) =>
       isPrefixPair(p.productId, input.productId),
     );
-    return prefix ?? null;
+    return earlierOnly(prefix, input);
   };
 
   const edges: ShopEdge[] = [];
@@ -364,21 +382,21 @@ export function buildShopGraph(text: string, issues: UiIssue[] = []): ShopGraph 
   for (const input of nodes.filter((n) => n.kind === "input")) {
     const typeKnown = producedTypes.has(input.typeKey.toLowerCase());
     if (!typeKnown) continue;
-    const from = findProducer(input);
-    if (from) {
-      for (const twin of produced) {
-        if (twin.matchKey === from.matchKey) usedOutputs.add(twin.id);
+    const fromList = findProducers(input);
+    if (fromList.length > 0) {
+      for (const from of fromList) {
+        usedOutputs.add(from.id);
+        const mismatch =
+          from.productId !== input.productId &&
+          isPrefixPair(from.productId, input.productId);
+        edges.push({
+          id: `${from.id}->${input.id}`,
+          fromId: from.id,
+          toId: input.id,
+          status: mismatch ? "mismatch" : "ok",
+          issues: [],
+        });
       }
-      const mismatch =
-        from.productId !== input.productId &&
-        isPrefixPair(from.productId, input.productId);
-      edges.push({
-        id: `${from.id}->${input.id}`,
-        fromId: from.id,
-        toId: input.id,
-        status: mismatch ? "mismatch" : "ok",
-        issues: [],
-      });
     } else {
       edges.push({
         id: `miss->${input.id}`,
