@@ -1298,6 +1298,36 @@ body[data-chrome="off"] .workspace[data-issues="bottom"] .issues-dock {
   padding-top: 5px;
 }
 
+.shop-bom .shop-ticket.shop-output {
+  font-weight: 500;
+}
+
+.shop-ticket.shop-bom-child,
+.shop-more.shop-bom-child {
+  padding-left: 24px;
+  position: relative;
+}
+
+.shop-bom-child::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 50%;
+  width: 7px;
+  border-left: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.shop-bom-child:not(.shop-bom-last)::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  bottom: 0;
+  border-left: 1px solid var(--rule);
+}
+
 .shop-input {
   padding-left: 14px;
 }

@@ -171,15 +171,24 @@ function bomBlock(bom: ShopBom, onJump: (line: number) => void): HTMLElement {
   if (kind) wrap.dataset.kind = kind;
 
   wrap.append(ticketEl(bom.output, onJump));
-  for (const input of bom.inputs) wrap.append(ticketEl(input, onJump));
+
+  const children: HTMLElement[] = [];
+  for (const input of bom.inputs) children.push(ticketEl(input, onJump));
   const mats = bom.materials.slice(0, 6);
-  for (const mat of mats) wrap.append(ticketEl(mat, onJump));
+  for (const mat of mats) children.push(ticketEl(mat, onJump));
   if (bom.materials.length > 6) {
     const more = document.createElement("span");
     more.className = "shop-more";
     more.textContent = `+${bom.materials.length - 6}`;
-    wrap.append(more);
+    children.push(more);
   }
+
+  children.forEach((el, i) => {
+    el.classList.add("shop-bom-child");
+    if (i === children.length - 1) el.classList.add("shop-bom-last");
+    wrap.append(el);
+  });
+
   return wrap;
 }
 
