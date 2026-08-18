@@ -94,7 +94,10 @@ const modal = document.querySelector<HTMLDivElement>("#confirm-modal")!;
 const confirmYes = document.querySelector<HTMLButtonElement>("#confirm-yes")!;
 const confirmNo = document.querySelector<HTMLButtonElement>("#confirm-no")!;
 
-const shop = mountShop(shopBoard, { onJump: (line) => jumpToLine(line) });
+const shop = mountShop(shopBoard, {
+  onJump: (line) => jumpToLine(line),
+  onClearFocus: () => highlightIssuesForLine(null),
+});
 
 let last: ValidationResult | null = null;
 let fileName = "специфікація.md";

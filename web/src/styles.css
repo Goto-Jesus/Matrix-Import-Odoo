@@ -1154,6 +1154,10 @@ body[data-chrome="off"] .workspace[data-issues="bottom"] .issues-dock {
   pointer-events: none;
 }
 
+.shop-routes-overlay {
+  z-index: 4;
+}
+
 .shop-route {
   fill: none;
   stroke: var(--steel);
@@ -1190,6 +1194,35 @@ body[data-chrome="off"] .workspace[data-issues="bottom"] .issues-dock {
 .shop-route.active {
   stroke-opacity: 1;
   stroke-width: 2.6;
+}
+
+.shop-route-ghost {
+  opacity: 0;
+  stroke-width: 3;
+  stroke-opacity: 0;
+  stroke-dasharray: 7 5;
+  transition:
+    opacity 120ms ease,
+    stroke-opacity 120ms ease;
+}
+
+.shop-route-ghost.shop-route-trunk {
+  stroke-dasharray: 9 6;
+}
+
+.shop-route-ghost.hot,
+.shop-route-ghost.active {
+  opacity: 1;
+  stroke-opacity: 0.45;
+}
+
+.shop-route-ghost.is-mismatch.hot,
+.shop-route-ghost.is-mismatch.active,
+.shop-route-ghost.is-break.hot,
+.shop-route-ghost.is-break.active,
+.shop-route-ghost.is-orphan.hot,
+.shop-route-ghost.is-orphan.active {
+  stroke-opacity: 0.38;
 }
 
 .shop-route-trunk {

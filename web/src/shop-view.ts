@@ -308,17 +308,21 @@ function clamp(n: number, min: number, max: number): number {
 
 function drawRoutes(
   svg: SVGSVGElement,
+  overlay: SVGSVGElement,
   graph: ShopGraph,
   canvas: HTMLElement,
 ): void {
   svg.replaceChildren();
+  overlay.replaceChildren();
   const w = Math.max(canvas.scrollWidth, canvas.clientWidth);
   const h = Math.max(canvas.scrollHeight, canvas.clientHeight);
-  svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
-  svg.setAttribute("width", String(w));
-  svg.setAttribute("height", String(h));
-  svg.style.width = `${w}px`;
-  svg.style.height = `${h}px`;
+  for (const layer of [svg, overlay]) {
+    layer.setAttribute("viewBox", `0 0 ${w} ${h}`);
+    layer.setAttribute("width", String(w));
+    layer.setAttribute("height", String(h));
+    layer.style.width = `${w}px`;
+    layer.style.height = `${h}px`;
+  }
 
   const ns = "http://www.w3.org/2000/svg";
   const planned: Array<{
@@ -334,18 +338,23 @@ function drawRoutes(
     count: number,
     forcedLaneX?: number,
   ): void => {
-    const path = document.createElementNS(ns, "path");
-    path.dataset.edge = edge.id;
-    if (edge.fromId) path.dataset.from = edge.fromId;
-    if (edge.toId) path.dataset.to = edge.toId;
-    path.classList.add("shop-route", `is-${edge.status}`);
-    if (edge.issues.length) path.classList.add("has-issue");
-    if (edge.status === "orphan" || edge.status === "break") {
-      path.classList.add("shop-nub");
-    }
-    path.setAttribute("d", curvePath(from, to, rank, count, forcedLaneX));
-    if (edge.issues[0]) path.setAttribute("aria-label", edge.issues[0].message);
-    svg.append(path);
+    const pathDef = curvePath(from, to, rank, count, forcedLaneX);
+    const makePath = (...extraClasses: string[]): SVGPathElement => {
+      const path = document.createElementNS(ns, "path");
+      path.dataset.edge = edge.id;
+      if (edge.fromId) path.dataset.from = edge.fromId;
+      if (edge.toId) path.dataset.to = edge.toId;
+      path.classList.add("shop-route", `is-${edge.status}`, ...extraClasses);
+      if (edge.issues.length) path.classList.add("has-issue");
+      if (edge.status === "orphan" || edge.status === "break") {
+        path.classList.add("shop-nub");
+      }
+      path.setAttribute("d", pathDef);
+      if (edge.issues[0]) path.setAttribute("aria-label", edge.issues[0].message);
+      return path;
+    };
+    svg.append(makePath());
+    overlay.append(makePath("shop-route-ghost"));
   };
 
   for (const edge of graph.edges) {
@@ -409,11 +418,18 @@ function drawRoutes(
         appendPath(item.edge, item.from, mergePoint, rank, pack.length, laneX),
       );
 
-      const trunk = document.createElementNS(ns, "path");
-      trunk.dataset.to = pack[0].edge.toId;
-      trunk.classList.add("shop-route", `is-${pack[0].edge.status}`, "shop-route-trunk");
-      trunk.setAttribute("d", curvePath(mergePoint, target, 0, 1, laneX));
-      svg.append(trunk);
+      const trunkPath = curvePath(mergePoint, target, 0, 1, laneX);
+      for (const [layer, extraClass] of [
+        [svg, ""],
+        [overlay, "shop-route-ghost"],
+      ] as const) {
+        const trunk = document.createElementNS(ns, "path");
+        trunk.dataset.to = pack[0].edge.toId;
+        trunk.classList.add("shop-route", `is-${pack[0].edge.status}`, "shop-route-trunk");
+        if (extraClass) trunk.classList.add(extraClass);
+        trunk.setAttribute("d", trunkPath);
+        layer.append(trunk);
+      }
 
       const dot = document.createElementNS(ns, "circle");
       dot.classList.add("shop-route-join", `is-${pack[0].edge.status}`);
@@ -427,7 +443,7 @@ function drawRoutes(
 
 export function mountShop(
   board: HTMLElement,
-  opts: { onJump: (line: number) => void },
+  opts: { onJump: (line: number) => void; onClearFocus?: () => void },
 ): ShopHandle {
   let graph: ShopGraph | null = null;
   let activeLine: number | null = null;
@@ -436,17 +452,23 @@ export function mountShop(
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.classList.add("shop-routes");
   svg.setAttribute("aria-hidden", "true");
+  const overlay = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  overlay.classList.add("shop-routes", "shop-routes-overlay");
+  overlay.setAttribute("aria-hidden", "true");
   const lanes = document.createElement("div");
   lanes.className = "shop-lanes";
   const canvas = document.createElement("div");
   canvas.className = "shop-canvas";
-  canvas.append(svg, lanes);
+  canvas.append(svg, lanes, overlay);
   board.replaceChildren(canvas);
 
   const scheduleDraw = () => {
     window.clearTimeout(drawTimer);
     drawTimer = window.setTimeout(() => {
-      if (graph) drawRoutes(svg, graph, canvas);
+      if (graph) {
+        drawRoutes(svg, overlay, graph, canvas);
+        applyActive();
+      }
     }, 16);
   };
 
@@ -467,9 +489,9 @@ export function mountShop(
       }
       for (const edge of graph.edges) {
         if (edge.fromId === node.id || edge.toId === node.id) {
-          board
-            .querySelector(`[data-edge="${CSS.escape(edge.id)}"]`)
-            ?.classList.add("active");
+          for (const route of board.querySelectorAll(`[data-edge="${CSS.escape(edge.id)}"]`)) {
+            route.classList.add("active");
+          }
         }
       }
     }
@@ -486,19 +508,26 @@ export function mountShop(
     focus?.scrollIntoView({ block: "nearest", inline: "nearest" });
   };
 
+  const syncRouteState = (klass: "hot" | "active", nodeId: string, on: boolean) => {
+    for (const el of board.querySelectorAll(
+      `.shop-route[data-from="${CSS.escape(nodeId)}"], .shop-route[data-to="${CSS.escape(nodeId)}"]`,
+    )) {
+      el.classList.toggle(klass, on);
+    }
+  };
+
+  const clearHot = () => {
+    for (const el of board.querySelectorAll(".shop-route.hot")) el.classList.remove("hot");
+  };
+
   lanes.addEventListener("mouseover", (event) => {
     const t = (event.target as HTMLElement).closest("[data-node]");
     if (!(t instanceof HTMLElement) || !t.dataset.node) return;
-    for (const el of svg.querySelectorAll(".shop-route.hot")) el.classList.remove("hot");
-    const id = t.dataset.node;
-    for (const el of svg.querySelectorAll(
-      `[data-from="${CSS.escape(id)}"], [data-to="${CSS.escape(id)}"]`,
-    )) {
-      el.classList.add("hot");
-    }
+    clearHot();
+    syncRouteState("hot", t.dataset.node, true);
   });
   lanes.addEventListener("mouseleave", () => {
-    for (const el of svg.querySelectorAll(".shop-route.hot")) el.classList.remove("hot");
+    clearHot();
   });
 
   svg.addEventListener("click", (event) => {
@@ -508,6 +537,19 @@ export function mountShop(
     if (!nodeId || !graph) return;
     const node = graph.nodes.find((n) => n.id === nodeId);
     if (node) opts.onJump(node.line);
+  });
+  canvas.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    if (
+      target.closest(".shop-ticket, .shop-sec-head, .shop-node") ||
+      target instanceof SVGPathElement
+    ) {
+      return;
+    }
+    activeLine = null;
+    applyActive();
+    opts.onClearFocus?.();
   });
 
   const ro = new ResizeObserver(scheduleDraw);
@@ -520,6 +562,7 @@ export function mountShop(
       lanes.replaceChildren();
       if (graph.workshops.length === 0) {
         svg.replaceChildren();
+        overlay.replaceChildren();
         lanes.append(emptyState());
         return;
       }
@@ -531,7 +574,7 @@ export function mountShop(
         lanes.append(col);
       }
       requestAnimationFrame(() => {
-        drawRoutes(svg, graph!, canvas);
+        drawRoutes(svg, overlay, graph!, canvas);
         applyActive();
       });
     },
