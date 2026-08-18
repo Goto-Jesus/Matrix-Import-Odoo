@@ -306,6 +306,13 @@ function clamp(n: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, n));
 }
 
+function hitClone(src: SVGPathElement): SVGPathElement {
+  const hit = src.cloneNode(true) as SVGPathElement;
+  hit.setAttribute("class", "shop-route-hit");
+  hit.removeAttribute("aria-label");
+  return hit;
+}
+
 function drawRoutes(
   svg: SVGSVGElement,
   overlay: SVGSVGElement,
@@ -353,7 +360,9 @@ function drawRoutes(
       if (edge.issues[0]) path.setAttribute("aria-label", edge.issues[0].message);
       return path;
     };
-    svg.append(makePath());
+    const vis = makePath();
+    svg.append(vis);
+    svg.append(hitClone(vis));
     overlay.append(makePath("shop-route-ghost"));
   };
 
@@ -424,11 +433,13 @@ function drawRoutes(
         [overlay, "shop-route-ghost"],
       ] as const) {
         const trunk = document.createElementNS(ns, "path");
+        trunk.dataset.edge = `trunk:${pack[0].edge.toId}`;
         trunk.dataset.to = pack[0].edge.toId;
         trunk.classList.add("shop-route", `is-${pack[0].edge.status}`, "shop-route-trunk");
         if (extraClass) trunk.classList.add(extraClass);
         trunk.setAttribute("d", trunkPath);
         layer.append(trunk);
+        if (layer === svg) layer.append(hitClone(trunk));
       }
 
       const dot = document.createElementNS(ns, "circle");
@@ -447,6 +458,8 @@ export function mountShop(
 ): ShopHandle {
   let graph: ShopGraph | null = null;
   let activeLine: number | null = null;
+  let activeEdgeKey: string | null = null;
+  let keepEdge = false;
   let drawTimer = 0;
 
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -478,34 +491,66 @@ export function mountShop(
     )) {
       el.classList.remove("active");
     }
-    if (!activeLine || !graph) return;
+    if (!graph) return;
     let focus: HTMLElement | null = null;
-    for (const node of graph.nodes) {
-      if (node.line !== activeLine) continue;
-      const el = board.querySelector(`.shop-ticket[data-node="${CSS.escape(node.id)}"]`);
+
+    const activateTicket = (nodeId: string) => {
+      const el = board.querySelector(`.shop-ticket[data-node="${CSS.escape(nodeId)}"]`);
       if (el instanceof HTMLElement) {
         el.classList.add("active");
         focus ??= el;
       }
-      for (const edge of graph.edges) {
-        if (edge.fromId === node.id || edge.toId === node.id) {
-          for (const route of board.querySelectorAll(`[data-edge="${CSS.escape(edge.id)}"]`)) {
-            route.classList.add("active");
+    };
+
+    if (activeEdgeKey) {
+      for (const route of board.querySelectorAll(activeEdgeKey)) {
+        route.classList.add("active");
+        if (!(route instanceof SVGPathElement)) continue;
+        if (route.dataset.from) activateTicket(route.dataset.from);
+        if (route.dataset.to) {
+          activateTicket(route.dataset.to);
+          if (!route.classList.contains("shop-route-trunk")) {
+            for (const trunk of board.querySelectorAll(
+              `.shop-route-trunk[data-to="${CSS.escape(route.dataset.to)}"]`,
+            )) {
+              trunk.classList.add("active");
+            }
           }
         }
       }
     }
-    const shop = graph.workshops.find((w) => w.line === activeLine);
-    if (shop) {
-      const head = board.querySelector(
-        `[data-workshop="${CSS.escape(shop.key)}"] .shop-sec-head`,
-      );
-      if (head instanceof HTMLElement) {
-        head.classList.add("active");
-        focus ??= head;
+
+    if (activeLine) {
+      for (const node of graph.nodes) {
+        if (node.line !== activeLine) continue;
+        activateTicket(node.id);
+        if (!activeEdgeKey) {
+          for (const edge of graph.edges) {
+            if (edge.fromId === node.id || edge.toId === node.id) {
+              for (const route of board.querySelectorAll(
+                `[data-edge="${CSS.escape(edge.id)}"]`,
+              )) {
+                route.classList.add("active");
+              }
+            }
+          }
+        }
+      }
+      const shop = graph.workshops.find((w) => w.line === activeLine);
+      if (shop) {
+        const head = board.querySelector(
+          `[data-workshop="${CSS.escape(shop.key)}"] .shop-sec-head`,
+        );
+        if (head instanceof HTMLElement) {
+          head.classList.add("active");
+          focus ??= head;
+        }
       }
     }
-    focus?.scrollIntoView({ block: "nearest", inline: "nearest" });
+
+    if (activeLine || activeEdgeKey) {
+      focus?.scrollIntoView({ block: "nearest", inline: "nearest" });
+    }
   };
 
   const syncRouteState = (klass: "hot" | "active", nodeId: string, on: boolean) => {
@@ -516,8 +561,46 @@ export function mountShop(
     }
   };
 
+  const markRouteFamily = (path: SVGPathElement, klass: "hot" | "active", on: boolean) => {
+    const edgeId = path.dataset.edge;
+    const toId = path.dataset.to;
+    const sel = edgeId
+      ? `.shop-route[data-edge="${CSS.escape(edgeId)}"]`
+      : toId
+        ? `.shop-route[data-to="${CSS.escape(toId)}"]`
+        : "";
+    if (!sel) return;
+    for (const el of board.querySelectorAll(sel)) el.classList.toggle(klass, on);
+    if (edgeId && toId && !edgeId.startsWith("trunk:")) {
+      for (const el of board.querySelectorAll(
+        `.shop-route-trunk[data-to="${CSS.escape(toId)}"]`,
+      )) {
+        el.classList.toggle(klass, on);
+      }
+    }
+  };
+
   const clearHot = () => {
     for (const el of board.querySelectorAll(".shop-route.hot")) el.classList.remove("hot");
+  };
+
+  const routeKeyOf = (path: SVGPathElement): string | null => {
+    if (path.dataset.edge) return `.shop-route[data-edge="${CSS.escape(path.dataset.edge)}"]`;
+    if (path.dataset.to) return `.shop-route[data-to="${CSS.escape(path.dataset.to)}"]`;
+    return null;
+  };
+
+  const selectRoute = (path: SVGPathElement) => {
+    activeEdgeKey = routeKeyOf(path);
+    const nodeId = path.dataset.to || path.dataset.from;
+    const node = nodeId && graph ? graph.nodes.find((n) => n.id === nodeId) : undefined;
+    if (node) {
+      keepEdge = true;
+      opts.onJump(node.line);
+      keepEdge = false;
+      return;
+    }
+    applyActive();
   };
 
   lanes.addEventListener("mouseover", (event) => {
@@ -530,26 +613,48 @@ export function mountShop(
     clearHot();
   });
 
-  svg.addEventListener("click", (event) => {
-    const t = event.target;
-    if (!(t instanceof SVGPathElement)) return;
-    const nodeId = t.dataset.to || t.dataset.from;
-    if (!nodeId || !graph) return;
-    const node = graph.nodes.find((n) => n.id === nodeId);
-    if (node) opts.onJump(node.line);
-  });
-  canvas.addEventListener("click", (event) => {
-    const target = event.target;
-    if (!(target instanceof Element)) return;
-    if (
-      target.closest(".shop-ticket, .shop-sec-head, .shop-node") ||
-      target instanceof SVGPathElement
-    ) {
-      return;
-    }
+  const clearFocus = () => {
     activeLine = null;
+    activeEdgeKey = null;
+    clearHot();
     applyActive();
     opts.onClearFocus?.();
+  };
+
+  const routeFromEvent = (target: EventTarget | null): SVGPathElement | null => {
+    if (!(target instanceof SVGPathElement)) return null;
+    if (target.classList.contains("shop-route-ghost")) return null;
+    if (
+      !target.classList.contains("shop-route-hit") &&
+      !target.classList.contains("shop-route")
+    ) {
+      return null;
+    }
+    return target;
+  };
+
+  canvas.addEventListener("mouseover", (event) => {
+    const t = routeFromEvent(event.target);
+    if (!t) return;
+    clearHot();
+    markRouteFamily(t, "hot", true);
+  });
+  canvas.addEventListener("mouseout", (event) => {
+    const t = routeFromEvent(event.target);
+    if (!t) return;
+    if (routeFromEvent(event.relatedTarget)) return;
+    clearHot();
+  });
+
+  board.addEventListener("click", (event) => {
+    const route = routeFromEvent(event.target);
+    if (route) {
+      selectRoute(route);
+      return;
+    }
+    if (!(event.target instanceof Element)) return;
+    if (event.target.closest(".shop-ticket, .shop-sec-head")) return;
+    clearFocus();
   });
 
   const ro = new ResizeObserver(scheduleDraw);
@@ -580,6 +685,7 @@ export function mountShop(
     },
     highlightLine(line: number | null) {
       activeLine = line;
+      if (!keepEdge) activeEdgeKey = null;
       applyActive();
     },
     destroy() {

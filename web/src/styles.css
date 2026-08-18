@@ -1025,6 +1025,7 @@ body[data-chrome="off"] .workspace[data-issues="bottom"] .issues-dock {
 
 .shop-canvas {
   position: relative;
+  width: 100%;
   min-width: min-content;
   min-height: 100%;
 }
@@ -1136,6 +1137,7 @@ body[data-chrome="off"] .workspace[data-issues="bottom"] .issues-dock {
   padding: 18px 28px 32px;
   min-width: min-content;
   min-height: 100%;
+  pointer-events: none;
 }
 
 .shop-col {
@@ -1156,6 +1158,7 @@ body[data-chrome="off"] .workspace[data-issues="bottom"] .issues-dock {
 
 .shop-routes-overlay {
   z-index: 4;
+  pointer-events: none;
 }
 
 .shop-route {
@@ -1165,6 +1168,17 @@ body[data-chrome="off"] .workspace[data-issues="bottom"] .issues-dock {
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-opacity: 0.55;
+  pointer-events: stroke;
+  cursor: pointer;
+}
+
+.shop-route-hit {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: 0.01;
+  stroke-width: 10px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
   pointer-events: stroke;
   cursor: pointer;
 }
@@ -1201,6 +1215,8 @@ body[data-chrome="off"] .workspace[data-issues="bottom"] .issues-dock {
   stroke-width: 3;
   stroke-opacity: 0;
   stroke-dasharray: 7 5;
+  pointer-events: none;
+  cursor: default;
   transition:
     opacity 120ms ease,
     stroke-opacity 120ms ease;
@@ -1253,6 +1269,11 @@ body[data-chrome="off"] .workspace[data-issues="bottom"] .issues-dock {
 
 .shop-empty p {
   margin: 0 0 6px;
+}
+
+.shop-node,
+.shop-empty {
+  pointer-events: auto;
 }
 
 .shop-node {
