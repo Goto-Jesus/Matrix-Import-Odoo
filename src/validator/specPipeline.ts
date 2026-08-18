@@ -9,7 +9,7 @@ import {
 import { formatDocumentContent } from "./formatter";
 import { toNoValidContent } from "./toNoValid";
 
-export const BLOCKING_PREFIXES = ["[BREAK]", "[ZERO]", "[EMPTY]", "[NOUNIT]"];
+export const BLOCKING_PREFIXES = ["[BREAK]", "[ZERO]", "[EMPTY]", "[NOUNIT]", "[UNKNOWN-ATTR]"];
 export const AUTO_PREFIXES = ["[FIX]", "[CASCADE]"];
 
 export type SpecToolName = "attrs" | "chain" | "bom";

@@ -1053,6 +1053,22 @@ body[data-chrome="off"] .workspace[data-issues="bottom"] .issues-dock {
   align-items: center;
   gap: 6px;
   white-space: nowrap;
+  padding: 3px 7px 3px 5px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s;
+}
+
+.shop-key li:hover {
+  border-color: var(--rule);
+  color: var(--graphite);
+}
+
+.shop-key li.is-legend-active {
+  border-color: var(--steel);
+  color: var(--graphite);
+  background: rgba(58, 90, 106, 0.1);
 }
 
 .shop-key-line {
@@ -1109,6 +1125,47 @@ body[data-chrome="off"] .workspace[data-issues="bottom"] .issues-dock {
 .shop-key-err {
   color: var(--grease);
   background: rgba(180, 35, 24, 0.12);
+}
+
+/* === Legend hover: dim all, highlight matching === */
+
+.shop-dock[data-legend] .shop-route:not(.shop-route-ghost) {
+  opacity: 0.07;
+}
+.shop-dock[data-legend] .shop-route-join {
+  opacity: 0.07;
+}
+.shop-dock[data-legend] .shop-ticket {
+  opacity: 0.1;
+}
+
+.shop-dock[data-legend="ok"] .shop-route.is-ok:not(.shop-route-ghost),
+.shop-dock[data-legend="ok"] .shop-route-join.is-ok {
+  opacity: 1;
+}
+.shop-dock[data-legend="mismatch"] .shop-route.is-mismatch:not(.shop-route-ghost),
+.shop-dock[data-legend="mismatch"] .shop-route-join.is-mismatch {
+  opacity: 1;
+}
+.shop-dock[data-legend="break"] .shop-route.is-break:not(.shop-route-ghost),
+.shop-dock[data-legend="break"] .shop-route-join.is-break {
+  opacity: 1;
+}
+.shop-dock[data-legend="orphan"] .shop-route.is-orphan:not(.shop-route-ghost),
+.shop-dock[data-legend="orphan"] .shop-route-join.is-orphan {
+  opacity: 1;
+}
+.shop-dock[data-legend="out"] .shop-ticket.shop-output {
+  opacity: 1;
+}
+.shop-dock[data-legend="in"] .shop-ticket.shop-input {
+  opacity: 1;
+}
+.shop-dock[data-legend="material"] .shop-ticket.shop-material {
+  opacity: 1;
+}
+.shop-dock[data-legend="err"] .shop-ticket[data-kind] {
+  opacity: 1;
 }
 
 .shop-board {
@@ -1170,6 +1227,7 @@ body[data-chrome="off"] .workspace[data-issues="bottom"] .issues-dock {
   stroke-opacity: 0.55;
   pointer-events: stroke;
   cursor: pointer;
+  transition: opacity 0.15s;
 }
 
 .shop-route-hit {
@@ -1354,6 +1412,7 @@ body[data-chrome="off"] .workspace[data-issues="bottom"] .issues-dock {
   font-size: 11px;
   line-height: 1.35;
   font-weight: 400;
+  transition: opacity 0.15s;
 }
 
 .shop-ticket-name {
