@@ -9,7 +9,7 @@ import {
 import type { UiIssue } from "./pipeline";
 
 export interface ShopHandle {
-  render(text: string, issues: UiIssue[]): void;
+  render(text: string, issues: UiIssue[]): UiIssue[];
   highlightLine(line: number | null): void;
   destroy(): void;
 }
@@ -454,7 +454,7 @@ function drawRoutes(
 
 export function mountShop(
   board: HTMLElement,
-  opts: { onJump: (line: number) => void; onClearFocus?: () => void },
+  opts: { onJump: (line: number) => void; onClearFocus?: () => void; onActiveLegend?: (key: string | null) => void },
 ): ShopHandle {
   let graph: ShopGraph | null = null;
   let activeLine: number | null = null;
@@ -550,6 +550,28 @@ export function mountShop(
 
     if (activeLine || activeEdgeKey) {
       focus?.scrollIntoView({ block: "nearest", inline: "nearest" });
+    }
+
+    if (opts.onActiveLegend) {
+      let legendKey: string | null = null;
+      if (activeEdgeKey) {
+        const route = board.querySelector<SVGPathElement>(
+          `${activeEdgeKey}.shop-route:not(.shop-route-ghost)`,
+        );
+        if (route) {
+          for (const cls of route.classList) {
+            if (/^is-(ok|mismatch|break|orphan)$/.test(cls)) { legendKey = cls.slice(3); break; }
+          }
+        }
+      } else if (activeLine) {
+        const ticket = board.querySelector<HTMLElement>(".shop-ticket.active");
+        if (ticket) {
+          if (ticket.classList.contains("shop-output")) legendKey = "out";
+          else if (ticket.classList.contains("shop-input")) legendKey = "in";
+          else if (ticket.classList.contains("shop-material")) legendKey = "material";
+        }
+      }
+      opts.onActiveLegend(legendKey);
     }
   };
 
@@ -662,14 +684,14 @@ export function mountShop(
   ro.observe(canvas);
 
   return {
-    render(text: string, issues: UiIssue[]) {
+    render(text: string, issues: UiIssue[]): UiIssue[] {
       graph = buildShopGraph(text, issues);
       lanes.replaceChildren();
       if (graph.workshops.length === 0) {
         svg.replaceChildren();
         overlay.replaceChildren();
         lanes.append(emptyState());
-        return;
+        return graph.mismatchIssues;
       }
       const cols = groupFamilies(graph.workshops);
       for (const families of cols) {
@@ -682,6 +704,7 @@ export function mountShop(
         drawRoutes(svg, overlay, graph!, canvas);
         applyActive();
       });
+      return graph.mismatchIssues;
     },
     highlightLine(line: number | null) {
       activeLine = line;

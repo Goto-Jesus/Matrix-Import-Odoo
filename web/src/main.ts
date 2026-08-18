@@ -94,10 +94,26 @@ const modal = document.querySelector<HTMLDivElement>("#confirm-modal")!;
 const confirmYes = document.querySelector<HTMLButtonElement>("#confirm-yes")!;
 const confirmNo = document.querySelector<HTMLButtonElement>("#confirm-no")!;
 
+const shopDock = document.querySelector<HTMLElement>("#shop-dock")!;
+const legendItems = [...document.querySelectorAll<HTMLElement>(".shop-key li[data-legend]")];
+
+let activeLegendEl: HTMLElement | null = null;
+const setActiveLegend = (key: string | null) => {
+  activeLegendEl?.classList.remove("is-legend-active");
+  activeLegendEl = key ? (legendItems.find((li) => li.dataset.legend === key) ?? null) : null;
+  activeLegendEl?.classList.add("is-legend-active");
+};
+
 const shop = mountShop(shopBoard, {
   onJump: (line) => jumpToLine(line),
   onClearFocus: () => highlightIssuesForLine(null),
+  onActiveLegend: setActiveLegend,
 });
+
+for (const li of legendItems) {
+  li.addEventListener("mouseenter", () => { shopDock.dataset.legend = li.dataset.legend!; });
+  li.addEventListener("mouseleave", () => { delete shopDock.dataset.legend; });
+}
 
 let last: ValidationResult | null = null;
 let fileName = "специфікація.md";
@@ -603,11 +619,21 @@ function paintResult(result: ValidationResult, writeEditor: boolean): void {
   last = result;
   fileName = result.fileName;
   fileHint.textContent = `Файл: ${result.fileName}. Зліва сирий, справа специфікація.`;
+
+  const graphIssues = renderShopNow();
+  if (graphIssues.length > 0) {
+    result.issues.push(...graphIssues);
+    result.counts.errors += graphIssues.filter((i) => i.kind === "error").length;
+    result.counts.warnings += graphIssues.filter((i) => i.kind === "warning").length;
+    if (result.counts.blocking > 0 || result.counts.errors > 0) {
+      result.status = "bad";
+    }
+  }
+
   setStamp(result.status);
   setCounts(result);
   applySpecMarks(result.issues);
   renderIssues(result);
-  renderShopNow();
   if (activeLine) highlightIssuesForLine(activeLine);
   enableExport();
   persistDraft();
@@ -673,9 +699,10 @@ function scheduleLint(): void {
   debounceTimer = window.setTimeout(runLintNow, DEBOUNCE_MS);
 }
 
-function renderShopNow(): void {
-  shop.render(editor.value, last?.issues ?? []);
+function renderShopNow(): UiIssue[] {
+  const mismatches = shop.render(editor.value, last?.issues ?? []);
   if (activeLine) shop.highlightLine(activeLine);
+  return mismatches;
 }
 
 function scheduleShop(): void {

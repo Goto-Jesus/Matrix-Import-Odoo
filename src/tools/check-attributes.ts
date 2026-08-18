@@ -258,8 +258,22 @@ function verify(
     if (!currentWorkshop) continue;
     if (!isProductLine(trimmed)) continue;
 
-    // Is it an input line (has "- N шт." or "- шт." or "- N кг" etc.)?
     const cleanLine = stripLineComment(trimmed);
+
+    // Check for unknown %...% attribute references on ALL product lines (outputs and inputs)
+    const paramCheck = parseParams(cleanLine);
+    if (paramCheck) {
+      for (const attr of paramCheck.attributes) {
+        const normalized = attr.replace(/❌%$/, "%");
+        if (!allAttrs.some((a) => a.paramName === normalized)) {
+          const msg = `[UNKNOWN-ATTR] рядок ${i + 1}: невідомий атрибут ${attr} — "${trimmed.slice(0, 80)}"`;
+          console.log(`  ${msg}`);
+          issues.push(msg);
+        }
+      }
+    }
+
+    // Is it an input line (has "- N шт." or "- шт." or "- N кг" etc.)?
     const hasQty = /[-]\s*[\d.,]*\s*(?:шт|кг|m|m²|m³)|[-]\s*[\d.,]+\s*$/u.test(
       cleanLine,
     );

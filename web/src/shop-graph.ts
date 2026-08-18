@@ -1,4 +1,4 @@
-import type { IssueKind, UiIssue } from "./pipeline";
+import type { IssueKind, QuickFix, UiIssue } from "./pipeline";
 
 export type ShopNodeKind = "output" | "input" | "material";
 export type ShopEdgeStatus = "ok" | "break" | "orphan" | "mismatch";
@@ -50,6 +50,7 @@ export interface ShopGraph {
   workshops: ShopWorkshop[];
   edges: ShopEdge[];
   nodes: ShopNode[];
+  mismatchIssues: UiIssue[];
 }
 
 const HEADER_RE =
@@ -226,6 +227,7 @@ export function buildShopGraph(text: string, issues: UiIssue[] = []): ShopGraph 
   const lines = text.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n").split("\n");
   const workshops: ShopWorkshop[] = [];
   const nodes: ShopNode[] = [];
+  const mismatchIssues: UiIssue[] = [];
   let title = "";
 
   let current: ShopWorkshop | null = null;
@@ -396,6 +398,26 @@ export function buildShopGraph(text: string, issues: UiIssue[] = []): ShopGraph 
           status: mismatch ? "mismatch" : "ok",
           issues: [],
         });
+        if (mismatch) {
+          const fromBase = from.raw.replace(QTY_RE, "").trim();
+          const qtyPart = input.qty ? ` - ${input.qty}` : "";
+          const replacement = `${fromBase}${qtyPart}`;
+          const fix: QuickFix = {
+            id: `fix-mismatch-${input.line}`,
+            label: `Замінити на: ${fromBase}`,
+            action: "replace-line",
+            line: input.line,
+            replacement,
+          };
+          mismatchIssues.push({
+            id: `graph-mismatch-${mismatchIssues.length}`,
+            kind: "error",
+            source: "chain",
+            line: input.line,
+            message: `[MISMATCH] Назва не збігається з виробником (${from.workshopKey}): «${input.productId}» замість «${from.productId}». Виробник має повнішу назву.`,
+            fixes: [fix],
+          });
+        }
       }
     } else {
       edges.push({
@@ -422,7 +444,7 @@ export function buildShopGraph(text: string, issues: UiIssue[] = []): ShopGraph 
 
   attachIssues(workshops, nodes, edges, issues);
 
-  return { title, workshops, edges, nodes };
+  return { title, workshops, edges, nodes, mismatchIssues };
 }
 
 function attachIssues(
