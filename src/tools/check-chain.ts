@@ -673,6 +673,15 @@ function detectProductIdMismatches(
           inId.startsWith(outId + " ") || outId.startsWith(inId + " ");
         if (!isMismatch) continue;
 
+        // Пропускаємо конфігураційні суфікси типу "БН", "НН", "ПБ", "ПН" —
+        // це коди варіанту дивану (2-4 великі літери), а не різні шаблони Odoo.
+        // "Д.Елегант" vs "Д.Елегант БН" → один і той же каркас, суфікс = "БН" → OK
+        // "Д.Лофт-3" vs "Д.Лофт-3 Механізм" → "Механізм" — повне слово → BREAK
+        const longer = inId.length > outId.length ? inId : outId;
+        const shorter = inId.length > outId.length ? outId : inId;
+        const suffix = longer.slice(shorter.length + 1);
+        if (/^[А-ЯҐЄІЇ]{1,4}$/.test(suffix)) continue;
+
         const key = `${type}::${outId}::${inId}`;
         if (reported.has(key)) continue;
         reported.add(key);

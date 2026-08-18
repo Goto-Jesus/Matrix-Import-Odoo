@@ -111,15 +111,21 @@ export function runBomCheck(
   let blockOutputText = "";
   let blockIsConditional = false;
   let blockHasInputs = false;
+  let blockIsPurchased = false; // true when output line has <!-- Купляється -->
   let seenAbo = true; // true at start of section so first block is always ok
 
   function flushBlock() {
     if (blockOutputLine < 0) return;
     if (!blockHasInputs) {
-      const msg = `[EMPTY] ${section}: порожня специфікація "${blockOutputText}"`;
-      console.log(`  ${msg}`);
-      issues.push(msg);
-      fixes.push({ lineIdx: blockOutputLine, content: "<!-- TODO: записати компоненти -->" });
+      if (blockIsPurchased) {
+        // Purchased item — no BOM needed, just info
+        console.log(`  [BUY] ${section}: "${blockOutputText}" — купляється, специфікація не потрібна`);
+      } else {
+        const msg = `[EMPTY] ${section}: порожня специфікація "${blockOutputText}"`;
+        console.log(`  ${msg}`);
+        issues.push(msg);
+        fixes.push({ lineIdx: blockOutputLine, content: "<!-- TODO: записати компоненти -->" });
+      }
     }
   }
 
@@ -128,6 +134,7 @@ export function runBomCheck(
     blockOutputText = "";
     blockIsConditional = false;
     blockHasInputs = false;
+    blockIsPurchased = false;
   }
 
   for (let i = 0; i < lines.length; i++) {
@@ -193,6 +200,7 @@ export function runBomCheck(
       blockOutputLine = i;
       blockOutputText = t;
       blockIsConditional = isConditional;
+      blockIsPurchased = /<!--\s*Купляється\s*-->/i.test(raw);
       seenAbo = false;
       continue;
     }

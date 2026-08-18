@@ -1,7 +1,7 @@
 export interface QuickFix {
   id: string;
   label: string;
-  action: "delete-line" | "replace-line" | "merge-next" | "replace-all";
+  action: "delete-line" | "replace-line" | "merge-next" | "replace-all" | "insert-after";
   line: number;
   extraLines?: number;
   replacement?: string;
@@ -99,7 +99,27 @@ export function lintSpec(content: string): LintHit[] {
     const line = lines[i];
     const t = line.trim();
     const n = i + 1;
-    if (t.startsWith("<!--")) continue;
+
+    if (t.startsWith("<!--")) {
+      if (/<!--\s*TODO/i.test(t)) {
+        hits.push({
+          kind: "blocking",
+          source: "lint",
+          line: n,
+          message: `TODO: рядок позначено як незавершений — потрібно виправити перед збереженням`,
+          original: t,
+          fixes: [
+            {
+              id: `todo-del-${seq++}`,
+              label: "Видалити рядок TODO",
+              action: "delete-line",
+              line: n,
+            },
+          ],
+        });
+      }
+      continue;
+    }
 
     for (const typo of TYPOS) {
       typo.re.lastIndex = 0;
@@ -213,6 +233,74 @@ export function lintSpec(content: string): LintHit[] {
     });
   }
 
+  // ── Empty-BOM detection ─────────────────────────────────────────────────────
+  // Output line (emoji+bracket, no qty suffix) inside a workshop that has zero
+  // component lines before the next output / price / separator.
+  // If the raw line already carries <!-- Купляється --> the block is intentional.
+  const WORKSHOP_HDR = /^#[^#].*№/;
+  const OUTPUT_RE = /^[🪵🧩🪤🧽]+\[/u;
+  const COMP_QTY_RE = /-\s*[\d,.][\d,.]*\s*\S+\s*$/;
+  const PRICE_HDR = /^Ціна\s+[\d.]+\s*грн/i;
+  const KUPLUETSYA = /<!--\s*Купляється\s*-->/i;
+  const SEPARATOR = /^(або|Або|і|---|\s*)$/;
+
+  let inWs = false;
+  let outLine = -1;
+  let outText = "";
+  let outRaw = "";
+  let hasComp = false;
+
+  function flushBom(): void {
+    if (outLine < 0) return;
+    if (!hasComp && !KUPLUETSYA.test(outRaw)) {
+      hits.push({
+        kind: "warning",
+        source: "lint",
+        line: outLine,
+        message: `Порожня специфікація — немає компонентів. Якщо товар купляється, додай «<!-- Купляється -->» до цього рядка.`,
+        original: outText,
+        fixes: [
+          {
+            id: `buy-${seq++}`,
+            label: "Позначити «Купляється»",
+            action: "replace-line",
+            line: outLine,
+            replacement: `${outRaw.trimEnd()} <!-- Купляється -->`,
+          },
+        ],
+      });
+    }
+    outLine = -1;
+    hasComp = false;
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const raw = lines[i];
+    const t = raw.trim();
+
+    if (WORKSHOP_HDR.test(t)) { flushBom(); inWs = true; continue; }
+    if (!inWs) continue;
+    if (!t || t.startsWith("//")) continue;
+
+    if (SEPARATOR.test(t)) { flushBom(); continue; }
+    if (PRICE_HDR.test(t)) { flushBom(); continue; }
+
+    // Output line: starts with emoji+bracket, no qty at end
+    if (OUTPUT_RE.test(t) && !COMP_QTY_RE.test(t)) {
+      flushBom();
+      outLine = i + 1;
+      outText = t.replace(/<!--.*?-->/g, "").trim();
+      outRaw = raw;
+      hasComp = false;
+      continue;
+    }
+
+    // Component line with qty
+    if (COMP_QTY_RE.test(t) && outLine >= 0) hasComp = true;
+  }
+  flushBom();
+  // ────────────────────────────────────────────────────────────────────────────
+
   return hits;
 }
 
@@ -237,6 +325,10 @@ export function applyFix(content: string, fix: QuickFix): string {
   }
   if (fix.action === "replace-all" && fix.find && fix.replacement) {
     return content.split(fix.find).join(fix.replacement);
+  }
+  if (fix.action === "insert-after" && fix.replacement !== undefined) {
+    lines.splice(idx + 1, 0, ...fix.replacement.split("\n"));
+    return lines.join("\n");
   }
   return content;
 }
