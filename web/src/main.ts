@@ -315,6 +315,10 @@ function setSpec(next: string, fromHistory = false): void {
   if (!ok || editor.value !== next) {
     editor.value = next;
   }
+  // insertText leaves caret at end — pin to first line
+  editor.setSelectionRange(0, 0);
+  editor.scrollTop = 0;
+  syncScroll();
   applyingHistory = false;
   if (last) last = { ...last, content: next };
   markSpecEdited();
