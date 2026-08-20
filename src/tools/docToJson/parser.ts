@@ -136,6 +136,19 @@ function extractFirstOuterParen(s: string): string {
   return "";
 }
 
+/**
+ * Поролон attr з брудного remainder після `]`.
+ * Канон attrStr для parseAttrString: "(ST-2233 (2000x1600x10))"
+ * → JSON value: "ST-2233 (2000x1600x10)"
+ */
+function rebuildPorolonAttrStr(remainder: string): string {
+  const code = remainder.match(/\b(ST-\d+)\b/i)?.[1];
+  const dimsRaw = remainder.match(/(\d+(?:[xхX×]\d+){2,})/)?.[1];
+  if (!code || !dimsRaw) return "";
+  const dims = dimsRaw.replace(/[хX×]/g, "x");
+  return `(${code.replace(/^st-/i, "ST-")} (${dims}))`;
+}
+
 // Splits a full product line into: emoji+template, attrString, qty, uom
 // Correctly handles nested parens: "[Поролон] (ST-2535 (2000x1600x20)) - 2.4 кг"
 //   → prefix="[Поролон]", attrStr="(ST-2535 (2000x1600x20))", qty=2.4, uom="кг"
@@ -162,6 +175,12 @@ function splitLineParts(
     // Has brackets — prefix is everything through ']' (includes emoji)
     const prefix = body.slice(0, bracketClose + 1).trim();
     const remainder = body.slice(bracketClose + 1).trim();
+    const bracketName = prefix.match(/\[([^\]]+)\]/)?.[1]?.trim() ?? "";
+    // Поролон: збираємо ST + dims з remainder (ігноруємо криві дужки)
+    if (bracketName === "Поролон") {
+      const rebuilt = rebuildPorolonAttrStr(remainder);
+      if (rebuilt) return { prefix, attrStr: rebuilt, qty, uom };
+    }
     // The attr string is the FIRST outer paren group after ']'
     const attrStr = extractFirstOuterParen(remainder);
     return { prefix, attrStr, qty, uom };
@@ -170,6 +189,15 @@ function splitLineParts(
     const parenIdx = body.indexOf("(");
     if (parenIdx !== -1) {
       const prefix = body.slice(0, parenIdx).trim();
+      // Bare "Поролон ST-… (dims)" / "Поролон (ST) (dims)"
+      // \b ненадійний з кирилицею — лише ^Поролон + пробіл/(
+      if (/^Поролон$/i.test(prefix) || /^Поролон[\s(]/u.test(body)) {
+        const rebuilt = rebuildPorolonAttrStr(body.replace(/^Поролон\s*/i, ""));
+        if (rebuilt) {
+          // Канон templateName з дужками — як після formatter
+          return { prefix: "[Поролон]", attrStr: rebuilt, qty, uom };
+        }
+      }
       const attrStr = extractFirstOuterParen(body.slice(parenIdx));
       return { prefix, attrStr, qty, uom };
     }

@@ -30,6 +30,7 @@ const UOM_NORMALIZE: Record<string, string> = {
   м3: "m³",
   m3: "m³",
   шт: "шт.",
+  кт: "шт.", // типова OCR/опечатка замість шт.
 };
 
 // Прибрати зайві пробіли: leading whitespace + consecutive spaces → single space
@@ -199,13 +200,62 @@ function fixUnclosedParen(line: string): string {
   return line.replace(/(\([^)]+?)\s*(-\s*[\d,.]+)/, "$1) $2");
 }
 
-// ") -qty uom" або ")-qty uom" → ") - qty uom"
-// Безпечно: тільки після ] або ), щоб не зачіпати "9-1", "ST-2535", "Нео-3"
+// ") -qty uom" / ")-qty uom" → ") - qty uom"
+// Також bare: "Ножка 115x115 -4 шт." → "… - 4 шт."
+// Безпечно: не чіпає "9-1", "ST-2535", "Нео-3" (немає UOM в кінці)
 function fixDashBeforeQty(line: string): string {
-  return line.replace(
+  let result = line.replace(
     /([\]\)])\s*-(\d[\d,.]*\s*[а-яА-ЯҐЄІЇa-zA-Z²³])/g,
     "$1 - $2",
   );
+  // Bare material / accessory lines without ] or ) before the dash
+  result = result.replace(
+    /^(\s*(?:[^\[\]#].*?|[^\[]*?))\s+-(\d[\d,.]*)\s+([а-яА-ЯҐЄІЇa-zA-Z][а-яА-ЯҐЄІЇa-zA-Z0-9.²³]*)\s*$/u,
+    "$1 - $2 $3",
+  );
+  return result;
+}
+
+// "…)). - qty" / "…). - qty" → "…) - qty" — сміттєва крапка після дужок
+function fixDotBeforeQty(line: string): string {
+  return line.replace(/(\)+)\.+\s*(-)/g, "$1 $2");
+}
+
+/**
+ * Поролон: детект блоків → канон markdown.
+ *
+ * Блоки: product=[Поролон], code=ST-XXXX, dims=NxNxN…, qty+uom.
+ * Канон MD:  [Поролон] (ST-2233 (2000x1600x10)) - 0.704 кг
+ * Канон JSON attr.value: "ST-2233 (2000x1600x10)"
+ *
+ * Покриває: без зовнішніх дужок, зайві ), крапки, кириличний «х»,
+ * "Поролон (ST) (dims)", "[Поролон] ST (dims)))" тощо.
+ */
+function normalizePorolonLine(line: string): string {
+  const indent = line.match(/^\s*/)?.[0] ?? "";
+  const trimmed = line.trim();
+  if (!trimmed || trimmed.startsWith("#") || trimmed.startsWith("//")) {
+    return line;
+  }
+  // Не чіпати шаблони цеху (нарізка / напівфабрикат)
+  if (/нарізан|напівфабр/i.test(trimmed)) return line;
+  // \b не працює з кирилицею в JS — лише [Поролон] або рядок що починається з Поролон
+  if (!/\[Поролон\]|^Поролон[\s(]/u.test(trimmed)) return line;
+  if (!/\bST-\d+/i.test(trimmed)) return line;
+
+  const qtyMatch = trimmed.match(
+    /\s*-\s*([\d,.]+)\s*([а-яА-ЯҐЄІЇa-zA-Z²³][а-яА-ЯҐЄІЇa-zA-Z0-9.²³]*)\s*$/u,
+  );
+  if (!qtyMatch) return line;
+
+  const body = trimmed.slice(0, trimmed.length - qtyMatch[0].length);
+  const codeRaw = body.match(/\b(ST-\d+)\b/i)?.[1];
+  const dimsRaw = body.match(/(\d+(?:[xхX×]\d+){2,})/)?.[1];
+  if (!codeRaw || !dimsRaw) return line;
+
+  const code = codeRaw.replace(/^st-/i, "ST-");
+  const dims = dimsRaw.replace(/[хX×]/g, "x");
+  return `${indent}[Поролон] (${code} (${dims})) - ${qtyMatch[1]} ${qtyMatch[2]}`;
 }
 
 // Нормалізація одиниць виміру: "1.60 kg" → "1.60 кг", "0.042 m³" → "0.042 m³"
@@ -218,14 +268,6 @@ function fixUom(line: string): string {
         UOM_NORMALIZE[raw.toLowerCase()] ?? UOM_NORMALIZE[raw] ?? uom;
       return `${dash}${qty} ${normalized}`;
     },
-  );
-}
-
-// "Поролон (ST-2535) (2000x1600x20) - 1.60 кг" → "[Поролон] (ST-2535 (2000x1600x20)) - 1.60 кг"
-function fixPorolonFormat(line: string): string {
-  return line.replace(
-    /^(\s*)Поролон\s+\(([^)]+)\)\s+\(([^)]+)\)/,
-    (_m, indent, code, dims) => `${indent}[Поролон] (${code} (${dims}))`,
   );
 }
 
@@ -491,6 +533,11 @@ export function formatDocumentContent(original: string): FormatterResult {
     apply(fixUnclosedParen, "додано відсутню закриваючу дужку");
     apply(fixMissingAttrParens, "[Назва] атрибут → [Назва] (атрибут)");
     apply(fixMissingSpaceBeforeDash, "додано пробіл перед тире в назві");
+    apply(
+      normalizePorolonLine,
+      "Поролон: блоки (ST + dims) → [Поролон] (ST (dims))",
+    );
+    apply(fixDotBeforeQty, "сміттєву крапку перед кількістю прибрано");
     apply(fixDashBeforeQty, "пробіл після дефіса перед числом додано");
     apply(fixAttributeSpaces, "пробіл після крапки в атрибуті прибрано");
     apply(fixAttributeCapitalization, "капіталізація в атрибуті виправлена");
@@ -513,7 +560,6 @@ export function formatDocumentContent(original: string): FormatterResult {
     //   "Соединитель: → [Соединитель] (атрибут) - qty шт.",
     // );
     apply(fixQtyDashUom, "qty-шт → - qty шт.");
-    apply(fixPorolonFormat, "Поролон: два парени → [Поролон] (код (розмір))");
     apply(fixVoylokFormat, "Войлок: додано дужки та квадратні дужки");
     apply(fixLaminateName, "[Ламінат] (розмір) → 🧩[Ламінат - лист] (розмір)");
     apply(fixMaterialNames, "назву матеріалу виправлено");
@@ -543,7 +589,8 @@ export function formatDocumentContent(original: string): FormatterResult {
   });
 
   // Document-level passes (require multi-line context)
-  let processedLines = fixMissingNapivfabrykatAttr(fixedLines, changes);
+  let processedLines = dropLoneDotLines(fixedLines, changes);
+  processedLines = fixMissingNapivfabrykatAttr(processedLines, changes);
   processedLines = fixAttrMarkersOnProducts(processedLines, changes, activeAttrs);
   processedLines = insertDnoKarkasuComment(processedLines, changes, activeAttrs);
   processedLines = removeDuplicateAboBlocks(processedLines, changes);
@@ -558,6 +605,19 @@ export function formatDocumentContent(original: string): FormatterResult {
     content,
     changes,
   };
+}
+
+// Окремий рядок "." / ".." — артефакт Word / копіпасту
+function dropLoneDotLines(lines: string[], changes: string[]): string[] {
+  const result: string[] = [];
+  for (let i = 0; i < lines.length; i++) {
+    if (/^\s*\.+\s*$/.test(lines[i])) {
+      changes.push(`Рядок ${i + 1}: видалено сміттєвий рядок з крапкою`);
+      continue;
+    }
+    result.push(lines[i]);
+  }
+  return result;
 }
 
 const QTY_ONLY_RE = /^-\s*([\d.,]*)\s*(шт\.?|кг|m³|m²|m|г)?\s*$/iu;
