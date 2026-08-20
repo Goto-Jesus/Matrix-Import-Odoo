@@ -40,6 +40,17 @@
           <span class="tool-hint hint">З сирого → специфікація</span>
         </div>
         <div class="tool">
+          <button
+            type="button"
+            id="btn-recheck-spec"
+            disabled
+            title="Копіює специфікацію справа в сирий текст зліва і одразу запускає повну перевірку з автовиправленням формату."
+          >
+            Зі специфікації
+          </button>
+          <span class="tool-hint hint">Спец → сирий → перевірка</span>
+        </div>
+        <div class="tool">
           <button type="button" id="btn-copy" disabled title="Копіює специфікацію справа.">
             Скопіювати
           </button>
@@ -209,7 +220,7 @@
       <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
         <p class="modal-stamp">УВАГА</p>
         <h2 id="confirm-title">Перезаписати специфікацію?</h2>
-        <p class="modal-body">Сирий текст зліва замінить те, що зараз справа. Правки в специфікації пропадуть. Ctrl+Z поверне, якщо передумаєш.</p>
+        <p class="modal-body" id="confirm-body">Сирий текст зліва замінить те, що зараз справа. Правки в специфікації пропадуть. Ctrl+Z поверне, якщо передумаєш.</p>
         <p class="modal-body modal-copy-warn" id="confirm-copy-warn" hidden>
           Після останніх змін ти не скопіював документ. Скопіюй зараз, інакше правки можна втратити.
         </p>

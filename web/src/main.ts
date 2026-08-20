@@ -76,6 +76,7 @@ const issuesEl = document.querySelector<HTMLOListElement>("#issues")!;
 const fileHint = document.querySelector<HTMLElement>("#file-hint")!;
 const fileInput = document.querySelector<HTMLInputElement>("#file-input")!;
 const btnCheck = document.querySelector<HTMLButtonElement>("#btn-check")!;
+const btnRecheckSpec = document.querySelector<HTMLButtonElement>("#btn-recheck-spec")!;
 const btnCopy = document.querySelector<HTMLButtonElement>("#btn-copy")!;
 const btnDownload = document.querySelector<HTMLButtonElement>("#btn-download")!;
 const saveHint = document.querySelector<HTMLElement>("#save-hint")!;
@@ -91,10 +92,16 @@ const issuesSplit = document.querySelector<HTMLElement>("#issues-split")!;
 const btnDock = document.querySelector<HTMLButtonElement>("#btn-dock")!;
 const btnHints = document.querySelector<HTMLButtonElement>("#btn-hints")!;
 const modal = document.querySelector<HTMLDivElement>("#confirm-modal")!;
+const confirmTitle = document.querySelector<HTMLHeadingElement>("#confirm-title")!;
+const confirmBody = document.querySelector<HTMLParagraphElement>("#confirm-body")!;
 const confirmYes = document.querySelector<HTMLButtonElement>("#confirm-yes")!;
 const confirmNo = document.querySelector<HTMLButtonElement>("#confirm-no")!;
 const confirmCopy = document.querySelector<HTMLButtonElement>("#confirm-copy")!;
 const confirmCopyWarn = document.querySelector<HTMLParagraphElement>("#confirm-copy-warn")!;
+
+const CONFIRM_DEFAULT_TITLE = "Перезаписати специфікацію?";
+const CONFIRM_DEFAULT_BODY =
+  "Сирий текст зліва замінить те, що зараз справа. Правки в специфікації пропадуть. Ctrl+Z поверне, якщо передумаєш.";
 
 /** False after spec edits until Copy / Ctrl+C. */
 let copiedAfterEdit = true;
@@ -620,6 +627,7 @@ function jumpTo(issue: UiIssue): void {
 
 function enableExport(): void {
   const has = Boolean(editor.value.trim());
+  btnRecheckSpec.disabled = !has;
   btnCopy.disabled = !has;
   btnDownload.disabled = !has;
   saveHint.textContent =
@@ -659,6 +667,8 @@ function askOverwrite(): Promise<boolean> {
   if (!editor.value.trim() || !raw.value.trim()) return Promise.resolve(true);
   const needCopyWarn = !copiedAfterEdit;
   return new Promise((resolve) => {
+    confirmTitle.textContent = CONFIRM_DEFAULT_TITLE;
+    confirmBody.textContent = CONFIRM_DEFAULT_BODY;
     confirmCopyWarn.hidden = !needCopyWarn;
     confirmCopy.hidden = !needCopyWarn;
     confirmYes.textContent = needCopyWarn ? "Все одно перезаписати" : "Перезаписати";
@@ -713,6 +723,18 @@ async function runFull(): Promise<void> {
   } else {
     paintResult(recheckSpec(editor.value, fileName, knownNamesMd), false);
   }
+}
+
+async function runFromSpec(): Promise<void> {
+  if (!editor.value.trim()) {
+    fileHint.textContent = "Спочатку заповни специфікацію справа.";
+    return;
+  }
+  // One click: always copy editor → raw, then full check. No confirm —
+  // after «Перевірити» raw ≠ formatted editor, so a modal blocked the
+  // main path (and copy-warn focused «Скопіювати» after setSpec).
+  raw.value = editor.value;
+  paintResult(runValidation(raw.value, fileName, knownNamesMd), true);
 }
 
 function runLintNow(): void {
@@ -1050,6 +1072,7 @@ function bindHints(): void {
 }
 
 btnCheck.addEventListener("click", () => void runFull());
+btnRecheckSpec.addEventListener("click", () => void runFromSpec());
 btnCopy.addEventListener("click", () => void copyText());
 btnDownload.addEventListener("click", download);
 editor.addEventListener("copy", () => markSpecCopied());
