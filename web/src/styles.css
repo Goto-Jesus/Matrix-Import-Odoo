@@ -863,9 +863,16 @@ textarea {
   color: var(--muted);
 }
 
+.modal-copy-warn {
+  margin-top: -8px;
+  color: var(--grease);
+  font-weight: 600;
+}
+
 .modal-actions {
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap;
   gap: 8px;
 }
 

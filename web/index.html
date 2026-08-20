@@ -210,7 +210,11 @@
         <p class="modal-stamp">УВАГА</p>
         <h2 id="confirm-title">Перезаписати специфікацію?</h2>
         <p class="modal-body">Сирий текст зліва замінить те, що зараз справа. Правки в специфікації пропадуть. Ctrl+Z поверне, якщо передумаєш.</p>
+        <p class="modal-body modal-copy-warn" id="confirm-copy-warn" hidden>
+          Після останніх змін ти не скопіював документ. Скопіюй зараз, інакше правки можна втратити.
+        </p>
         <div class="modal-actions">
+          <button type="button" id="confirm-copy" hidden>Скопіювати</button>
           <button type="button" id="confirm-no">Скасувати</button>
           <button type="button" id="confirm-yes" class="danger">Перезаписати</button>
         </div>

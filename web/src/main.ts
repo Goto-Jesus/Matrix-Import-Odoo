@@ -93,6 +93,19 @@ const btnHints = document.querySelector<HTMLButtonElement>("#btn-hints")!;
 const modal = document.querySelector<HTMLDivElement>("#confirm-modal")!;
 const confirmYes = document.querySelector<HTMLButtonElement>("#confirm-yes")!;
 const confirmNo = document.querySelector<HTMLButtonElement>("#confirm-no")!;
+const confirmCopy = document.querySelector<HTMLButtonElement>("#confirm-copy")!;
+const confirmCopyWarn = document.querySelector<HTMLParagraphElement>("#confirm-copy-warn")!;
+
+/** False after spec edits until Copy / Ctrl+C. */
+let copiedAfterEdit = true;
+
+function markSpecEdited(): void {
+  copiedAfterEdit = false;
+}
+
+function markSpecCopied(): void {
+  copiedAfterEdit = true;
+}
 
 const shopDock = document.querySelector<HTMLElement>("#shop-dock")!;
 const legendItems = [...document.querySelectorAll<HTMLElement>(".shop-key li[data-legend]")];
@@ -284,6 +297,7 @@ function setSpec(next: string, fromHistory = false): void {
   }
   applyingHistory = false;
   if (last) last = { ...last, content: next };
+  markSpecEdited();
   persistDraft();
 }
 
@@ -297,6 +311,7 @@ function undoSpec(): void {
   if (last) last = { ...last, content: prev };
   applyingHistory = false;
   typingBurst = false;
+  markSpecEdited();
   enableExport();
   renderDecorations(prev);
   scheduleLint();
@@ -314,6 +329,7 @@ function redoSpec(): void {
   if (last) last = { ...last, content: next };
   applyingHistory = false;
   typingBurst = false;
+  markSpecEdited();
   enableExport();
   renderDecorations(next);
   scheduleLint();
@@ -641,19 +657,28 @@ function paintResult(result: ValidationResult, writeEditor: boolean): void {
 
 function askOverwrite(): Promise<boolean> {
   if (!editor.value.trim() || !raw.value.trim()) return Promise.resolve(true);
+  const needCopyWarn = !copiedAfterEdit;
   return new Promise((resolve) => {
+    confirmCopyWarn.hidden = !needCopyWarn;
+    confirmCopy.hidden = !needCopyWarn;
+    confirmYes.textContent = needCopyWarn ? "Все одно перезаписати" : "Перезаписати";
     modal.hidden = false;
-    confirmYes.focus();
+    (needCopyWarn ? confirmCopy : confirmYes).focus();
     const finish = (ok: boolean) => {
       modal.hidden = true;
+      confirmCopyWarn.hidden = true;
+      confirmCopy.hidden = true;
+      confirmYes.textContent = "Перезаписати";
       modal.removeEventListener("click", onBackdrop);
       confirmYes.removeEventListener("click", onYes);
       confirmNo.removeEventListener("click", onNo);
+      confirmCopy.removeEventListener("click", onCopy);
       document.removeEventListener("keydown", onKey);
       resolve(ok);
     };
     const onYes = () => finish(true);
     const onNo = () => finish(false);
+    const onCopy = () => void copyText();
     const onBackdrop = (event: MouseEvent) => {
       if (event.target === modal) finish(false);
     };
@@ -662,13 +687,14 @@ function askOverwrite(): Promise<boolean> {
         event.preventDefault();
         finish(false);
       }
-      if (event.key === "Enter" && document.activeElement !== confirmNo) {
+      if (event.key === "Enter" && document.activeElement !== confirmNo && document.activeElement !== confirmCopy) {
         event.preventDefault();
         finish(true);
       }
     };
     confirmYes.addEventListener("click", onYes);
     confirmNo.addEventListener("click", onNo);
+    confirmCopy.addEventListener("click", onCopy);
     modal.addEventListener("click", onBackdrop);
     document.addEventListener("keydown", onKey);
   });
@@ -713,6 +739,7 @@ function scheduleShop(): void {
 function onSpecInput(): void {
   if (applyingHistory) return;
   closeFixes();
+  markSpecEdited();
   if (last) last = { ...last, content: editor.value };
   enableExport();
   renderDecorations(editor.value);
@@ -767,11 +794,19 @@ function download(): void {
 async function copyText(): Promise<void> {
   if (!editor.value.trim()) return;
   await navigator.clipboard.writeText(editor.value);
-  const prev = btnCopy.textContent;
-  btnCopy.textContent = "Скопійовано";
-  setTimeout(() => {
-    btnCopy.textContent = prev;
-  }, 1200);
+  markSpecCopied();
+  const flash = (btn: HTMLButtonElement, prev: string) => {
+    btn.textContent = "Скопійовано";
+    setTimeout(() => {
+      btn.textContent = prev;
+    }, 1200);
+  };
+  flash(btnCopy, "Скопіювати");
+  if (!modal.hidden && !confirmCopy.hidden) {
+    confirmCopyWarn.hidden = true;
+    confirmYes.textContent = "Перезаписати";
+    flash(confirmCopy, "Скопіювати");
+  }
 }
 
 function applySplit(percent: number): void {
@@ -1017,6 +1052,13 @@ function bindHints(): void {
 btnCheck.addEventListener("click", () => void runFull());
 btnCopy.addEventListener("click", () => void copyText());
 btnDownload.addEventListener("click", download);
+editor.addEventListener("copy", () => markSpecCopied());
+document.addEventListener("keydown", (e) => {
+  if (!(e.ctrlKey || e.metaKey)) return;
+  if (e.code !== "KeyC" && e.key.toLowerCase() !== "c" && e.key !== "с" && e.key !== "С") return;
+  if (document.activeElement !== editor) return;
+  markSpecCopied();
+});
 fileInput.addEventListener("change", () => {
   const file = fileInput.files?.[0];
   if (file) void readFile(file);
