@@ -15,6 +15,62 @@ interface ParsedParams {
 
 // ─── Document section header ──────────────────────────────────────────────
 const SECTION_HEADER_RE = /^#+\s*(Цех\s*№[\d\-]+)/u;
+const ATTR_LIST_SECTION_RE =
+  /# СПИСОК АТРИБУТІВ[^\n]*\n([\s\S]*?)(?=\n##|\n#[^#]|$)/;
+/** "Name", ✅ | "Name" ❌ | "Name", | "Name"  — missing mark = ❌ */
+const ATTR_LIST_ITEM_RE = /"([^"]+)",?\s*(✅|❌)?\uFE0F?/gu;
+const ATTR_LIST_LINE_RE =
+  /^(\s*"[^"]+")(,?)(\s*)((?:✅|❌)\uFE0F?)?(\s*)$/u;
+
+function matchAttrListSection(content: string): RegExpMatchArray | null {
+  return content.match(ATTR_LIST_SECTION_RE);
+}
+
+/**
+ * Missing emoji in the list = ❌. Rewrite lines so every entry has ✅ or ❌.
+ */
+export function normalizeAttributeListEmojis(content: string): {
+  content: string;
+  fixes: string[];
+} {
+  const listMatch = matchAttrListSection(content);
+  if (!listMatch || listMatch.index === undefined) {
+    return { content, fixes: [] };
+  }
+
+  const block = listMatch[1];
+  const fixes: string[] = [];
+  const newBlock = block
+    .split("\n")
+    .map((line) => {
+      const m = ATTR_LIST_LINE_RE.exec(line);
+      if (!m) return line;
+      if (m[4]) return line; // already ✅ or ❌
+      // Quoted attr name present, mark missing → ❌
+      const space = m[3].length > 0 ? m[3] : " ";
+      const fixed = `${m[1]}${m[2]}${space}❌${m[5]}`;
+      const name = /"([^"]+)"/.exec(m[1])?.[1] ?? m[1].trim();
+      fixes.push(`[FIX] список атрибутів: "${name}" без позначки → ❌`);
+      return fixed;
+    })
+    .join("\n");
+
+  if (fixes.length === 0) return { content, fixes };
+
+  const start = listMatch.index + listMatch[0].length - block.length;
+  const next =
+    content.slice(0, start) + newBlock + content.slice(start + block.length);
+  return { content: next, fixes };
+}
+
+export function attributeListNeedsEmojiFix(content: string): boolean {
+  const listMatch = matchAttrListSection(content);
+  if (!listMatch) return false;
+  return listMatch[1].split("\n").some((line) => {
+    const m = ATTR_LIST_LINE_RE.exec(line);
+    return Boolean(m && !m[4]);
+  });
+}
 
 // ─── Step 1: Parse attribute rules from document ──────────────────────────
 
@@ -22,13 +78,11 @@ function parseAttributeRules(content: string): Attribute[] {
   const attrs: Attribute[] = [];
 
   // 1a. Parse СПИСОК АТРИБУТІВ section for order and active status
-  const listMatch = content.match(
-    /# СПИСОК АТРИБУТІВ[^\n]*\n([\s\S]*?)(?=\n##|\n#[^#])/,
-  );
+  const listMatch = matchAttrListSection(content);
   if (!listMatch) throw new Error('Не знайдено "# СПИСОК АТРИБУТІВ" у файлі');
 
   const listBlock = listMatch[1];
-  const itemRe = /"([^"]+)",?\s*(✅|❌)/gu;
+  const itemRe = new RegExp(ATTR_LIST_ITEM_RE.source, "gu");
   let m: RegExpExecArray | null;
   let order = 0;
   while ((m = itemRe.exec(listBlock)) !== null) {
@@ -36,6 +90,7 @@ function parseAttributeRules(content: string): Attribute[] {
     attrs.push({
       paramName: `%${m[1]}%`,
       order,
+      // Missing mark = inactive (❌)
       active: m[2] === "✅",
       workshops: [],
     });
@@ -48,8 +103,6 @@ function parseAttributeRules(content: string): Attribute[] {
   if (!instrMatch) throw new Error('Не знайдено "## Інструкції" у файлі');
 
   const instrBlock = instrMatch[1];
-  // Match each numbered entry: "1. %Attr%:" ... "Впливає на цехи: (list)"
-  const entryRe = /^\d+\.\s+%([^%]+)%/gmu;
   const workshopRe = /Впливає на цехи:\s*\(([^)]+)\)/u;
 
   // Split by numbered entries
@@ -404,6 +457,22 @@ function applyChanges(fileLines: string[], changes: LineChange[]): string[] {
 // ─── Library export ───────────────────────────────────────────────────────
 
 /**
+ * Fingerprint of ✅/❌ flags in «# СПИСОК АТРИБУТІВ».
+ * Missing mark counts as ❌ (same as inactive).
+ */
+export function attributeFlagsSignature(content: string): string | null {
+  const listMatch = matchAttrListSection(content);
+  if (!listMatch) return null;
+  const itemRe = new RegExp(ATTR_LIST_ITEM_RE.source, "gu");
+  const parts: string[] = [];
+  let m: RegExpExecArray | null;
+  while ((m = itemRe.exec(listMatch[1])) !== null) {
+    parts.push(`${m[1]}=${m[2] === "✅" ? "✅" : "❌"}`);
+  }
+  return parts.length > 0 ? parts.join("|") : null;
+}
+
+/**
  * Run attribute checks on in-memory content.
  * Returns the fixed content and list of issues found.
  */
@@ -412,8 +481,14 @@ export function runAttributeCheck(
   fileName: string,
 ): { content: string; issues: string[] } {
   console.log(`\nАтрибути: ${fileName}`);
-  const fileLines = content.split("\n");
-  const allAttrs = parseAttributeRules(content);
+
+  const listNorm = normalizeAttributeListEmojis(content);
+  for (const fix of listNorm.fixes) {
+    console.log(`  ${fix}`);
+  }
+
+  const fileLines = listNorm.content.split("\n");
+  const allAttrs = parseAttributeRules(listNorm.content);
   for (const a of allAttrs) {
     console.log(
       `  ${a.order}. ${a.paramName} [${a.active ? "✅" : "❌"}] → цехи: ${a.workshops.join(", ") || "—"}`,
@@ -434,18 +509,19 @@ export function runAttributeCheck(
   );
   workingLines = applyChanges(workingLines, inputChanges);
 
-  const totalChanges = outputChanges.length + inputChanges.length;
+  const totalChanges =
+    listNorm.fixes.length + outputChanges.length + inputChanges.length;
   if (totalChanges === 0) {
     console.log("  ✅ Атрибути в порядку, змін немає.");
   } else {
     console.log(
-      `  Змін output: ${outputChanges.length}, input (каскад): ${inputChanges.length}`,
+      `  Змін список: ${listNorm.fixes.length}, output: ${outputChanges.length}, input (каскад): ${inputChanges.length}`,
     );
   }
 
   return {
     content: workingLines.join("\n"),
-    issues: [...attrIssues, ...cascadeIssues],
+    issues: [...listNorm.fixes, ...attrIssues, ...cascadeIssues],
   };
 }
 

@@ -218,6 +218,29 @@ button.primary:hover:not(:disabled) {
   border-color: var(--steel);
 }
 
+button.is-pending {
+  background: var(--ochre);
+  border-color: var(--ochre);
+  color: var(--sheet);
+  box-shadow: 0 0 0 2px rgba(180, 83, 9, 0.28);
+  animation: attr-pending-pulse 1.6s ease-in-out infinite;
+}
+
+button.is-pending:hover:not(:disabled) {
+  background: #9a4508;
+  border-color: #9a4508;
+}
+
+@keyframes attr-pending-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 2px rgba(180, 83, 9, 0.22);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(180, 83, 9, 0.4);
+  }
+}
+
 button:focus-visible,
 .file-btn:focus-visible,
 textarea:focus-visible,

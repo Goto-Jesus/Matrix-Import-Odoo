@@ -1,3 +1,4 @@
+import { runAttributeCheck } from "../../src/tools/check-attributes";
 import {
   checkSpecContent,
   isAutoIssue,
@@ -8,6 +9,7 @@ import {
 } from "../../src/validator/specPipeline";
 import { lintSpec, type QuickFix } from "./lint";
 
+export { attributeFlagsSignature, attributeListNeedsEmojiFix } from "../../src/tools/check-attributes";
 export type { QuickFix };
 
 const AUTO_TODO_LINE =
@@ -349,4 +351,38 @@ export function recheckSpec(
   appendLint(issues, working);
 
   return finish(working, working, fileName, issues);
+}
+
+/** Rewrite %Attr% / %Attr❌% from current ✅/❌ list, then recheck (no further rewrites). */
+export function rewriteSpecAttributes(
+  spec: string,
+  fileName: string,
+  knownNamesMd: string,
+): ValidationResult {
+  const original = spec.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n");
+  const issues: UiIssue[] = [];
+  let working = stripAutoTodoLines(original);
+
+  let attr: SpecToolPass;
+  try {
+    const result = runAttributeCheck(working, fileName);
+    working = stripAutoTodoLines(result.content);
+    attr = { source: "attrs", content: working, issues: result.issues };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    attr = { source: "attrs", content: working, issues: [], error: message };
+  }
+  collectToolIssues(issues, attr, working, true);
+
+  const tools = runSpecTools(working, fileName, {
+    applyTodos: false,
+    applyContent: false,
+  });
+  collectToolIssues(issues, tools.attr, working, false);
+  collectToolIssues(issues, tools.chain, working, false);
+  collectToolIssues(issues, tools.bom, working, false);
+  collectCatalogIssues(issues, working, knownNamesMd);
+  appendLint(issues, working);
+
+  return finish(original, working, fileName, issues);
 }

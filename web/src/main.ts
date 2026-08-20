@@ -1,7 +1,10 @@
 import knownNamesMd from "../../right_names_odoo_base.md?raw";
 import { applyFix, type QuickFix } from "./lint";
 import {
+  attributeFlagsSignature,
+  attributeListNeedsEmojiFix,
   recheckSpec,
+  rewriteSpecAttributes,
   runValidation,
   type SheetStatus,
   type UiIssue,
@@ -77,6 +80,7 @@ const fileHint = document.querySelector<HTMLElement>("#file-hint")!;
 const fileInput = document.querySelector<HTMLInputElement>("#file-input")!;
 const btnCheck = document.querySelector<HTMLButtonElement>("#btn-check")!;
 const btnRecheckSpec = document.querySelector<HTMLButtonElement>("#btn-recheck-spec")!;
+const btnRewriteAttrs = document.querySelector<HTMLButtonElement>("#btn-rewrite-attrs")!;
 const btnCopy = document.querySelector<HTMLButtonElement>("#btn-copy")!;
 const btnDownload = document.querySelector<HTMLButtonElement>("#btn-download")!;
 const saveHint = document.querySelector<HTMLElement>("#save-hint")!;
@@ -137,6 +141,10 @@ for (const li of legendItems) {
 
 let last: ValidationResult | null = null;
 let fileName = "специфікація.md";
+/** Attr ✅/❌ fingerprint last applied to workshop lines. */
+let appliedAttrFlags: string | null = null;
+/** Last seen list fingerprint (detect edit even when applied baseline is null). */
+let prevAttrFlags: string | null = null;
 let lineKinds = new Map<number, UiIssue["kind"]>();
 let lineFixes = new Map<number, QuickFix[]>();
 let activeLine: number | null = null;
@@ -215,6 +223,7 @@ function persistDraft(): void {
           status: last?.status ?? stamp.dataset.status ?? "idle",
           issues: last?.issues ?? [],
           counts: last?.counts ?? { blocking: 0, errors: 0, auto: 0, warnings: 0 },
+          appliedAttrFlags,
         }),
       );
     } catch {
@@ -256,12 +265,15 @@ function restoreDraft(): boolean {
       status?: SheetStatus;
       issues?: UiIssue[];
       counts?: ValidationResult["counts"];
+      appliedAttrFlags?: string | null;
     };
     if (draft.raw) raw.value = draft.raw;
     if (draft.spec) editor.value = draft.spec;
     if (draft.fileName) fileName = draft.fileName;
     if (!draft.spec?.trim() && !draft.raw?.trim()) return false;
     fileHint.textContent = `Відновлено: ${fileName}`;
+    appliedAttrFlags =
+      draft.appliedAttrFlags ?? attributeFlagsSignature(editor.value);
     enableExport();
     if (draft.issues?.length) {
       last = {
@@ -281,6 +293,7 @@ function restoreDraft(): boolean {
     if (draft.status && draft.status !== "idle") setStamp(draft.status);
     renderDecorations(editor.value);
     if (editor.value.trim()) runLintNow();
+    syncAttrButton();
     return true;
   } catch {
     return false;
@@ -632,6 +645,37 @@ function enableExport(): void {
   btnDownload.disabled = !has;
   saveHint.textContent =
     last?.status === "bad" ? "Є помилки — все одно можна зберегти" : "Завантажити собі";
+  syncAttrButton();
+}
+
+function syncAttrButton(): void {
+  const current = attributeFlagsSignature(editor.value);
+  if (!current) {
+    btnRewriteAttrs.disabled = true;
+    btnRewriteAttrs.classList.remove("is-pending");
+    btnRewriteAttrs.setAttribute("aria-pressed", "false");
+    prevAttrFlags = null;
+    return;
+  }
+
+  // Flags changed before any rewrite baseline existed → previous list is baseline.
+  if (appliedAttrFlags === null && prevAttrFlags !== null && current !== prevAttrFlags) {
+    appliedAttrFlags = prevAttrFlags;
+  }
+
+  const pending =
+    attributeListNeedsEmojiFix(editor.value) ||
+    (appliedAttrFlags !== null && current !== appliedAttrFlags);
+  prevAttrFlags = current;
+  btnRewriteAttrs.disabled = !pending;
+  btnRewriteAttrs.classList.toggle("is-pending", pending);
+  btnRewriteAttrs.setAttribute("aria-pressed", pending ? "true" : "false");
+}
+
+function markAttrsApplied(content: string): void {
+  appliedAttrFlags = attributeFlagsSignature(content);
+  prevAttrFlags = appliedAttrFlags;
+  syncAttrButton();
 }
 
 function paintResult(result: ValidationResult, writeEditor: boolean): void {
@@ -639,6 +683,7 @@ function paintResult(result: ValidationResult, writeEditor: boolean): void {
   if (writeEditor) {
     activeLine = null;
     setSpec(result.content);
+    markAttrsApplied(result.content);
   }
   last = result;
   fileName = result.fileName;
@@ -735,6 +780,11 @@ async function runFromSpec(): Promise<void> {
   // main path (and copy-warn focused «Скопіювати» after setSpec).
   raw.value = editor.value;
   paintResult(runValidation(raw.value, fileName, knownNamesMd), true);
+}
+
+function runRewriteAttrs(): void {
+  if (!editor.value.trim()) return;
+  paintResult(rewriteSpecAttributes(editor.value, fileName, knownNamesMd), true);
 }
 
 function runLintNow(): void {
@@ -1073,6 +1123,7 @@ function bindHints(): void {
 
 btnCheck.addEventListener("click", () => void runFull());
 btnRecheckSpec.addEventListener("click", () => void runFromSpec());
+btnRewriteAttrs.addEventListener("click", () => runRewriteAttrs());
 btnCopy.addEventListener("click", () => void copyText());
 btnDownload.addEventListener("click", download);
 editor.addEventListener("copy", () => markSpecCopied());
